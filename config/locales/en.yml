@@ -3,3 +3,7 @@ en:
   decidim:
     action_delegator:
       name: Decidim ActionDelegator cooperatives module
+  layouts:
+    decidim:
+      user_profile:
+        vote_delegations: Vote delegations

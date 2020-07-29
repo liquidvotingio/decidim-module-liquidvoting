@@ -11,6 +11,9 @@ module Decidim
 
       routes do
         # Add admin engine routes here
+        resources :delegations
+
+        root to: "delegations#index"
       end
 
       initializer "decidim_action_delegator.admin_assets" do |app|
