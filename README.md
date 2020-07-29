@@ -1,6 +1,6 @@
 # Decidim::ActionDelegator
 
-[![Build Status](https://github.com/coopdevs/decidim-module-action_delegator/workflows/Build/badge.svg)](https://github.com/coopdevs/decidim-module-action_delegator/actions)
+![[CI] Build](https://github.com/coopdevs/decidim-module-action_delegator/workflows/%5BCI%5D%20Build/badge.svg)
 [![Maintainability](https://api.codeclimate.com/v1/badges/codeclimate-id/maintainability)](https://codeclimate.com/github/coopdevs/decidim-module-action_delegator/maintainability)
 [![Codecov](https://codecov.io/gh/coopdevs/decidim-module-action_delegator/branch/master/graph/badge.svg)](https://codecov.io/gh/coopdevs/decidim-module-action_delegator)
 
