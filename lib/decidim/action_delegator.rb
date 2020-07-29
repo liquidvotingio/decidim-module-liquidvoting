@@ -9,3 +9,9 @@ module Decidim
   module ActionDelegator
   end
 end
+
+Decidim.register_global_engine(
+  :decidim_action_delegator, # this is the name of the global method to access engine routes
+  ::Decidim::ActionDelegator::Engine,
+  at: "/action_delegator"
+)

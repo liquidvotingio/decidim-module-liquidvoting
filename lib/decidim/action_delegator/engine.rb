@@ -9,13 +9,32 @@ module Decidim
     class Engine < ::Rails::Engine
       isolate_namespace Decidim::ActionDelegator
 
+      paths["db/migrate"] = nil
+      paths["lib/tasks"] = nil
+
       routes do
         # Add engine routes here
-        # resources :action_delegator
+        authenticate(:user) do
+          resources :user_delegations, controller: :user_delegations
+          root to: "user_delegations#index"
+        end
       end
 
       initializer "decidim_action_delegator.assets" do |app|
         app.config.assets.precompile += %w(decidim_action_delegator_manifest.js decidim_action_delegator_manifest.css)
+      end
+
+      initializer "decidim.user_menu" do
+        Decidim.menu :user_menu do |menu|
+          menu.item t("vote_delegations", scope: "layouts.decidim.user_profile"),
+                    decidim_action_delegator.user_delegations_path,
+                    position: 5.0,
+                    active: :exact
+        end
+      end
+
+      def load_seed
+        nil
       end
     end
   end
