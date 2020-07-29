@@ -66,4 +66,4 @@ jobs:
         run: COBERTURA=1 bundle exec rake
 
       - name: Codecov
-        uses: codecov/codecov-action@v1.0.7
+        uses: codecov/codecov-action@v1
