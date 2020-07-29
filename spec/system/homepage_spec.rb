@@ -13,5 +13,4 @@ describe "Visit the home page", type: :system, perform_enqueued: true do
   it "renders the home page" do
     expect(page).to have_content("Home")
   end
-
 end
