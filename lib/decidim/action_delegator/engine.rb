@@ -6,6 +6,7 @@ require "decidim/core"
 module Decidim
   module ActionDelegator
     # This is the engine that runs on the public interface of action_delegator.
+    # Handles all the logic related to delegation except verifications
     class Engine < ::Rails::Engine
       isolate_namespace Decidim::ActionDelegator
 

@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
-require "decidim/action_delegator/admin"
 require "decidim/action_delegator/engine"
-require "decidim/action_delegator/admin_engine"
+require "decidim/action_delegator/verification/admin"
+require "decidim/action_delegator/verification/admin_engine"
+require "decidim/action_delegator/verification/engine"
 require "decidim/action_delegator/workflow"
 
 module Decidim
