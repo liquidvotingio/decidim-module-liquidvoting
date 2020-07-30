@@ -9,9 +9,6 @@ module Decidim
     class Engine < ::Rails::Engine
       isolate_namespace Decidim::ActionDelegator
 
-      paths["db/migrate"] = nil
-      paths["lib/tasks"] = nil
-
       routes do
         # Add engine routes here
         authenticate(:user) do
@@ -31,10 +28,6 @@ module Decidim
                     position: 5.0,
                     active: :exact
         end
-      end
-
-      def load_seed
-        nil
       end
     end
   end
