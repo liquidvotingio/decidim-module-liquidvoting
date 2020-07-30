@@ -2,6 +2,13 @@
 en:
   decidim:
     action_delegator:
+      admin:
+        delegations:
+          index:
+            created_at: Created at
+            grantee: Grantee
+            granter: Granter
+            title: Delegations
       name: Decidim ActionDelegator cooperatives module
   layouts:
     decidim:
