@@ -10,8 +10,7 @@ module Decidim
       paths["lib/tasks"] = nil
 
       routes do
-        # Add admin engine routes here
-        resources :delegations
+        resources :delegations, only: [:index, :destroy]
 
         root to: "delegations#index"
       end

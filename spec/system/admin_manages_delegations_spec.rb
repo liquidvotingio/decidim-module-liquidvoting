@@ -19,7 +19,14 @@ describe "Admin manages delegations", type: :system do
     visit Decidim::ActionDelegator::AdminEngine.routes.url_helpers.delegations_path
   end
 
-  it "renders the delegations page" do
-    expect(page).to have_content(delegation.granter.name)
+  context "with existing delegations" do
+    it "allows to remove a delegation" do
+      within "tr[data-delegation-id=\"#{delegation.id}\"]" do
+        click_link "Delete"
+      end
+
+      expect(page).to have_no_content(delegation.grantee.name)
+      expect(page).to have_no_content(delegation.granter.name)
+    end
   end
 end

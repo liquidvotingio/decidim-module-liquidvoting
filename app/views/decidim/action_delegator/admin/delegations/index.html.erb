@@ -14,10 +14,14 @@
         </thead>
         <tbody>
           <% delegations.each do |delegation| %>
-            <tr>
+            <tr data-delegation-id="<%= delegation.id %>">
               <td><%= delegation.granter.name %></td>
               <td><%= delegation.grantee.name %></td>
               <td><%= l delegation.created_at, format: :short %></td>
+
+              <td class="table-list__actions">
+                <%= link_to t(".delete"), Decidim::ActionDelegator::AdminEngine.routes.url_helpers.delegation_path(delegation), method: :delete %>
+              </td>
             </tr>
           <% end %>
         </tbody>

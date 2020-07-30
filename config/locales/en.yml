@@ -4,8 +4,12 @@ en:
     action_delegator:
       admin:
         delegations:
+          destroy:
+            error: There was a problem destroying this delegation
+            success: Delegation successfully destroyed
           index:
             created_at: Created at
+            delete: Delete
             grantee: Grantee
             granter: Granter
             title: Delegations
