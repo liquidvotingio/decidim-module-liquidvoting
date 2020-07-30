@@ -10,6 +10,8 @@ module Decidim
 
         def index
           # some permissions
+          delegations = Delegation.all
+          render :index, locals: { delegations: delegations }
         end
       end
     end

@@ -11,9 +11,7 @@ describe "decidim/action_delegator/admin/delegations/index", type: :view do
   end
 
   it "renders the list of delegations" do
-    assign(:delegations, [delegation])
-
-    render
+    render template: subject, locals: { delegations: [delegation] }
 
     expect(rendered).to match(delegation.granter.name)
     expect(rendered).to match(delegation.grantee.name)

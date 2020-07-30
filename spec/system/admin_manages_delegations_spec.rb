@@ -6,6 +6,13 @@ describe "Admin manages delegations", type: :system do
   let(:organization) { create(:organization) }
   let!(:user) { create(:user, :admin, :confirmed, organization: organization) }
 
+  let!(:delegation) do
+    Decidim::ActionDelegator::Delegation.create!(
+      granter: create(:user),
+      grantee: create(:user)
+    )
+  end
+
   before do
     switch_to_host(organization.host)
     login_as user, scope: :user
@@ -13,6 +20,6 @@ describe "Admin manages delegations", type: :system do
   end
 
   it "renders the delegations page" do
-    expect(page).to have_content("index")
+    expect(page).to have_content(delegation.granter.name)
   end
 end
