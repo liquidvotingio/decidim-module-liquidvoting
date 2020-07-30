@@ -11,9 +11,11 @@ describe "decidim/action_delegator/admin/delegations/index", type: :view do
   end
 
   it "renders the list of delegations" do
+    assign(:delegations, [delegation])
+
     render
 
-    expect(rendered).to include(delegation.granter)
-    expect(rendered).to include(delegation.grantee)
+    expect(rendered).to match(delegation.granter.name)
+    expect(rendered).to match(delegation.grantee.name)
   end
 end
