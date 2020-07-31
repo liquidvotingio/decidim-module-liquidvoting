@@ -8,6 +8,8 @@ en:
             index: 
               title: "Members management"
       admin:
+        menu:
+          delegations: User delegations
         delegations:
           destroy:
             error: There was a problem destroying this delegation

@@ -12,7 +12,7 @@ module Decidim
         layout "decidim/admin/users"
 
         def index
-          # some permissions
+          # TODO: handle permissions
           delegations = Delegation.all
           render :index, locals: { delegations: delegations }
         end
