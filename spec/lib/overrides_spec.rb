@@ -28,7 +28,7 @@ module Decidim::ActionDelegator
     end
 
     private
-  
+
     def md5(file)
       Digest::MD5.hexdigest(File.read(file))
     end

@@ -6,9 +6,6 @@ module Decidim
       class DelegationsController < ActionDelegator::Admin::ApplicationController
         include NeedsPermission
 
-        # FIXME: the helper method is added but it's not accessible from the template
-        helper Decidim::Admin::IconLinkHelper
-
         layout "decidim/admin/users"
 
         def index

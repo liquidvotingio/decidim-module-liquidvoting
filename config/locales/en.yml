@@ -2,14 +2,7 @@
 en:
   decidim:
     action_delegator:
-      verification:
-        admin:
-          members:
-            index: 
-              title: "Members management"
       admin:
-        menu:
-          delegations: User delegations
         delegations:
           destroy:
             error: There was a problem destroying this delegation
@@ -20,7 +13,14 @@ en:
             grantee: Grantee
             granter: Granter
             title: Delegations
+        menu:
+          delegations: User delegations
       name: Decidim ActionDelegator cooperatives module
+      verification:
+        admin:
+          members:
+            index:
+              title: Members management
     authorization_handlers:
       admin:
         delegations_verifier:

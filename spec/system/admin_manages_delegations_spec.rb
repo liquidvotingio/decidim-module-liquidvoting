@@ -7,6 +7,7 @@ describe "Admin manages delegations", type: :system do
   let!(:user) { create(:user, :admin, :confirmed, organization: organization) }
 
   let!(:delegation) do
+    # TODO: create a factory instead of this
     Decidim::ActionDelegator::Delegation.create!(
       granter: create(:user),
       grantee: create(:user)
@@ -16,13 +17,15 @@ describe "Admin manages delegations", type: :system do
   before do
     switch_to_host(organization.host)
     login_as user, scope: :user
-    visit Decidim::ActionDelegator::AdminEngine.routes.url_helpers.delegations_path
+    # visit decidim_admin_action_delegator.delegations_path
+    visit decidim_admin.users_path
+    click_link "User delegations"
   end
 
   context "with existing delegations" do
     it "allows to remove a delegation" do
       within "tr[data-delegation-id=\"#{delegation.id}\"]" do
-        click_link "Delete"
+        accept_confirm { click_link "Delete" }
       end
 
       expect(page).to have_no_content(delegation.grantee.name)
