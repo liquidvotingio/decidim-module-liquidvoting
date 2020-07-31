@@ -23,6 +23,22 @@ describe "Admin manages delegations", type: :system do
   end
 
   context "with existing delegations" do
+    it "renders a card wrapper with the title" do
+      expect(page).to have_content(I18n.t("decidim.action_delegator.admin.delegations.index.title").upcase)
+    end
+
+    it "renders a table with header" do
+      expect(page).to have_content(I18n.t("decidim.action_delegator.admin.delegations.index.grantee").upcase)
+      expect(page).to have_content(I18n.t("decidim.action_delegator.admin.delegations.index.granter").upcase)
+      expect(page).to have_content(I18n.t("decidim.action_delegator.admin.delegations.index.created_at").upcase)
+    end
+
+    it "renders the list of delegations" do
+      expect(page).to have_content(delegation.granter.name)
+      expect(page).to have_content(delegation.grantee.name)
+      expect(page).to have_content(I18n.l(delegation.created_at, format: :short))
+    end
+
     it "allows to remove a delegation" do
       within "tr[data-delegation-id=\"#{delegation.id}\"]" do
         accept_confirm { click_link "Delete" }
