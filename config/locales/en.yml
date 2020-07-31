@@ -2,6 +2,11 @@
 en:
   decidim:
     action_delegator:
+      verification:
+        admin:
+          members:
+            index: 
+              title: "Members management"
       admin:
         delegations:
           destroy:
@@ -14,6 +19,14 @@ en:
             granter: Granter
             title: Delegations
       name: Decidim ActionDelegator cooperatives module
+    authorization_handlers:
+      admin:
+        delegations_verifier:
+          help:
+          - A verification method for delegate voting
+      delegations_verifier:
+        explanation: Verified users with this method can delegate votes to other users
+        name: Delegations Verifier
   layouts:
     decidim:
       user_profile:
