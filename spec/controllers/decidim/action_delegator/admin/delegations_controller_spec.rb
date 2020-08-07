@@ -9,7 +9,7 @@ module Decidim
         routes { Decidim::ActionDelegator::AdminEngine.routes }
 
         let(:organization) { create :organization }
-        let(:user) { create(:user, :confirmed, organization: organization) }
+        let(:user) { create(:user, :admin, :confirmed, organization: organization) }
 
         let!(:delegation) { create(:delegation) }
 
@@ -18,7 +18,28 @@ module Decidim
           sign_in user
         end
 
+        describe "#index" do
+          it "authorizes the action" do
+            expect(controller).to receive(:allowed_to?).with(:index, :delegation, {})
+
+            get :index
+          end
+
+          it "renders the index template" do
+            get :index
+
+            expect(response).to render_template(:index)
+            expect(response).to have_http_status(:ok)
+          end
+        end
+
         describe "#destroy" do
+          it "authorizes the action" do
+            expect(controller).to receive(:allowed_to?).with(:destroy, :delegation, {})
+
+            delete :destroy, params: { id: delegation.id }
+          end
+
           context "when successful" do
             it "destroys the specified delegation" do
               expect { delete :destroy, params: { id: delegation.id } }
