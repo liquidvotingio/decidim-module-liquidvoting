@@ -6,13 +6,7 @@ describe "Admin manages delegations", type: :system do
   let(:organization) { create(:organization) }
   let!(:user) { create(:user, :admin, :confirmed, organization: organization) }
 
-  let!(:delegation) do
-    # TODO: create a factory instead of this
-    Decidim::ActionDelegator::Delegation.create!(
-      granter: create(:user),
-      grantee: create(:user)
-    )
-  end
+  let!(:delegation) { create(:delegation) }
 
   before do
     switch_to_host(organization.host)

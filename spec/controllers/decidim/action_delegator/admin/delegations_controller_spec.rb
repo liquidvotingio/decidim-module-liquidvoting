@@ -11,12 +11,7 @@ module Decidim
         let(:organization) { create :organization }
         let(:user) { create(:user, :confirmed, organization: organization) }
 
-        let!(:delegation) do
-          Decidim::ActionDelegator::Delegation.create!(
-            granter: create(:user),
-            grantee: create(:user)
-          )
-        end
+        let!(:delegation) { create(:delegation) }
 
         before do
           request.env["decidim.current_organization"] = organization
