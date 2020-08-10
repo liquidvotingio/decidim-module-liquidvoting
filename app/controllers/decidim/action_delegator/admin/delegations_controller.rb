@@ -31,7 +31,7 @@ module Decidim
         private
 
         def collection
-          Delegation.where(organization: current_organization)
+          Delegation.where(organization: current_organization).includes(:grantee, :granter)
         end
 
         def delegation
