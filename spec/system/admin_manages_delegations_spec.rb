@@ -6,7 +6,7 @@ describe "Admin manages delegations", type: :system do
   let(:organization) { create(:organization) }
   let!(:user) { create(:user, :admin, :confirmed, organization: organization) }
 
-  let!(:delegation) { create(:delegation) }
+  let!(:delegation) { create(:delegation, organization: organization) }
 
   before do
     switch_to_host(organization.host)
