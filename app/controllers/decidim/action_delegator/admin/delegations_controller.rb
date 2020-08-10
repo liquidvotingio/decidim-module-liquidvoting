@@ -5,13 +5,14 @@ module Decidim
     module Admin
       class DelegationsController < ActionDelegator::Admin::ApplicationController
         include NeedsPermission
+        include Filterable
 
         layout "decidim/admin/users"
 
         def index
           enforce_permission_to :index, :delegation
 
-          delegations = Delegation.all
+          delegations = filtered_collection
           render :index, locals: { delegations: delegations }
         end
 
@@ -28,6 +29,10 @@ module Decidim
         end
 
         private
+
+        def collection
+          Delegation.where(organization: current_organization)
+        end
 
         def delegation
           Delegation.find_by(id: params[:id])

@@ -11,7 +11,7 @@ module Decidim
         let(:organization) { create :organization }
         let(:user) { create(:user, :admin, :confirmed, organization: organization) }
 
-        let!(:delegation) { create(:delegation) }
+        let!(:delegation) { create(:delegation, organization: organization) }
 
         before do
           request.env["decidim.current_organization"] = organization
@@ -30,6 +30,19 @@ module Decidim
 
             expect(response).to render_template(:index)
             expect(response).to have_http_status(:ok)
+          end
+
+          context "with view rendering" do
+            render_views
+
+            it "lists delegations of the current organization" do
+              non_org_delegation = create(:delegation)
+
+              get :index
+
+              expect(response.body).to include(delegation_path(delegation))
+              expect(response.body).not_to include(delegation_path(non_org_delegation))
+            end
           end
         end
 
