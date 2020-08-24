@@ -7,5 +7,12 @@ FactoryBot.define do
     granter factory: :user
     grantee factory: :user
     organization
+    setting
+  end
+
+  factory :setting, class: "Decidim::ActionDelegator::Setting" do
+    max_grants { 3 }
+    expires_at { Time.zone.now + 2.days }
+    organization
   end
 end

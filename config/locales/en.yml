@@ -8,6 +8,8 @@ en:
             error: There was a problem destroying this delegation
             success: Delegation successfully destroyed
           index:
+            actions:
+              new_setting: New settings
             created_at: Created at
             delete: Delete
             grantee: Grantee
@@ -15,6 +17,16 @@ en:
             title: Delegations
         menu:
           delegations: User delegations
+        settings:
+          create:
+            error: There was a problem creating the settings
+            success: Settings saved successfully
+          new:
+            form:
+              title: General information
+            max_grants: Maximum delegations
+            save: Save
+            title: Delegation settings
       name: Decidim ActionDelegator cooperatives module
       verification:
         admin:

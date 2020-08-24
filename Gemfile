@@ -35,5 +35,6 @@ end
 
 group :test do
   gem "codecov", require: false
+  gem "shoulda-matchers"
   gem "simplecov-cobertura", require: false
 end
