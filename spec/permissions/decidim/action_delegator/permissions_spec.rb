@@ -20,11 +20,11 @@ describe Decidim::ActionDelegator::Permissions do
   end
 
   context "when scope is admin" do
-    let(:scope) { { scope: :admin } }
+    let(:scope) { :admin }
 
     context "when subject is not delegation" do
       let(:action) do
-        { scope: :admin, action: :index, subject: :other }
+        { scope: scope, action: :index, subject: :other }
       end
 
       it_behaves_like "permission is not set"
@@ -32,7 +32,7 @@ describe Decidim::ActionDelegator::Permissions do
 
     context "when listing delegations" do
       let(:action) do
-        { scope: :admin, action: :index, subject: :delegation }
+        { scope: scope, action: :index, subject: :delegation }
       end
 
       context "when the user is admin" do
@@ -48,7 +48,7 @@ describe Decidim::ActionDelegator::Permissions do
 
     context "when destorying a delegation" do
       let(:action) do
-        { scope: :admin, action: :destroy, subject: :delegation }
+        { scope: scope, action: :destroy, subject: :delegation }
       end
 
       context "when the user is admin" do
