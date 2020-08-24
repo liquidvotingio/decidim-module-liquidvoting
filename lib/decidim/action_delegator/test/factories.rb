@@ -3,5 +3,9 @@
 require "decidim/core/test/factories"
 
 FactoryBot.define do
-  # Add engine factories here
+  factory :delegation, class: "Decidim::ActionDelegator::Delegation" do
+    granter factory: :user
+    grantee factory: :user
+    organization
+  end
 end

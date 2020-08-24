@@ -12,13 +12,9 @@ module Decidim
 
         routes do
           # Add admin engine routes here
-          resources :delegations
+          resources :members
 
-          root to: "delegations#index"
-        end
-
-        initializer "decidim_action_delegator.admin_assets" do |app|
-          app.config.assets.precompile += %w(admin/decidim_action_delegator_manifest.js admin/decidim_action_delegator_manifest.css)
+          root to: "members#index"
         end
 
         def load_seed
