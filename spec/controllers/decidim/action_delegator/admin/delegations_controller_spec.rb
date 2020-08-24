@@ -20,7 +20,7 @@ module Decidim
 
         describe "#index" do
           it "authorizes the action" do
-            expect(controller.allowed_to? :index, :delegation).to eq true
+            expect(controller.allowed_to?(:index, :delegation)).to eq true
 
             get :index
           end
@@ -48,7 +48,7 @@ module Decidim
 
         describe "#destroy" do
           it "authorizes the action" do
-            expect(controller.allowed_to? :destroy, :delegation).to eq true
+            expect(controller.allowed_to?(:destroy, :delegation)).to eq true
 
             delete :destroy, params: { id: delegation.id }
           end
