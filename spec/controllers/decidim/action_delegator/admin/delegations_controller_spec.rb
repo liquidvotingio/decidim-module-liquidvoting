@@ -75,7 +75,7 @@ module Decidim
 
       describe "#destroy" do
         it "authorizes the action" do
-          expect(controller.allowed_to?(:destroy, :delegation)).to eq true
+          expect(controller).to receive(:allowed_to?).with(:destroy, :delegation, {})
 
           delete :destroy, params: { id: delegation.id }
         end

@@ -23,6 +23,8 @@ module Decidim
         end
 
         def create
+          enforce_permission_to :create, :delegation
+
           @delegation = build_delegation
 
           if @delegation.save
