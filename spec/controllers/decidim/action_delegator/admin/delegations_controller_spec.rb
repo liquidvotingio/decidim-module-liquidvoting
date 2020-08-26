@@ -7,7 +7,7 @@ module Decidim
     describe Admin::DelegationsController, type: :controller do
       routes { Decidim::ActionDelegator::AdminEngine.routes }
 
-      let(:organization) { create :organization }
+      let(:organization) { create(:organization) }
       let(:user) { create(:user, :admin, :confirmed, organization: organization) }
 
       let!(:delegation) { create(:delegation, organization: organization) }
@@ -45,6 +45,34 @@ module Decidim
         end
       end
 
+      describe "#create" do
+        let(:granter) { create(:user, organization: organization) }
+        let(:grantee) { create(:user, organization: organization) }
+        let!(:setting) { create(:setting, organization: organization) }
+
+        it "authorizes the action" do
+          expect(controller).to receive(:allowed_to?).with(:create, :delegation, {})
+
+          post :create, params: { delegation: { granter_id: granter.id, grantee_id: grantee.id } }
+        end
+
+        context "when successful" do
+          it "creates a delegation" do
+            expect { post :create, params: { delegation: { granter_id: granter.id, grantee_id: grantee.id } } }
+              .to change(Delegation, :count).by(1)
+          end
+        end
+
+        context "when failed" do
+          it "shows an error" do
+            post :create, params: { delegation: { granter_id: granter.id } }
+
+            expect(response).to redirect_to(delegations_path)
+            expect(flash[:error]).to eq(I18n.t("decidim.action_delegator.admin.delegations.create.error"))
+          end
+        end
+      end
+
       describe "#destroy" do
         it "authorizes the action" do
           expect(controller.allowed_to?(:destroy, :delegation)).to eq true
@@ -68,7 +96,7 @@ module Decidim
             allow(Delegation).to receive(:find_by).with(id: delegation.id.to_s).and_return(delegation)
           end
 
-          it "shows the error" do
+          it "shows an error" do
             delete :destroy, params: { id: delegation.id }
 
             expect(response).to redirect_to(delegations_path)

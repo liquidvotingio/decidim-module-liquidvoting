@@ -3,6 +3,7 @@
 require "spec_helper"
 
 describe "Admin manages delegations", type: :system do
+  let(:i18n_scope) { "decidim.action_delegator.admin" }
   let(:organization) { create(:organization) }
   let!(:user) { create(:user, :admin, :confirmed, organization: organization) }
 
@@ -22,9 +23,9 @@ describe "Admin manages delegations", type: :system do
     end
 
     it "renders a table with header" do
-      expect(page).to have_content(I18n.t("decidim.action_delegator.admin.delegations.index.grantee").upcase)
-      expect(page).to have_content(I18n.t("decidim.action_delegator.admin.delegations.index.granter").upcase)
-      expect(page).to have_content(I18n.t("decidim.action_delegator.admin.delegations.index.created_at").upcase)
+      expect(page).to have_content(I18n.t("delegations.index.grantee", scope: i18n_scope).upcase)
+      expect(page).to have_content(I18n.t("delegations.index.granter", scope: i18n_scope).upcase)
+      expect(page).to have_content(I18n.t("delegations.index.created_at", scope: i18n_scope).upcase)
     end
 
     it "renders the list of delegations" do
@@ -40,6 +41,29 @@ describe "Admin manages delegations", type: :system do
 
       expect(page).to have_no_content(delegation.grantee.name)
       expect(page).to have_no_content(delegation.granter.name)
+    end
+  end
+
+  context "when creating a delegation" do
+    let!(:granter) { create(:user, organization: organization) }
+    let!(:grantee) { create(:user, organization: organization) }
+    let!(:setting) { create(:setting, organization: organization) }
+
+    before do
+      click_link I18n.t("delegations.index.actions.new_delegation", scope: i18n_scope)
+    end
+
+    it "creates a new delegation" do
+      within ".new_delegation" do
+        select granter.name, from: :delegation_granter_id
+        select grantee.name, from: :delegation_grantee_id
+
+        find("*[type=submit]").click
+      end
+
+      expect(page).to have_admin_callout("successfully")
+      expect(page).to have_content(grantee.name)
+      expect(page).to have_current_path(decidim_admin_action_delegator.delegations_path)
     end
   end
 end
