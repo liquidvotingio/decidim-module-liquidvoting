@@ -14,7 +14,10 @@ module Decidim
         def index
           enforce_permission_to :index, :delegation
 
-          delegations = filtered_collection
+          delegations = filtered_collection.map do |delegation|
+            DelegationPresenter.new(delegation)
+          end
+
           render :index, locals: { delegations: delegations }
         end
 
@@ -58,7 +61,7 @@ module Decidim
         end
 
         def delegation_params
-          params.require(:delegation).permit(:granter_id, :grantee_id)
+          params.require(:delegation).permit(:granter_id, :grantee_id, :decidim_consultation_id)
         end
 
         def collection

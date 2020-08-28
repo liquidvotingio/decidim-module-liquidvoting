@@ -13,6 +13,9 @@ module Decidim
       belongs_to :organization,
                  foreign_key: "decidim_organization_id",
                  class_name: "Decidim::Organization"
+      belongs_to :consultation,
+                 foreign_key: "decidim_consultation_id",
+                 class_name: "Decidim::Consultation"
     end
   end
 end

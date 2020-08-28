@@ -48,17 +48,19 @@ module Decidim
       describe "#create" do
         let(:granter) { create(:user, organization: organization) }
         let(:grantee) { create(:user, organization: organization) }
-        let!(:setting) { create(:setting, organization: organization) }
+        let(:consultation) { create(:consultation, organization: organization) }
+
+        before { create(:setting, organization: organization) }
 
         it "authorizes the action" do
           expect(controller).to receive(:allowed_to?).with(:create, :delegation, {})
 
-          post :create, params: { delegation: { granter_id: granter.id, grantee_id: grantee.id } }
+          post :create, params: { delegation: { granter_id: granter.id, grantee_id: grantee.id, decidim_consultation_id: consultation.id } }
         end
 
         context "when successful" do
           it "creates a delegation" do
-            expect { post :create, params: { delegation: { granter_id: granter.id, grantee_id: grantee.id } } }
+            expect { post :create, params: { delegation: { granter_id: granter.id, grantee_id: grantee.id, decidim_consultation_id: consultation.id } } }
               .to change(Delegation, :count).by(1)
           end
         end

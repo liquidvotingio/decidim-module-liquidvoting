@@ -13,6 +13,7 @@
           <tr>
             <th><%= t(".grantee") %></th>
             <th><%= t(".granter") %></th>
+            <th><%= t(".consultation") %></th>
             <th><%= t(".created_at") %></th>
             <th>&nbsp;</th>
           </tr>
@@ -22,6 +23,7 @@
             <tr data-delegation-id="<%= delegation.id %>">
               <td><%= delegation.granter.name %></td>
               <td><%= delegation.grantee.name %></td>
+              <td><%= delegation.consultation.translated_title %></td>
               <td><%= l delegation.created_at, format: :short %></td>
 
               <td class="table-list__actions">

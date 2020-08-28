@@ -8,6 +8,7 @@ module Decidim
       subject { build(:delegation) }
 
       it { is_expected.to belong_to(:setting) }
+      it { is_expected.to belong_to(:consultation) }
       it { is_expected.to be_valid }
     end
   end
