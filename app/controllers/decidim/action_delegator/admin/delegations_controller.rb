@@ -55,7 +55,6 @@ module Decidim
 
         def build_delegation
           delegation = Delegation.new(delegation_params)
-          delegation.setting = Setting.where(organization: current_organization).last
           delegation.organization = current_organization
           delegation
         end

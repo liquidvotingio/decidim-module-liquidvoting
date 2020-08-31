@@ -7,9 +7,6 @@ module Decidim
 
       belongs_to :granter, class_name: "Decidim::User"
       belongs_to :grantee, class_name: "Decidim::User"
-      belongs_to :setting,
-                 foreign_key: "decidim_action_delegator_settings_id",
-                 class_name: "Decidim::ActionDelegator::Setting"
       belongs_to :organization,
                  foreign_key: "decidim_organization_id",
                  class_name: "Decidim::Organization"

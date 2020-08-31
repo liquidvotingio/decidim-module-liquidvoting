@@ -8,7 +8,6 @@ FactoryBot.define do
     granter factory: :user
     grantee factory: :user
     organization
-    setting
     consultation
   end
 

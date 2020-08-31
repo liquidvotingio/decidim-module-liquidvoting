@@ -7,7 +7,6 @@ module Decidim
     describe Delegation, type: :model do
       subject { build(:delegation) }
 
-      it { is_expected.to belong_to(:setting) }
       it { is_expected.to belong_to(:consultation) }
       it { is_expected.to be_valid }
     end
