@@ -13,12 +13,12 @@ module Decidim
         end
 
         def consultations_for_select
-          consultations.map do |consultation|
+          organization_consultations.map do |consultation|
             ConsultationPresenter.new(consultation)
           end
         end
 
-        def consultations
+        def organization_consultations
           Consultations::OrganizationConsultations.new(current_organization).query
         end
       end

@@ -62,10 +62,7 @@ module Decidim
         end
 
         def collection
-          Delegation
-            .includes(:grantee, :granter)
-            .joins(:consultation)
-            .merge(Consultations::OrganizationConsultations.new(current_organization).query)
+          @collection ||= OrganizationDelegations.new(current_organization).query
         end
 
         def delegation
