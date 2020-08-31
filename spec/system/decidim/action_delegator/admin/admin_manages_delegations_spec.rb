@@ -51,7 +51,7 @@ describe "Admin manages delegations", type: :system do
     let!(:consultation) { create(:consultation, organization: organization) }
 
     before do
-      create(:setting, organization: organization)
+      create(:setting)
       click_link I18n.t("delegations.index.actions.new_delegation", scope: i18n_scope)
     end
 

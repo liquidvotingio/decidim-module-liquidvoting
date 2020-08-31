@@ -4,6 +4,7 @@ require "spec_helper"
 
 describe "Admin manages settings", type: :system do
   let(:organization) { create(:organization) }
+  let!(:consultation) { create(:consultation, organization: organization) }
   let!(:user) { create(:user, :admin, :confirmed, organization: organization) }
 
   before do
@@ -15,9 +16,12 @@ describe "Admin manages settings", type: :system do
   end
 
   it "creates new settings" do
+    consultation_translated_title = Decidim::ActionDelegator::Admin::ConsultationPresenter.new(consultation).translated_title
+
     within ".new_setting" do
       fill_in :setting_max_grants, with: 5
       fill_in :setting_expires_at, with: 2.days.from_now.to_date
+      select consultation_translated_title, from: :setting_decidim_consultation_id
 
       find("*[type=submit]").click
     end

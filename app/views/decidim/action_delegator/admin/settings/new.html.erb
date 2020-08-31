@@ -16,6 +16,15 @@
       <div class="row column">
         <%= f.date_field :expires_at, min: Date.today %>
       </div>
+
+      <div class="row column">
+        <%= f.select :decidim_consultation_id,
+                     options_from_collection_for_select(
+                       consultations_for_select,
+                       :id,
+                       :translated_title
+                     ) %>
+      </div>
     </div>
   </div>
 

@@ -4,6 +4,8 @@ module Decidim
   module ActionDelegator
     module Admin
       class SettingsController < ActionDelegator::Admin::ApplicationController
+        helper DelegationHelper
+
         layout "decidim/action_delegator/admin/settings"
 
         def new
@@ -24,13 +26,11 @@ module Decidim
         private
 
         def setting_params
-          params.require(:setting).permit(:max_grants, :expires_at)
+          params.require(:setting).permit(:max_grants, :expires_at, :decidim_consultation_id)
         end
 
         def build_setting
-          setting = Setting.new(setting_params)
-          setting.organization = current_organization
-          setting
+          Setting.new(setting_params)
         end
       end
     end
