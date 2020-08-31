@@ -54,9 +54,7 @@ module Decidim
         private
 
         def build_delegation
-          delegation = Delegation.new(delegation_params)
-          delegation.organization = current_organization
-          delegation
+          Delegation.new(delegation_params)
         end
 
         def delegation_params
@@ -64,7 +62,10 @@ module Decidim
         end
 
         def collection
-          Delegation.where(organization: current_organization).includes(:grantee, :granter)
+          Delegation
+            .includes(:grantee, :granter)
+            .joins(:consultation)
+            .merge(Consultations::OrganizationConsultations.new(current_organization).query)
         end
 
         def delegation

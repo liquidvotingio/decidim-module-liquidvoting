@@ -5,9 +5,10 @@ require "spec_helper"
 describe "Admin manages delegations", type: :system do
   let(:i18n_scope) { "decidim.action_delegator.admin" }
   let(:organization) { create(:organization) }
+  let(:consultation) { create(:consultation, organization: organization) }
   let!(:user) { create(:user, :admin, :confirmed, organization: organization) }
 
-  let!(:delegation) { create(:delegation, organization: organization) }
+  let!(:delegation) { create(:delegation, consultation: consultation) }
 
   before do
     switch_to_host(organization.host)
