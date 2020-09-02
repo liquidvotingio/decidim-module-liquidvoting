@@ -19,7 +19,7 @@ module Decidim
       private
 
       def expires_at_in_the_future
-        errors.add(:expires_at, "can't be in the past") if expires_at.present? && expires_at < Time.zone.now
+        errors.add(:expires_at, "can't be in the past") if expires_at.present? && expires_at < Time.current
       end
     end
   end
