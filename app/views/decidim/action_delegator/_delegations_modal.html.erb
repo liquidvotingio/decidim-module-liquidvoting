@@ -1,0 +1,30 @@
+<div class="reveal" data-reveal id="delegations-modal">
+  <div class="reveal__header">
+    <h3 class="reveal__title">
+      <%= t "action_delegator.delegations_modal.title", scope: "decidim" %>
+    </h3>
+    <button class="close-button" data-close aria-label="Close modal" type="button">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <p>You have been granted the vote from:</p>
+  <div class="card card--secondary">
+    <div class="card__content">
+
+      <% Decidim::ActionDelegator::ConsultationDelegations.for(consultation, current_user).each do |delegation| %>
+        <div class="row">
+          <div class="columns medium-5 medium-offset-1">
+            <%= delegation.granter.name %>
+          </div>
+          <div class="columns medium-5 medium-offset-1">
+            <%= link_to "#", class: "button expanded delegation-vote-button", data: { "delegation-id" => delegation.id } do %>
+              <div class="vote-button-caption"><%= t "questions.vote_button.vote", scope: "decidim" %></div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+
+    </div>
+  </div>
+</div>

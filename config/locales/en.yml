@@ -52,6 +52,8 @@ en:
           members:
             index:
               title: Members management
+      delegations_modal:
+        title: "Consultation: granted delegations"
     authorization_handlers:
       admin:
         delegations_verifier:
