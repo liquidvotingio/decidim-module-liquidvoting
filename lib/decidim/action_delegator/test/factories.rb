@@ -7,7 +7,7 @@ FactoryBot.define do
   factory :delegation, class: "Decidim::ActionDelegator::Delegation" do
     granter factory: :user
     grantee factory: :user
-    consultation
+    setting
   end
 
   factory :setting, class: "Decidim::ActionDelegator::Setting" do

@@ -3,5 +3,5 @@
 Decidim::ActionDelegator::Delegation.create(
   granter: Decidim::User.first,
   grantee: Decidim::User.second,
-  consultation: Decidim::Consultation.first
+  setting: Decidim::ActionDelegator::Setting.first
 )

@@ -8,7 +8,8 @@ describe "Admin manages delegations", type: :system do
   let(:consultation) { create(:consultation, organization: organization) }
   let!(:user) { create(:user, :admin, :confirmed, organization: organization) }
 
-  let!(:delegation) { create(:delegation, consultation: consultation) }
+  let(:setting) { create(:setting, consultation: consultation) }
+  let!(:delegation) { create(:delegation, setting: setting) }
 
   before do
     switch_to_host(organization.host)
@@ -60,7 +61,7 @@ describe "Admin manages delegations", type: :system do
       within ".new_delegation" do
         select granter.name, from: :delegation_granter_id
         select grantee.name, from: :delegation_grantee_id
-        select consultation_translated_title, from: :delegation_decidim_consultation_id
+        select setting.id, from: :delegation_decidim_action_delegator_setting_id
 
         find("*[type=submit]").click
       end

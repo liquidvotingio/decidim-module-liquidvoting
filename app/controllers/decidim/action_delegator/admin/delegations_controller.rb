@@ -58,7 +58,7 @@ module Decidim
         end
 
         def delegation_params
-          params.require(:delegation).permit(:granter_id, :grantee_id, :decidim_consultation_id)
+          params.require(:delegation).permit(:granter_id, :grantee_id, :decidim_action_delegator_setting_id)
         end
 
         def collection

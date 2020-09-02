@@ -2,15 +2,14 @@
 
 module Decidim
   module ActionDelegator
-    class OrganizationDelegations < Rectify::Query
+    class OrganizationSettings < Rectify::Query
       def initialize(organization)
         @organization = organization
       end
 
       def query
-        Delegation
-          .includes(:grantee, :granter)
-          .joins(setting: :consultation)
+        Setting
+          .joins(:consultation)
           .merge(organization_consultations)
       end
 

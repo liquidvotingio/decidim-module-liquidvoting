@@ -5,7 +5,7 @@ module Decidim
     module Admin
       class DelegationPresenter < SimpleDelegator
         def consultation
-          Admin::ConsultationPresenter.new(__getobj__.consultation)
+          Admin::ConsultationPresenter.new(__getobj__.setting.consultation)
         end
       end
     end

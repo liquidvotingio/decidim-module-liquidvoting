@@ -8,10 +8,11 @@ module Decidim
       routes { Decidim::ActionDelegator::AdminEngine.routes }
 
       let(:organization) { create(:organization) }
-      let(:consultation) { create(:consultation, organization: organization) }
       let(:user) { create(:user, :admin, :confirmed, organization: organization) }
 
-      let!(:delegation) { create(:delegation, consultation: consultation) }
+      let(:consultation) { create(:consultation, organization: organization) }
+      let(:setting) { create(:setting, consultation: consultation) }
+      let!(:delegation) { create(:delegation, setting: setting) }
 
       before do
         request.env["decidim.current_organization"] = organization
@@ -52,7 +53,7 @@ module Decidim
         let(:consultation) { create(:consultation, organization: organization) }
 
         let(:delegation_params) do
-          { delegation: { granter_id: granter.id, grantee_id: grantee.id, decidim_consultation_id: consultation.id } }
+          { delegation: { granter_id: granter.id, grantee_id: grantee.id, decidim_action_delegator_setting_id: setting.id } }
         end
 
         before { create(:setting) }
