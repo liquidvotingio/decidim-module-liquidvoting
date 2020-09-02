@@ -19,17 +19,13 @@ describe "Admin manages delegations", type: :system do
   end
 
   context "with existing delegations" do
-    it "renders a card wrapper with the title" do
+    it "renders the list of delegations in a table" do
       expect(page).to have_content(I18n.t("decidim.action_delegator.admin.delegations.index.title").upcase)
-    end
 
-    it "renders a table with header" do
       expect(page).to have_content(I18n.t("delegations.index.grantee", scope: i18n_scope).upcase)
       expect(page).to have_content(I18n.t("delegations.index.granter", scope: i18n_scope).upcase)
       expect(page).to have_content(I18n.t("delegations.index.created_at", scope: i18n_scope).upcase)
-    end
 
-    it "renders the list of delegations" do
       expect(page).to have_content(delegation.granter.name)
       expect(page).to have_content(delegation.grantee.name)
       expect(page).to have_content(I18n.l(delegation.created_at, format: :short))
