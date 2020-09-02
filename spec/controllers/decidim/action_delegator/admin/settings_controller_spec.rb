@@ -25,7 +25,7 @@ module Decidim
           it "creates new settings" do
             expect { post :create, params: setting_params }.to change(Setting, :count).by(1)
 
-            expect(response).to redirect_to(delegations_path)
+            expect(response).to redirect_to(settings_path)
             expect(flash[:notice]).to eq(I18n.t("decidim.action_delegator.admin.settings.create.success"))
           end
         end

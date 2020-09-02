@@ -8,6 +8,7 @@ module Decidim
         include Filterable
 
         helper DelegationHelper
+        helper_method :current_setting
 
         layout "decidim/admin/users"
 
@@ -32,7 +33,7 @@ module Decidim
 
           if @delegation.save
             notice = I18n.t("delegations.create.success", scope: "decidim.action_delegator.admin")
-            redirect_to delegations_path, notice: notice
+            redirect_to setting_delegations_path(@delegation.setting), notice: notice
           else
             error = I18n.t("delegations.create.error", scope: "decidim.action_delegator.admin")
             redirect_to delegations_path, flash: { error: error }
@@ -67,6 +68,10 @@ module Decidim
 
         def delegation
           Delegation.find_by(id: params[:id])
+        end
+
+        def current_setting
+          @current_setting ||= Setting.find_by(id: params[:setting_id])
         end
       end
     end

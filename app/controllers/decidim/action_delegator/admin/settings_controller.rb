@@ -8,6 +8,12 @@ module Decidim
 
         layout "decidim/action_delegator/admin/settings"
 
+        def index
+          @settings = Setting.all.map do |setting|
+            SettingPresenter.new(setting)
+          end
+        end
+
         def new
           @setting = Setting.new
         end
@@ -17,7 +23,7 @@ module Decidim
 
           if @setting.save
             flash[:notice] = I18n.t("settings.create.success", scope: "decidim.action_delegator.admin")
-            redirect_to decidim_admin_action_delegator.delegations_path
+            redirect_to decidim_admin_action_delegator.settings_path
           else
             flash[:error] = I18n.t("settings.create.error", scope: "decidim.action_delegator.admin")
           end

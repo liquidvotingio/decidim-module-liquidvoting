@@ -31,6 +31,12 @@ en:
           create:
             error: There was a problem creating the settings
             success: Settings saved successfully
+          index:
+            actions:
+              new_delegation: New delegation
+            consultation: Consultation
+            created_at: Created at
+            title: Delegations
           new:
             form:
               title: General information

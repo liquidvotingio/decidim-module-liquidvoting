@@ -23,11 +23,11 @@ module Decidim
         it "authorizes the action" do
           expect(controller.allowed_to?(:index, :delegation)).to eq true
 
-          get :index
+          get :index, params: { setting_id: setting.id }
         end
 
         it "renders the index template" do
-          get :index
+          get :index, params: { setting_id: setting.id }
 
           expect(response).to render_template(:index)
           expect(response).to have_http_status(:ok)
@@ -39,7 +39,7 @@ module Decidim
           it "lists delegations of the current organization" do
             non_org_delegation = create(:delegation)
 
-            get :index
+            get :index, params: { setting_id: setting.id }
 
             expect(response.body).to include(delegation_path(delegation))
             expect(response.body).not_to include(delegation_path(non_org_delegation))

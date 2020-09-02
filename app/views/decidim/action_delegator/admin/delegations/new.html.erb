@@ -28,6 +28,7 @@
                        selected: @delegation.grantee_id
                      ) %>
       </div>
+      <%# # TODO: Remove and build it in the controller %>
       <div class="row column">
         <%= f.select :decidim_action_delegator_setting_id,
                      options_from_collection_for_select(

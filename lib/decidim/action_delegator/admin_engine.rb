@@ -10,8 +10,10 @@ module Decidim
       paths["lib/tasks"] = nil
 
       routes do
-        resources :delegations, only: [:index, :new, :create, :destroy]
-        resources :settings, only: [:new, :create]
+        resources :settings, only: [:index, :new, :create] do
+          resources :delegations, only: [:index, :new]
+        end
+        resources :delegations, only: [:create, :destroy]
 
         root to: "delegations#index"
       end
