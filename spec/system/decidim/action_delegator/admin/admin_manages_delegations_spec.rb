@@ -13,7 +13,6 @@ describe "Admin manages delegations", type: :system do
   before do
     switch_to_host(organization.host)
     login_as user, scope: :user
-    # visit decidim_admin_action_delegator.delegations_path
     visit decidim_admin.users_path
     click_link I18n.t("decidim.action_delegator.admin.menu.delegations")
   end
