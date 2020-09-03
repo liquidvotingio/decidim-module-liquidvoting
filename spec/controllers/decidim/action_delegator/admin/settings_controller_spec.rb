@@ -38,6 +38,34 @@ module Decidim
           end
         end
       end
+
+      describe "#destroy" do
+        let!(:setting) { create(:setting) }
+
+        context "when successful" do
+          it "destroys the specified setting" do
+            expect { delete :destroy, params: { id: setting.id } }
+              .to change(Setting, :count).by(-1)
+
+            expect(response).to redirect_to(settings_path)
+            expect(flash[:notice]).to eq(I18n.t("decidim.action_delegator.admin.settings.destroy.success"))
+          end
+        end
+
+        context "when failed" do
+          before do
+            allow(setting).to receive(:destroy).and_return(false)
+            allow(Setting).to receive(:find_by).with(id: setting.id.to_s).and_return(setting)
+          end
+
+          it "shows an error" do
+            delete :destroy, params: { id: setting.id }
+
+            expect(response).to redirect_to(settings_path)
+            expect(flash[:error]).to eq(I18n.t("decidim.action_delegator.admin.settings.destroy.error"))
+          end
+        end
+      end
     end
   end
 end

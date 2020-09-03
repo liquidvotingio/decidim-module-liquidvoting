@@ -31,6 +31,9 @@ en:
           create:
             error: There was a problem creating the settings
             success: Settings saved successfully
+          destroy:
+            error: There was a problem destroying this setting
+            success: Setting successfully destroyed
           index:
             actions:
               new_delegation: New delegation

@@ -29,6 +29,16 @@ module Decidim
           end
         end
 
+        def destroy
+          if setting.destroy
+            flash[:notice] = I18n.t("settings.destroy.success", scope: "decidim.action_delegator.admin")
+          else
+            flash[:error] = I18n.t("settings.destroy.error", scope: "decidim.action_delegator.admin")
+          end
+
+          redirect_to settings_path
+        end
+
         private
 
         def setting_params
@@ -37,6 +47,10 @@ module Decidim
 
         def build_setting
           Setting.new(setting_params)
+        end
+
+        def setting
+          Setting.find_by(id: params[:id])
         end
       end
     end
