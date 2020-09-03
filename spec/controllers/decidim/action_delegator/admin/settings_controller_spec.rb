@@ -16,6 +16,13 @@ module Decidim
         sign_in user
       end
 
+      describe "#index" do
+        it "renders decidim/admin/users layout" do
+          get :index
+          expect(response).to render_template("layouts/decidim/admin/users")
+        end
+      end
+
       describe "#create" do
         let(:setting_params) do
           { setting: { max_grants: 2, expires_at: 2.days.from_now.to_date, decidim_consultation_id: consultation.id } }

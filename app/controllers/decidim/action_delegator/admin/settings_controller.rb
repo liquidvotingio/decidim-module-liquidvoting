@@ -6,7 +6,7 @@ module Decidim
       class SettingsController < ActionDelegator::Admin::ApplicationController
         helper DelegationHelper
 
-        layout "decidim/action_delegator/admin/settings"
+        layout "decidim/admin/users"
 
         def index
           @settings = Setting.all.map do |setting|
