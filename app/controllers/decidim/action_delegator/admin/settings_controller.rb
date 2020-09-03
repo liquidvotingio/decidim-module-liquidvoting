@@ -9,16 +9,22 @@ module Decidim
         layout "decidim/admin/users"
 
         def index
+          enforce_permission_to :index, :setting
+
           @settings = Setting.all.map do |setting|
             SettingPresenter.new(setting)
           end
         end
 
         def new
+          enforce_permission_to :create, :setting
+
           @setting = Setting.new(max_grants: 1)
         end
 
         def create
+          enforce_permission_to :create, :setting
+
           @setting = build_setting
 
           if @setting.save
@@ -30,6 +36,8 @@ module Decidim
         end
 
         def destroy
+          enforce_permission_to :destroy, :setting
+
           if setting.destroy
             flash[:notice] = I18n.t("settings.destroy.success", scope: "decidim.action_delegator.admin")
           else

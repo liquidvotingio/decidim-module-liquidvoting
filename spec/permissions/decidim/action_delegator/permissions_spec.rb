@@ -12,17 +12,27 @@ describe Decidim::ActionDelegator::Permissions do
   let(:delegation) { build(:delegation, granter: user) }
 
   context "when scope is not admin" do
-    let(:action) do
-      { scope: :public, action: :index, subject: :delegation }
+    context "when listing delegations" do
+      let(:action) do
+        { scope: :public, action: :index, subject: :delegation }
+      end
+
+      it_behaves_like "permission is not set"
     end
 
-    it_behaves_like "permission is not set"
+    context "when listing settings" do
+      let(:action) do
+        { scope: :public, action: :index, subject: :setting }
+      end
+
+      it_behaves_like "permission is not set"
+    end
   end
 
   context "when scope is admin" do
     let(:scope) { :admin }
 
-    context "when subject is not delegation" do
+    context "when subject is not delegation or setting" do
       let(:action) do
         { scope: scope, action: :index, subject: :other }
       end
@@ -46,9 +56,73 @@ describe Decidim::ActionDelegator::Permissions do
       end
     end
 
-    context "when destorying a delegation" do
+    context "when creating a delegation" do
+      let(:action) do
+        { scope: scope, action: :create, subject: :delegation }
+      end
+
+      context "when the user is admin" do
+        it { is_expected.to eq(true) }
+      end
+
+      context "when the user is not admin" do
+        let(:user) { build(:user) }
+
+        it_behaves_like "permission is not set"
+      end
+    end
+
+    context "when destroying a delegation" do
       let(:action) do
         { scope: scope, action: :destroy, subject: :delegation }
+      end
+
+      context "when the user is admin" do
+        it { is_expected.to eq(true) }
+      end
+
+      context "when the user is not admin" do
+        let(:user) { build(:user) }
+
+        it_behaves_like "permission is not set"
+      end
+    end
+
+    context "when listing settings" do
+      let(:action) do
+        { scope: scope, action: :index, subject: :setting }
+      end
+
+      context "when the user is admin" do
+        it { is_expected.to eq(true) }
+      end
+
+      context "when the user is not admin" do
+        let(:user) { build(:user) }
+
+        it_behaves_like "permission is not set"
+      end
+    end
+
+    context "when creating a setting" do
+      let(:action) do
+        { scope: scope, action: :create, subject: :setting }
+      end
+
+      context "when the user is admin" do
+        it { is_expected.to eq(true) }
+      end
+
+      context "when the user is not admin" do
+        let(:user) { build(:user) }
+
+        it_behaves_like "permission is not set"
+      end
+    end
+
+    context "when destroying a setting" do
+      let(:action) do
+        { scope: scope, action: :destroy, subject: :setting }
       end
 
       context "when the user is admin" do

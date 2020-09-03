@@ -23,6 +23,8 @@ module Decidim
         end
 
         def new
+          enforce_permission_to :create, :delegation
+
           @delegation = Delegation.new
         end
 

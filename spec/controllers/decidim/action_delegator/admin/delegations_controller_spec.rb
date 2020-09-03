@@ -47,6 +47,14 @@ module Decidim
         end
       end
 
+      describe "#new" do
+        it "authorizes the action" do
+          expect(controller).to receive(:allowed_to?).with(:create, :delegation, {})
+
+          get :new, params: { setting_id: setting.id }
+        end
+      end
+
       describe "#create" do
         let(:granter) { create(:user, organization: organization) }
         let(:grantee) { create(:user, organization: organization) }

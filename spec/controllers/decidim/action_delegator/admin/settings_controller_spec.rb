@@ -17,15 +17,35 @@ module Decidim
       end
 
       describe "#index" do
+        it "authorizes the action" do
+          expect(controller).to receive(:allowed_to?).with(:index, :setting, {})
+
+          get :index
+        end
+
         it "renders decidim/admin/users layout" do
           get :index
           expect(response).to render_template("layouts/decidim/admin/users")
         end
       end
 
+      describe "#new" do
+        it "authorizes the action" do
+          expect(controller).to receive(:allowed_to?).with(:create, :setting, {})
+
+          get :new
+        end
+      end
+
       describe "#create" do
         let(:setting_params) do
           { setting: { max_grants: 2, expires_at: 2.days.from_now.to_date, decidim_consultation_id: consultation.id } }
+        end
+
+        it "authorizes the action" do
+          expect(controller).to receive(:allowed_to?).with(:create, :setting, {})
+
+          post :create, params: setting_params
         end
 
         context "when successful" do
@@ -48,6 +68,12 @@ module Decidim
 
       describe "#destroy" do
         let!(:setting) { create(:setting) }
+
+        it "authorizes the action" do
+          expect(controller).to receive(:allowed_to?).with(:destroy, :setting, {})
+
+          delete :destroy, params: { id: setting.id }
+        end
 
         context "when successful" do
           it "destroys the specified setting" do
