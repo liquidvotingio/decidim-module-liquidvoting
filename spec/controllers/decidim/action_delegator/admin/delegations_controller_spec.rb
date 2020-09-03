@@ -33,19 +33,15 @@ module Decidim
           expect(response).to have_http_status(:ok)
         end
 
-        context "with view rendering" do
-          render_views
+        it "lists delegations of the current setting" do
+          other_consultation = create(:consultation, organization: organization)
+          other_setting = create(:setting, consultation: other_consultation)
+          other_setting_delegation = create(:delegation, setting: other_setting)
 
-          it "lists delegations of the current setting" do
-            other_consultation = create(:consultation, organization: organization)
-            other_setting = create(:setting, consultation: other_consultation)
-            other_setting_delegation = create(:delegation, setting: other_setting)
+          get :index, params: { setting_id: setting.id }
 
-            get :index, params: { setting_id: setting.id }
-
-            expect(response.body).to include(delegation_path(delegation))
-            expect(response.body).not_to include(delegation_path(other_setting_delegation))
-          end
+          expect(assigns(:delegations)).to include(delegation)
+          expect(assigns(:delegations)).not_to include(other_setting_delegation)
         end
       end
 

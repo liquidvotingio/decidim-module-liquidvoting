@@ -18,7 +18,7 @@
           </tr>
         </thead>
         <tbody>
-          <% delegations.each do |delegation| %>
+          <% @delegations.each do |delegation| %>
             <tr data-delegation-id="<%= delegation.id %>">
               <td><%= delegation.granter.name %></td>
               <td><%= delegation.grantee.name %></td>

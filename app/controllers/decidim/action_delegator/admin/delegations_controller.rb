@@ -15,11 +15,9 @@ module Decidim
         def index
           enforce_permission_to :index, :delegation
 
-          delegations = filtered_collection.map do |delegation|
+          @delegations = filtered_collection.map do |delegation|
             DelegationPresenter.new(delegation)
           end
-
-          render :index, locals: { delegations: delegations }
         end
 
         def new
