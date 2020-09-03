@@ -36,13 +36,15 @@ module Decidim
         context "with view rendering" do
           render_views
 
-          it "lists delegations of the current organization" do
-            non_org_delegation = create(:delegation)
+          it "lists delegations of the current setting" do
+            other_consultation = create(:consultation, organization: organization)
+            other_setting = create(:setting, consultation: other_consultation)
+            other_setting_delegation = create(:delegation, setting: other_setting)
 
             get :index, params: { setting_id: setting.id }
 
             expect(response.body).to include(delegation_path(delegation))
-            expect(response.body).not_to include(delegation_path(non_org_delegation))
+            expect(response.body).not_to include(delegation_path(other_setting_delegation))
           end
         end
       end
@@ -90,9 +92,20 @@ module Decidim
 
       describe "#destroy" do
         it "authorizes the action" do
-          expect(controller).to receive(:allowed_to?).with(:destroy, :delegation, {})
+          expect(controller).to receive(:allowed_to?).with(:destroy, :delegation, resource: delegation)
 
           delete :destroy, params: { id: delegation.id }
+        end
+
+        context "when the specified delegation does not belong to the current organization" do
+          let(:consultation) { create(:consultation) }
+          let(:setting) { create(:setting, consultation: consultation) }
+          let(:delegation) { create(:delegation) }
+
+          it "does destroy the delegation" do
+            expect { delete :destroy, params: { id: delegation.id } }
+              .not_to change(Delegation, :count)
+          end
         end
 
         context "when successful" do
@@ -107,8 +120,7 @@ module Decidim
 
         context "when failed" do
           before do
-            allow(delegation).to receive(:destroy).and_return(false)
-            allow(Delegation).to receive(:find_by).with(id: delegation.id.to_s).and_return(delegation)
+            allow_any_instance_of(Delegation).to receive(:destroy).and_return(false) # rubocop:disable RSpec/AnyInstance
           end
 
           it "shows an error" do

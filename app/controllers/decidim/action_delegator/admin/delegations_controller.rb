@@ -43,7 +43,7 @@ module Decidim
         end
 
         def destroy
-          enforce_permission_to :destroy, :delegation
+          enforce_permission_to :destroy, :delegation, resource: delegation
 
           setting_id = delegation.setting.id
 
@@ -67,11 +67,15 @@ module Decidim
         end
 
         def collection
-          @collection ||= OrganizationDelegations.new(current_organization).query
+          @collection ||= if current_setting.present?
+                            SettingDelegations.new(current_setting).query
+                          else
+                            OrganizationDelegations.new(current_organization).query
+                          end
         end
 
         def delegation
-          Delegation.find_by(id: params[:id])
+          @delegation ||= collection.find_by(id: params[:id])
         end
 
         def current_setting

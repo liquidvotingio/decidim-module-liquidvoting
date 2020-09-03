@@ -9,8 +9,6 @@ describe Decidim::ActionDelegator::Permissions do
   let(:permission_action) { Decidim::PermissionAction.new(action) }
   let(:context) { {} }
 
-  let(:delegation) { build(:delegation, granter: user) }
-
   context "when scope is not admin" do
     context "when listing delegations" do
       let(:action) do
@@ -76,6 +74,7 @@ describe Decidim::ActionDelegator::Permissions do
       let(:action) do
         { scope: scope, action: :destroy, subject: :delegation }
       end
+      let(:context) { { resource: create(:delegation) } }
 
       context "when the user is admin" do
         it { is_expected.to eq(true) }
@@ -124,6 +123,7 @@ describe Decidim::ActionDelegator::Permissions do
       let(:action) do
         { scope: scope, action: :destroy, subject: :setting }
       end
+      let(:context) { { resource: create(:setting) } }
 
       context "when the user is admin" do
         it { is_expected.to eq(true) }

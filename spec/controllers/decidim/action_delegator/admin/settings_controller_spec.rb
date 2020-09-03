@@ -27,6 +27,15 @@ module Decidim
           get :index
           expect(response).to render_template("layouts/decidim/admin/users")
         end
+
+        it "lists settings of the current organization only" do
+          other_consultation = create(:consultation)
+          other_setting = create(:setting, consultation: other_consultation)
+
+          get :index
+
+          expect(assigns(:settings)).not_to include(other_setting)
+        end
       end
 
       describe "#new" do
@@ -67,12 +76,22 @@ module Decidim
       end
 
       describe "#destroy" do
-        let!(:setting) { create(:setting) }
+        let!(:setting) { create(:setting, consultation: consultation) }
 
         it "authorizes the action" do
-          expect(controller).to receive(:allowed_to?).with(:destroy, :setting, {})
+          expect(controller).to receive(:allowed_to?).with(:destroy, :setting, resource: setting)
 
           delete :destroy, params: { id: setting.id }
+        end
+
+        context "when the specified setting does not belong to the current organization" do
+          let(:consultation) { create(:consultation) }
+          let(:setting) { create(:setting, consultation: consultation) }
+
+          it "does not destroy the setting" do
+            expect { delete :destroy, params: { id: setting.id } }
+              .not_to change(Setting, :count)
+          end
         end
 
         context "when successful" do
@@ -87,8 +106,7 @@ module Decidim
 
         context "when failed" do
           before do
-            allow(setting).to receive(:destroy).and_return(false)
-            allow(Setting).to receive(:find_by).with(id: setting.id.to_s).and_return(setting)
+            allow_any_instance_of(Setting).to receive(:destroy).and_return(false) # rubocop:disable RSpec/AnyInstance
           end
 
           it "shows an error" do

@@ -5,13 +5,14 @@ module Decidim
     module Admin
       class SettingsController < ActionDelegator::Admin::ApplicationController
         helper DelegationHelper
+        include Filterable
 
         layout "decidim/admin/users"
 
         def index
           enforce_permission_to :index, :setting
 
-          @settings = Setting.all.map do |setting|
+          @settings = filtered_collection.map do |setting|
             SettingPresenter.new(setting)
           end
         end
@@ -36,7 +37,7 @@ module Decidim
         end
 
         def destroy
-          enforce_permission_to :destroy, :setting
+          enforce_permission_to :destroy, :setting, resource: setting
 
           if setting.destroy
             flash[:notice] = I18n.t("settings.destroy.success", scope: "decidim.action_delegator.admin")
@@ -58,7 +59,11 @@ module Decidim
         end
 
         def setting
-          Setting.find_by(id: params[:id])
+          @setting ||= collection.find_by(id: params[:id])
+        end
+
+        def collection
+          @collection ||= OrganizationSettings.new(current_organization).query
         end
       end
     end
