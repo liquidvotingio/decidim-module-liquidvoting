@@ -15,7 +15,7 @@ module Decidim
         end
 
         def new
-          @setting = Setting.new
+          @setting = Setting.new(max_grants: 1)
         end
 
         def create
