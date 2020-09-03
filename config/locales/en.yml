@@ -4,17 +4,39 @@ en:
     action_delegator:
       admin:
         delegations:
+          create:
+            error: There was a problem creating the delegation
+            success: Delegation created successfully
           destroy:
             error: There was a problem destroying this delegation
             success: Delegation successfully destroyed
           index:
+            actions:
+              new_delegation: New delegation
+              new_setting: New settings
+            consultation: Consultation
             created_at: Created at
             delete: Delete
             grantee: Grantee
             granter: Granter
             title: Delegations
+          new:
+            form:
+              title: General information
+            save: Create
+            title: New delegation
         menu:
           delegations: User delegations
+        settings:
+          create:
+            error: There was a problem creating the settings
+            success: Settings saved successfully
+          new:
+            form:
+              title: General information
+            max_grants: Maximum delegations
+            save: Save
+            title: Delegation settings
       name: Decidim ActionDelegator cooperatives module
       verification:
         admin:

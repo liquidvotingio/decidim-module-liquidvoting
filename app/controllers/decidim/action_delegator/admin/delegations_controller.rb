@@ -7,13 +7,36 @@ module Decidim
         include NeedsPermission
         include Filterable
 
+        helper DelegationHelper
+
         layout "decidim/admin/users"
 
         def index
           enforce_permission_to :index, :delegation
 
-          delegations = filtered_collection
+          delegations = filtered_collection.map do |delegation|
+            DelegationPresenter.new(delegation)
+          end
+
           render :index, locals: { delegations: delegations }
+        end
+
+        def new
+          @delegation = Delegation.new
+        end
+
+        def create
+          enforce_permission_to :create, :delegation
+
+          @delegation = build_delegation
+
+          if @delegation.save
+            notice = I18n.t("delegations.create.success", scope: "decidim.action_delegator.admin")
+            redirect_to delegations_path, notice: notice
+          else
+            error = I18n.t("delegations.create.error", scope: "decidim.action_delegator.admin")
+            redirect_to delegations_path, flash: { error: error }
+          end
         end
 
         def destroy
@@ -30,8 +53,16 @@ module Decidim
 
         private
 
+        def build_delegation
+          Delegation.new(delegation_params)
+        end
+
+        def delegation_params
+          params.require(:delegation).permit(:granter_id, :grantee_id, :decidim_action_delegator_setting_id)
+        end
+
         def collection
-          Delegation.where(organization: current_organization).includes(:grantee, :granter)
+          @collection ||= OrganizationDelegations.new(current_organization).query
         end
 
         def delegation
