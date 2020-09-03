@@ -88,4 +88,28 @@ describe "Admin manages delegations", type: :system do
       expect(page).to have_current_path(decidim_admin_action_delegator.setting_delegations_path(setting.id))
     end
   end
+
+  context "when destroying a delegation" do
+    let(:consultation) { create(:consultation, organization: organization) }
+    let(:setting) { create(:setting, consultation: consultation) }
+    let!(:delegation) { create(:delegation, setting: setting) }
+
+    before do
+      switch_to_host(organization.host)
+      login_as user, scope: :user
+      visit decidim_admin.users_path
+      click_link I18n.t("decidim.action_delegator.admin.menu.delegations")
+      click_link Decidim::ActionDelegator::Admin::ConsultationPresenter.new(consultation).translated_title
+    end
+
+    it "destroys the delegation" do
+      within "tr[data-delegation-id=\"#{delegation.id}\"]" do
+        accept_confirm { click_link "Delete" }
+      end
+
+      expect(page).not_to have_content(delegation.grantee.name)
+      expect(page).to have_current_path(decidim_admin_action_delegator.setting_delegations_path(setting.id))
+      expect(page).to have_admin_callout("successfully")
+    end
+  end
 end

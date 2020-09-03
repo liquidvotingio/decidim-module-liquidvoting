@@ -92,7 +92,7 @@ module Decidim
             expect { delete :destroy, params: { id: delegation.id } }
               .to change(Delegation, :count).by(-1)
 
-            expect(response).to redirect_to(delegations_path)
+            expect(response).to redirect_to(setting_delegations_path(setting.id))
             expect(flash[:notice]).to eq(I18n.t("decidim.action_delegator.admin.delegations.destroy.success"))
           end
         end
@@ -106,7 +106,7 @@ module Decidim
           it "shows an error" do
             delete :destroy, params: { id: delegation.id }
 
-            expect(response).to redirect_to(delegations_path)
+            expect(response).to redirect_to(setting_delegations_path(setting.id))
             expect(flash[:error]).to eq(I18n.t("decidim.action_delegator.admin.delegations.destroy.error"))
           end
         end
