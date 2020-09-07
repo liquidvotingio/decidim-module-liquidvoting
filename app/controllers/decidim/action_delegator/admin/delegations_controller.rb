@@ -10,7 +10,7 @@ module Decidim
         helper DelegationHelper
         helper_method :current_setting
 
-        layout "decidim/admin/users"
+        layout "decidim/action_delegator/admin/delegations"
 
         def index
           enforce_permission_to :index, :delegation

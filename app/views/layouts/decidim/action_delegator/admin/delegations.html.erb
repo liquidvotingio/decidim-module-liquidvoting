@@ -1,0 +1,24 @@
+<% content_for :secondary_nav do %>
+  <div class="secondary-nav">
+    <div class="secondary-nav__title">
+      <%= translated_attribute(current_setting.consultation.title) %>
+    </div>
+    <ul>
+      <% if allowed_to? :index, :delegation %>
+        <li <% if is_active_link?(decidim_admin_action_delegator.setting_delegations_path(current_setting)) %> class="is-active" <% end %>>
+          <%= link_to t("menu.participants", scope: "decidim.action_delegator.admin"), decidim_admin_action_delegator.setting_delegations_path(current_setting) %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= render "layouts/decidim/admin/application" do %>
+  <div class="process-title">
+    <div class="process-title-content">
+      <%= translated_attribute(current_setting.consultation.title) %>
+    </div>
+  </div>
+
+  <%= yield %>
+<% end %>

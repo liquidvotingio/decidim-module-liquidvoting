@@ -27,6 +27,11 @@ module Decidim
           get :index, params: { setting_id: setting.id }
         end
 
+        it "renders decidim/action_delegator/admin/delegations layout" do
+          get :index
+          expect(response).to render_template("layouts/decidim/action_delegator/admin/delegations")
+        end
+
         it "renders the index template" do
           get :index, params: { setting_id: setting.id }
 

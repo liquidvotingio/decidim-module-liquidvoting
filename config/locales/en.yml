@@ -26,6 +26,7 @@ en:
             title: New delegation
         menu:
           delegations: User delegations
+          participants: Participants
         settings:
           create:
             error: There was a problem creating the settings
