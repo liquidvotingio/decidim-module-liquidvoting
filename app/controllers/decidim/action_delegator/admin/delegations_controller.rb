@@ -35,8 +35,7 @@ module Decidim
             notice = I18n.t("delegations.create.success", scope: "decidim.action_delegator.admin")
             redirect_to setting_delegations_path(@delegation.setting), notice: notice
           else
-            error = I18n.t("delegations.create.error", scope: "decidim.action_delegator.admin")
-            redirect_to delegations_path, flash: { error: error }
+            flash.now[:error] = I18n.t("delegations.create.error", scope: "decidim.action_delegator.admin")
           end
         end
 
@@ -57,18 +56,19 @@ module Decidim
         private
 
         def build_delegation
-          Delegation.new(delegation_params)
+          attributes = delegation_params.merge(setting: current_setting)
+          Delegation.new(attributes)
         end
 
         def delegation_params
-          params.require(:delegation).permit(:granter_id, :grantee_id, :decidim_action_delegator_setting_id)
+          params.require(:delegation).permit(:granter_id, :grantee_id)
         end
 
         def collection
           @collection ||= if current_setting.present?
                             SettingDelegations.new(current_setting).query
                           else
-                            OrganizationDelegations.new(current_organization).query
+                            organization_settings
                           end
         end
 
@@ -77,7 +77,11 @@ module Decidim
         end
 
         def current_setting
-          @current_setting ||= Setting.find_by(id: params[:setting_id])
+          @current_setting ||= organization_settings.find_by(id: params[:setting_id])
+        end
+
+        def organization_settings
+          OrganizationSettings.new(current_organization).query
         end
       end
     end

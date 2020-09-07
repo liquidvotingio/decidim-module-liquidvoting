@@ -27,7 +27,6 @@ describe "Admin manages delegations", type: :system do
       within ".new_delegation" do
         select granter.name, from: :delegation_granter_id
         select grantee.name, from: :delegation_grantee_id
-        select setting.id, from: :delegation_decidim_action_delegator_setting_id
 
         find("*[type=submit]").click
       end

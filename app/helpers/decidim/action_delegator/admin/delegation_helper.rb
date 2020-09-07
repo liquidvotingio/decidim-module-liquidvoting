@@ -18,10 +18,6 @@ module Decidim
           end
         end
 
-        def settings_for_select
-          OrganizationSettings.new(current_organization).query
-        end
-
         def organization_consultations
           Consultations::OrganizationConsultations.new(current_organization).query
         end

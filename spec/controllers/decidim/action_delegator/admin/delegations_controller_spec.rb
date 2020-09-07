@@ -12,7 +12,6 @@ module Decidim
 
       let(:consultation) { create(:consultation, organization: organization) }
       let(:setting) { create(:setting, consultation: consultation) }
-      let!(:delegation) { create(:delegation, setting: setting) }
 
       before do
         request.env["decidim.current_organization"] = organization
@@ -20,6 +19,8 @@ module Decidim
       end
 
       describe "#index" do
+        let!(:delegation) { create(:delegation, setting: setting) }
+
         it "authorizes the action" do
           expect(controller.allowed_to?(:index, :delegation)).to eq true
 
@@ -57,57 +58,69 @@ module Decidim
         let(:granter) { create(:user, organization: organization) }
         let(:grantee) { create(:user, organization: organization) }
         let(:consultation) { create(:consultation, organization: organization) }
+        let(:setting) { create(:setting, consultation: consultation) }
 
-        let(:delegation_params) do
-          { delegation: { granter_id: granter.id, grantee_id: grantee.id, decidim_action_delegator_setting_id: setting.id } }
+        let(:params) do
+          { delegation: { granter_id: granter.id, grantee_id: grantee.id }, setting_id: setting.id }
         end
-
-        before { create(:setting) }
 
         it "authorizes the action" do
           expect(controller).to receive(:allowed_to?).with(:create, :delegation, {})
 
-          post :create, params: delegation_params
+          post :create, params: params
+        end
+
+        context "when the setting belongs to another organization" do
+          let(:setting) { create(:setting) }
+
+          it "does not destroy the delegation" do
+            expect { post :create, params: params }.not_to change(Delegation, :count)
+          end
         end
 
         context "when successful" do
           it "creates a delegation" do
-            expect { post :create, params: delegation_params }.to change(Delegation, :count).by(1)
+            expect { post :create, params: params }.to change(Delegation, :count).by(1)
+          end
+
+          it "redirects to the setting index" do
+            post :create, params: params
+            expect(response).to redirect_to(setting_delegations_path(setting))
           end
         end
 
         context "when failed" do
           it "shows an error" do
-            post :create, params: { delegation: { granter_id: granter.id } }
+            post :create, params: { delegation: { granter_id: granter.id }, setting_id: setting.id }
 
-            expect(response).to redirect_to(delegations_path)
-            expect(flash[:error]).to eq(I18n.t("decidim.action_delegator.admin.delegations.create.error"))
+            expect(controller).to set_flash.now[:error].to(I18n.t("decidim.action_delegator.admin.delegations.create.error"))
           end
         end
       end
 
       describe "#destroy" do
+        let!(:delegation) { create(:delegation, setting: setting) }
+        let(:params) { { id: delegation.id, setting_id: setting.id } }
+
         it "authorizes the action" do
           expect(controller).to receive(:allowed_to?).with(:destroy, :delegation, resource: delegation)
 
-          delete :destroy, params: { id: delegation.id }
+          delete :destroy, params: params
         end
 
-        context "when the specified delegation does not belong to the current organization" do
+        context "when the setting belongs to another organization" do
           let(:consultation) { create(:consultation) }
           let(:setting) { create(:setting, consultation: consultation) }
           let(:delegation) { create(:delegation) }
 
-          it "does destroy the delegation" do
-            expect { delete :destroy, params: { id: delegation.id } }
-              .not_to change(Delegation, :count)
+          it "does not destroy the delegation" do
+            expect { delete :destroy, params: params }.not_to change(Delegation, :count)
           end
         end
 
         context "when successful" do
           it "destroys the specified delegation" do
-            expect { delete :destroy, params: { id: delegation.id } }
-              .to change(Delegation, :count).by(-1)
+            expect { delete :destroy, params: params }.to change(Delegation, :count).by(-1)
 
             expect(response).to redirect_to(setting_delegations_path(setting.id))
             expect(flash[:notice]).to eq(I18n.t("decidim.action_delegator.admin.delegations.destroy.success"))
@@ -120,7 +133,7 @@ module Decidim
           end
 
           it "shows an error" do
-            delete :destroy, params: { id: delegation.id }
+            delete :destroy, params: params
 
             expect(response).to redirect_to(setting_delegations_path(setting.id))
             expect(flash[:error]).to eq(I18n.t("decidim.action_delegator.admin.delegations.destroy.error"))
