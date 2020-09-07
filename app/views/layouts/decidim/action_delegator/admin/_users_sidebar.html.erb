@@ -36,7 +36,7 @@
           <% end %>
         </ul>
       </li>
-      <% if allowed_to? :index, :delegation %>
+      <% if allowed_to? :index, :impersonatable_user %>
         <li <% if is_active_link?(decidim_admin_action_delegator.settings_path) %> class="is-active" <% end %>>
           <%= link_to t("menu.delegations", scope: "decidim.action_delegator.admin"), decidim_admin_action_delegator.settings_path %>
         </li>
