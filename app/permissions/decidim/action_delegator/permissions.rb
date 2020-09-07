@@ -6,10 +6,25 @@ module Decidim
       def permissions
         return permission_action unless user.admin?
         return permission_action unless permission_action.scope == :admin
-        return permission_action unless permission_action.subject == :delegation
+        return permission_action unless [:delegation, :setting].include?(permission_action.subject)
 
-        allow!
+        allow! if can_perform_action?(permission_action.action, resource)
+
         permission_action
+      end
+
+      private
+
+      def can_perform_action?(action, resource)
+        if action == :destroy
+          resource.present?
+        else
+          true
+        end
+      end
+
+      def resource
+        @resource ||= context.fetch(:resource, nil)
       end
     end
   end

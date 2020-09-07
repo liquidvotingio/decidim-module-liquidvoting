@@ -12,14 +12,13 @@ en:
             success: Delegation successfully destroyed
           index:
             actions:
-              new_delegation: New delegation
-              new_setting: New settings
+              new_delegation: New participant
             consultation: Consultation
             created_at: Created at
             delete: Delete
             grantee: Grantee
             granter: Granter
-            title: Delegations
+            title: Participants
           new:
             form:
               title: General information
@@ -27,10 +26,20 @@ en:
             title: New delegation
         menu:
           delegations: User delegations
+          participants: Participants
         settings:
           create:
             error: There was a problem creating the settings
             success: Settings saved successfully
+          destroy:
+            error: There was a problem destroying this setting
+            success: Setting successfully destroyed
+          index:
+            actions:
+              new_setting: New delegation
+            consultation: Consultation
+            created_at: Created at
+            title: Delegations
           new:
             form:
               title: General information

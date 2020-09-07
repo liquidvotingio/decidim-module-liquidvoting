@@ -8,6 +8,7 @@ module Decidim
       subject { build(:setting) }
 
       it { is_expected.to belong_to(:consultation) }
+      it { is_expected.to have_many(:delegations).dependent(:destroy) }
 
       it { is_expected.to validate_presence_of(:max_grants) }
       it { is_expected.to validate_presence_of(:expires_at) }

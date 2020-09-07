@@ -8,20 +8,21 @@ module Decidim
         include Filterable
 
         helper DelegationHelper
+        helper_method :current_setting
 
-        layout "decidim/admin/users"
+        layout "decidim/action_delegator/admin/delegations"
 
         def index
           enforce_permission_to :index, :delegation
 
-          delegations = filtered_collection.map do |delegation|
+          @delegations = filtered_collection.map do |delegation|
             DelegationPresenter.new(delegation)
           end
-
-          render :index, locals: { delegations: delegations }
         end
 
         def new
+          enforce_permission_to :create, :delegation
+
           @delegation = Delegation.new
         end
 
@@ -32,41 +33,51 @@ module Decidim
 
           if @delegation.save
             notice = I18n.t("delegations.create.success", scope: "decidim.action_delegator.admin")
-            redirect_to delegations_path, notice: notice
+            redirect_to setting_delegations_path(@delegation.setting), notice: notice
           else
-            error = I18n.t("delegations.create.error", scope: "decidim.action_delegator.admin")
-            redirect_to delegations_path, flash: { error: error }
+            flash.now[:error] = I18n.t("delegations.create.error", scope: "decidim.action_delegator.admin")
           end
         end
 
         def destroy
-          enforce_permission_to :destroy, :delegation
+          enforce_permission_to :destroy, :delegation, resource: delegation
+
+          setting_id = delegation.setting.id
 
           if delegation.destroy
             notice = I18n.t("delegations.destroy.success", scope: "decidim.action_delegator.admin")
-            redirect_to delegations_path, notice: notice
+            redirect_to setting_delegations_path(setting_id), notice: notice
           else
             error = I18n.t("delegations.destroy.error", scope: "decidim.action_delegator.admin")
-            redirect_to delegations_path, flash: { error: error }
+            redirect_to setting_delegations_path(setting_id), flash: { error: error }
           end
         end
 
         private
 
         def build_delegation
-          Delegation.new(delegation_params)
+          attributes = delegation_params.merge(setting: current_setting)
+          Delegation.new(attributes)
         end
 
         def delegation_params
-          params.require(:delegation).permit(:granter_id, :grantee_id, :decidim_action_delegator_setting_id)
-        end
-
-        def collection
-          @collection ||= OrganizationDelegations.new(current_organization).query
+          params.require(:delegation).permit(:granter_id, :grantee_id)
         end
 
         def delegation
-          Delegation.find_by(id: params[:id])
+          @delegation ||= collection.find_by(id: params[:id])
+        end
+
+        def collection
+          @collection ||= SettingDelegations.new(current_setting).query
+        end
+
+        def current_setting
+          @current_setting ||= organization_settings.find_by(id: params[:setting_id])
+        end
+
+        def organization_settings
+          OrganizationSettings.new(current_organization).query
         end
       end
     end
