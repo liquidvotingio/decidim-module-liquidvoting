@@ -63,6 +63,7 @@ describe "Admin manages settings", type: :system do
 
   context "when removing settings" do
     let!(:setting) { create(:setting, consultation: consultation) }
+    let!(:delegation) { create(:delegation, setting: setting) }
 
     before do
       switch_to_host(organization.host)

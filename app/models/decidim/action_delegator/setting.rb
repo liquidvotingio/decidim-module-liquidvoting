@@ -10,6 +10,10 @@ module Decidim
       belongs_to :consultation,
                  foreign_key: "decidim_consultation_id",
                  class_name: "Decidim::Consultation"
+      has_many :delegations,
+               inverse_of: :setting,
+               foreign_key: "decidim_action_delegator_setting_id",
+               dependent: :destroy
 
       validate :expires_at_in_the_future
 
