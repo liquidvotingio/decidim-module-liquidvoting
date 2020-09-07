@@ -11,9 +11,8 @@ module Decidim
 
       routes do
         resources :settings, only: [:index, :new, :create, :destroy] do
-          resources :delegations, only: [:index, :new, :create]
+          resources :delegations, only: [:index, :new, :create, :destroy]
         end
-        resources :delegations, only: [:destroy]
 
         root to: "delegations#index"
       end

@@ -26,7 +26,7 @@
               <td><%= l delegation.created_at, format: :short %></td>
 
               <td class="table-list__actions">
-                <%= icon_link_to "circle-x", decidim_admin_action_delegator.delegation_path(delegation), t("actions.destroy", scope: "decidim.admin"), class: "action-icon--remove", method: :delete, data: { confirm: t("actions.confirm_destroy", scope: "decidim.admin") } %>
+                <%= icon_link_to "circle-x", decidim_admin_action_delegator.setting_delegation_path(delegation.setting, delegation), t("actions.destroy", scope: "decidim.admin"), class: "action-icon--remove", method: :delete, data: { confirm: t("actions.confirm_destroy", scope: "decidim.admin") } %>
               </td>
             </tr>
           <% end %>

@@ -64,16 +64,12 @@ module Decidim
           params.require(:delegation).permit(:granter_id, :grantee_id)
         end
 
-        def collection
-          @collection ||= if current_setting.present?
-                            SettingDelegations.new(current_setting).query
-                          else
-                            organization_settings
-                          end
-        end
-
         def delegation
           @delegation ||= collection.find_by(id: params[:id])
+        end
+
+        def collection
+          @collection ||= SettingDelegations.new(current_setting).query
         end
 
         def current_setting
