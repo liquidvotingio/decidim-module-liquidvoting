@@ -70,7 +70,7 @@ module Decidim
           it "shows the error" do
             post :create, params: { setting: { max_grants: 2 } }
 
-            expect(flash[:error]).to eq(I18n.t("decidim.action_delegator.admin.settings.create.error"))
+            expect(controller).to set_flash.now[:error].to(I18n.t("decidim.action_delegator.admin.settings.create.error"))
           end
         end
       end
