@@ -18,7 +18,7 @@
             <%= delegation.granter.name %>
           </div>
           <div class="columns medium-5 medium-offset-1">
-            <%= link_to "#", class: "button expanded delegation-vote-button", data: { "delegation-id" => delegation.id } do %>
+            <%= link_to "#", class: "button expanded delegation-vote-button", data: { "delegation-id" => delegation.id, "delegation-granter-name" => delegation.granter.name } do %>
               <div class="vote-button-caption"><%= t "questions.vote_button.vote", scope: "decidim" %></div>
             <% end %>
           </div>

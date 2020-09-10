@@ -54,6 +54,7 @@ en:
               title: Members management
       delegations_modal:
         title: "Consultation: granted delegations"
+        callout: "Remember, you are voting on behalf of"
     authorization_handlers:
       admin:
         delegations_verifier:
