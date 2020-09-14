@@ -1,4 +1,4 @@
-<% if Decidim::ActionDelegator::ConsultationDelegations.for(consultation, current_user).any? %>
+<% if Decidim::ActionDelegator::Delegation.granted_to?(current_user, consultation) %>
   <div class="delegation-callout callout warning is-hidden">
     <p><%= t "action_delegator.delegations_modal.callout", scope: "decidim" %> <span class="delegation-callout-message"></span></p>
   </div>
