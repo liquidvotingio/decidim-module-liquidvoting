@@ -1,3 +1,5 @@
-<div class="delegations-notice flex--cc">
-  <%= link_to t("action_delegator.delegations.link", scope: "decidim"), "#", id: "delegations-button" %>
-</div>
+<% if Decidim::ActionDelegator::ConsultationDelegations.for(consultation, current_user).any? %>
+  <div class="delegations-notice flex--cc">
+    <%= link_to t("action_delegator.delegations.link", scope: "decidim"), "#", id: "delegations-button" %>
+  </div>
+<% end %>
