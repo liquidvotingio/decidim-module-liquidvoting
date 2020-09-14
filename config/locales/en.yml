@@ -52,9 +52,12 @@ en:
           members:
             index:
               title: Members management
+      delegations:
+        link: You have delegations granted
       delegations_modal:
         title: "Consultation: granted delegations"
-        callout: "Remember, you are voting on behalf of"
+        callout: Remember, you are voting on behalf of
+        contextual_help: "You have been granted the vote from:"
     authorization_handlers:
       admin:
         delegations_verifier:
