@@ -21,7 +21,7 @@
 
             <%# Copied from decidim-consultation's _vote_button.html.erb %>
             <% if question.consultation.upcoming? %>
-              <div class="card__button button expanded disabled">
+              <div class="button expanded disabled">
                 <div class="vote-button-caption"><%= t("questions.vote_button.vote", scope: "decidim") %></div>
                 <div>
                   <%= t "questions.vote_button.starting_from",
@@ -34,7 +34,7 @@
                           method: :delete,
                           remote: true,
                           data: { disable: true },
-                          class: "card__button button expanded success disabled",
+                          class: "button expanded success disabled",
                           id: "unvote_button" do %>
                 <div class="vote-button-caption">
                   <%= t("questions.vote_button.already_voted", scope: "decidim") %>
@@ -46,7 +46,7 @@
                               method: :delete,
                               remote: true,
                               data: { disable: true },
-                              class: "card__button button expanded success",
+                              class: "button expanded success",
                               id: "unvote_button" do %>
                   <div class="vote-button-caption"
                        data-original="<%= t("questions.vote_button.already_voted", scope: "decidim") %>"
@@ -57,13 +57,13 @@
               <% elsif allowed_to? :vote, :question, { question: question }, [Decidim::Consultations::Permissions, Decidim::Admin::Permissions, Decidim::Permissions], delegation.granter %>
                 <% if question.multiple? %>
                   <%= link_to decidim_consultations.question_question_multiple_votes_path(question),
-                              class: "card__button button expanded",
+                              class: "button expanded",
                               id: "multivote_button" do %>
                     <div class="vote-button-caption"><%= t "questions.vote_button.vote", scope: "decidim" %></div>
                   <% end %>
                 <% else %>
 
-                  <%# This link is the only bit slightly modified from _vote_button to add stuff needed by delegations %>
+                  <%# This link is slightly modified from _vote_button to add stuff needed by delegations %>
                   <%= link_to "#", class: "button expanded delegation-vote-button", data: { "delegation-id" => delegation.id, "delegation-granter-name" => delegation.granter.name } do %>
                     <div class="vote-button-caption"><%= t "questions.vote_button.vote", scope: "decidim" %></div>
                   <% end %>
@@ -76,7 +76,7 @@
               <% end %>
             <% elsif question.consultation.active? %>
               <%= logged_button_to decidim_consultations.question_question_votes_path(question),
-                                   class: "card__button button expanded",
+                                   class: "button expanded",
                                    data: { disable: true },
                                    id: "vote_button" do %>
                 <div class="vote-button-caption">
