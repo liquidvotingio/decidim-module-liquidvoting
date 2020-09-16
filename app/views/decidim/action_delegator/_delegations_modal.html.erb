@@ -48,6 +48,7 @@
                               data: { disable: true },
                               class: "button expanded success",
                               id: "delegation_unvote_button" do %>
+                  <%= hidden_field_tag :decidim_consultations_delegation_id, delegation.id, id: "decidim_consultations_delegation_id_delete" %>
                   <div class="vote-button-caption"
                        data-original="<%= t("questions.vote_button.already_voted", scope: "decidim") %>"
                        data-replace="<%= t("questions.vote_button.already_voted_hover", scope: "decidim") %>">
