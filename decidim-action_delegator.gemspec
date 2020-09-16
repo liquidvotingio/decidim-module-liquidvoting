@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.email = ["saulopefa@gmail.com", "ivan@platoniq.net"]
   s.license = "AGPL-3.0"
   s.homepage = "https://github.com/coopdevs/decidim-module-action_delegator"
-  s.required_ruby_version = ">= 2.6"
+  s.required_ruby_version = ">= 2.5"
 
   s.name = "decidim-action_delegator"
   s.summary = "A Decidim ActionDelegator module"
