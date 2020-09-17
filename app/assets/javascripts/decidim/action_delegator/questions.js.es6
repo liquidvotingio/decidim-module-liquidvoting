@@ -14,8 +14,8 @@ $(() => {
 
   delegationVoteButtons.click((e) => {
     voteDialog.foundation("open");
-    delegationField.val($(e.target).data("delegation-id"));
-    delegationCalloutsMessage.text($(e.target).data("delegation-granter-name"));
+    delegationField.val($(e.currentTarget).data("delegation-id"));
+    delegationCalloutsMessage.text($(e.currentTarget).data("delegation-granter-name"));
     delegationCallouts.removeClass("is-hidden");
   });
 
