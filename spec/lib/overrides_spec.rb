@@ -12,6 +12,15 @@ module Decidim::ActionDelegator
       files: {
         "/app/views/layouts/decidim/admin/users.html.erb" => "8d2622bcea84aa844896123499619bc3"
       }
+    }, {
+      package: "decidim-consultations",
+      files: {
+        "/app/views/decidim/consultations/consultations/_question.html.erb" => "e0490411ca3af6573cc736b297cbe6c8",
+        "/app/views/decidim/consultations/question_votes/update_vote_button.js.erb" => "a675fe780e77e8766beef999112a8fcb",
+        "/app/views/decidim/consultations/questions/_vote_button.html.erb" => "036bbb6a3e37062ed37325da8d48ed36",
+        "/app/views/decidim/consultations/questions/_vote_modal.html.erb" => "b23948e4ed7e0360a09faef326bc3664",
+        "/app/views/decidim/consultations/questions/_vote_modal_confirm.html.erb" => "7eb753c457e9a5adc6c16efd155ba434"
+      }
     }
   ]
 
@@ -22,7 +31,7 @@ module Decidim::ActionDelegator
       # rubocop:enable Rails/DynamicFindBy
       item[:files].each do |file, signature|
         it "#{spec.gem_dir}#{file} matches checksum" do
-          expect(signature).to eq(md5("#{spec.gem_dir}#{file}"))
+          expect(md5("#{spec.gem_dir}#{file}")).to eq(signature)
         end
       end
     end
