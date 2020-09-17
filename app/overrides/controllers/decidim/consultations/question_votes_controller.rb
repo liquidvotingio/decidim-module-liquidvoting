@@ -1,27 +1,9 @@
 # frozen_string_literal: true
 
 Decidim::Consultations::QuestionVotesController.class_eval do
-  def create
-    enforce_permission_to :vote, :question, question: current_question
-
-    vote_form = form(Decidim::ActionDelegator::VoteForm).from_params(params, current_question: current_question)
-    VoteQuestion.call(vote_form) do
-      on(:ok) do
-        current_question.reload
-        render :update_vote_button
-      end
-
-      on(:invalid) do
-        render json: {
-          error: I18n.t("question_votes.create.error", scope: "decidim.consultations")
-        }, status: :unprocessable_entity
-      end
-    end
-  end
-
   def destroy
     enforce_permission_to_unvote :question, question: current_question
-    UnvoteQuestion.call(current_question, delegation.present? ? delegation.granter : current_user) do
+    Decidim::Consultations::UnvoteQuestion.call(current_question, delegation.present? ? delegation.granter : current_user) do
       on(:ok) do
         current_question.reload
         render :update_vote_button

@@ -1,22 +1,14 @@
 # frozen_string_literal: true
 
 Decidim::Consultations::VoteQuestion.class_eval do
+  private
+
   def build_vote
+    author = delegation ? delegation.granter : form.context.current_user
     form.context.current_question.votes.build(
-    if delegation
-      author: form.context.current_user,
-      form.context.current_question.votes.build(
+      author: author,
       response: form.response
-        author: delegation.granter,
     )
-        response: form.response
-      )
-    else
-      form.context.current_question.votes.build(
-        author: form.context.current_user,
-        response: form.response
-      )
-    end
   end
 
   def delegation

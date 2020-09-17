@@ -12,6 +12,7 @@ require_relative "#{base_path}lib/decidim/action_delegator/version"
 
 gem "decidim", Decidim::ActionDelegator::DECIDIM_VERSION
 gem "decidim-action_delegator", path: "."
+gem "decidim-consultations", Decidim::ActionDelegator::DECIDIM_VERSION
 
 gem "bootsnap", "~> 1.4"
 gem "puma", ">= 4.3"
@@ -20,7 +21,6 @@ gem "uglifier", "~> 4.1"
 group :development, :test do
   gem "byebug", "~> 11.0", platform: :mri
 
-  gem "decidim-consultations", Decidim::ActionDelegator::DECIDIM_VERSION
   gem "decidim-dev", Decidim::ActionDelegator::DECIDIM_VERSION
 end
 
