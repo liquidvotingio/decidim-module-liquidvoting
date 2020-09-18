@@ -34,8 +34,7 @@
                           method: :delete,
                           remote: true,
                           data: { disable: true },
-                          class: "button expanded success disabled",
-                          id: "delegation_unvote_button" do %>
+                          class: "button expanded success disabled delegation_unvote_button" do %>
                 <div class="vote-button-caption">
                   <%= t("questions.vote_button.already_voted", scope: "decidim") %>
                 </div>
@@ -46,9 +45,8 @@
                               method: :delete,
                               remote: true,
                               data: { disable: true },
-                              class: "button expanded success",
-                              id: "unvote_button" do %>
-                  <%= hidden_field_tag :decidim_consultations_delegation_id, delegation.id, id: "decidim_consultations_delegation_id_delete" %>
+                              class: "button expanded success unvote_button" do %>
+                              <%= hidden_field_tag "decidim_consultations_delegation_id", delegation.id, id: "decidim_consultations_delegation_id_delete_#{delegation.id}" %>
                   <div class="vote-button-caption"
                        data-original="<%= t("questions.vote_button.already_voted", scope: "decidim") %>"
                        data-replace="<%= t("questions.vote_button.already_voted_hover", scope: "decidim") %>">
