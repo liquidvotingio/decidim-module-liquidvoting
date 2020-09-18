@@ -3,6 +3,7 @@ PATH
   specs:
     decidim-action_delegator (0.1)
       decidim-admin (= 0.21.0)
+      decidim-consultations (= 0.21.0)
       decidim-core (= 0.21.0)
 
 GEM

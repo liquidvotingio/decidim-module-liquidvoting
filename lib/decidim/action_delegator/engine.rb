@@ -18,6 +18,15 @@ module Decidim
         end
       end
 
+      # Initializer must go here otherwise every engine triggers config/initializers/ files
+      initializer "decidim_action_delegator.overrides" do |_app|
+        Rails.application.config.to_prepare do
+          Dir.glob(Decidim::ActionDelegator::Engine.root + "app/overrides/**/*.rb").each do |c|
+            require_dependency(c)
+          end
+        end
+      end
+
       initializer "decidim_action_delegator.assets" do |app|
         app.config.assets.precompile += %w(decidim_action_delegator_manifest.js decidim_action_delegator_manifest.css)
       end
