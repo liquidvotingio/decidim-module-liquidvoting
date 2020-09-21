@@ -13,6 +13,7 @@ $(() => {
   });
 
   delegationVoteButtons.click((e) => {
+    delegationDialog.foundation("close");
     voteDialog.foundation("open");
     delegationField.val($(e.currentTarget).data("delegation-id"));
     delegationCalloutsMessage.text($(e.currentTarget).data("delegation-granter-name"));
