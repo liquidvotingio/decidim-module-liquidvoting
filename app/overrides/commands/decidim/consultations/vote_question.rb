@@ -13,7 +13,7 @@ Decidim::Consultations::VoteQuestion.class_eval do
 
   def delegation
     @delegation ||= Decidim::ActionDelegator::ConsultationDelegations.for(
-      current_question.consultation,
+      form.context.current_question.consultation,
       form.context.current_user
     ).find_by(id: form.decidim_consultations_delegation_id)
   end
