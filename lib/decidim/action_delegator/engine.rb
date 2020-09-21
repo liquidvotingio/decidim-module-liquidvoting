@@ -2,6 +2,7 @@
 
 require "rails"
 require "decidim/core"
+require "decidim/consultations"
 
 module Decidim
   module ActionDelegator
@@ -15,6 +16,15 @@ module Decidim
         authenticate(:user) do
           resources :user_delegations, controller: :user_delegations
           root to: "user_delegations#index"
+        end
+      end
+
+      # Initializer must go here otherwise every engine triggers config/initializers/ files
+      initializer "decidim_action_delegator.overrides" do |_app|
+        Rails.application.config.to_prepare do
+          Dir.glob(Decidim::ActionDelegator::Engine.root + "app/overrides/**/*.rb").each do |c|
+            require_dependency(c)
+          end
         end
       end
 

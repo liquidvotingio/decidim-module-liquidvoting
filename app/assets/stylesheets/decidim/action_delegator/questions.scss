@@ -1,0 +1,27 @@
+.delegations-notice {
+  a {
+    color: white;
+    background:rgba(0,0,0,0.5);
+    line-height: 1;
+    text-align: center;
+    padding: 0.5em;
+  }
+}
+
+.question-vote-cabin {
+  .delegations-notice {
+    a {
+      color: var(--secondary);
+      font-weight: 600;
+      background:transparent;
+    }
+  }
+}
+
+#delegations-modal {
+  .vote-button-caption {
+    text-transform: uppercase;
+    font-weight: 600;
+    color: white;
+  }
+}
