@@ -14,12 +14,13 @@ Gem::Specification.new do |s|
 
   s.name = "decidim-liquidvoting"
   s.summary = "A Decidim Liquidvoting module"
-  s.description = "Integrates decidim with liquidvoting.io."
+  s.description = "Integrates Decidim with liquidvoting.io."
 
   s.files = Dir["{app,config,lib}/**/*", "LICENSE-AGPLv3.txt", "Rakefile", "README.md"]
 
   # TODO: figure out if we need decidim-admin and decidim-proposals as dependencies
   s.add_dependency "decidim-core", Decidim::Liquidvoting::DECIDIM_VERSION
+  s.add_dependency "graphql-client", "~> 0.16.0"
 
   s.add_development_dependency "decidim-dev", Decidim::Liquidvoting::DECIDIM_VERSION
 end
