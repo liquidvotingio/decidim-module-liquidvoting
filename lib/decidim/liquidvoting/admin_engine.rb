@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 module Decidim
-  module ActionDelegator
-    # This is the engine that runs on the public interface of `ActionDelegator`.
+  module Liquidvoting
+    # This is the engine that runs on the public interface of `Liquidvoting`.
     class AdminEngine < ::Rails::Engine
-      isolate_namespace Decidim::ActionDelegator::Admin
+      isolate_namespace Decidim::Liquidvoting::Admin
 
       paths["db/migrate"] = nil
       paths["lib/tasks"] = nil

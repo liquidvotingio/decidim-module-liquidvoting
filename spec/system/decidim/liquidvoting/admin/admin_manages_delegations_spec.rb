@@ -7,7 +7,7 @@ describe "Admin manages delegations", type: :system do
   let(:organization) { create(:organization) }
   let(:user) { create(:user, :admin, :confirmed, organization: organization) }
 
-  let(:consultation_translated_title) { Decidim::ActionDelegator::Admin::ConsultationPresenter.new(consultation).translated_title }
+  let(:consultation_translated_title) { Decidim::Liquidvoting::Admin::ConsultationPresenter.new(consultation).translated_title }
 
   context "when creating a delegation" do
     let!(:granter) { create(:user, organization: organization) }

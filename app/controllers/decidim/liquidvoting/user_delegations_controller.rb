@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 module Decidim
-  module ActionDelegator
+  module Liquidvoting
     # This controller handles user profile actions for this module
-    class UserDelegationsController < ActionDelegator::ApplicationController
+    class UserDelegationsController < Liquidvoting::ApplicationController
       include Decidim::UserProfile
 
       def index

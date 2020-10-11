@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Decidim
-  module ActionDelegator
+  module Liquidvoting
     class Permissions < Decidim::DefaultPermissions
       def permissions
         return permission_action unless user.admin?

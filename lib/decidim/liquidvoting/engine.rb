@@ -5,11 +5,11 @@ require "decidim/core"
 require "decidim/consultations"
 
 module Decidim
-  module ActionDelegator
+  module Liquidvoting
     # This is the engine that runs on the public interface of action_delegator.
     # Handles all the logic related to delegation except verifications
     class Engine < ::Rails::Engine
-      isolate_namespace Decidim::ActionDelegator
+      isolate_namespace Decidim::Liquidvoting
 
       routes do
         # Add engine routes here
@@ -22,7 +22,7 @@ module Decidim
       # Initializer must go here otherwise every engine triggers config/initializers/ files
       initializer "decidim_action_delegator.overrides" do |_app|
         Rails.application.config.to_prepare do
-          Dir.glob(Decidim::ActionDelegator::Engine.root + "app/overrides/**/*.rb").each do |c|
+          Dir.glob(Decidim::Liquidvoting::Engine.root + "app/overrides/**/*.rb").each do |c|
             require_dependency(c)
           end
         end

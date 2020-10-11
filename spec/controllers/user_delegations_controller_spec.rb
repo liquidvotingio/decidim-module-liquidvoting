@@ -3,9 +3,9 @@
 require "spec_helper"
 
 module Decidim
-  module ActionDelegator
+  module Liquidvoting
     describe UserDelegationsController, type: :controller do
-      routes { Decidim::ActionDelegator::Engine.routes }
+      routes { Decidim::Liquidvoting::Engine.routes }
 
       let(:organization) { create :organization }
       let(:user) { create(:user, :confirmed, organization: organization) }

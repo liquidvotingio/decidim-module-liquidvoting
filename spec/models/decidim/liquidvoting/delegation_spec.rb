@@ -3,7 +3,7 @@
 require "spec_helper"
 
 module Decidim
-  module ActionDelegator
+  module Liquidvoting
     describe Delegation, type: :model do
       subject { build(:delegation) }
 

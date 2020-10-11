@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Decidim
-  module ActionDelegator
+  module Liquidvoting
     module Admin
       module DelegationHelper
         def granters_for_select

@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 module Decidim
-  module ActionDelegator
+  module Liquidvoting
     # This controller is the abstract class from which all other controllers of
     # this engine inherit.
     #
     class ApplicationController < Decidim::ApplicationController
       # def permission_class_chain
-      #  [::Decidim::ActionDelegator::Permissions] + super
+      #  [::Decidim::Liquidvoting::Permissions] + super
       # end
     end
   end

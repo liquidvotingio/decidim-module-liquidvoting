@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 module Decidim
-  module ActionDelegator
+  module Liquidvoting
     module Admin
-      class DelegationsController < ActionDelegator::Admin::ApplicationController
+      class DelegationsController < Liquidvoting::Admin::ApplicationController
         include NeedsPermission
         include Filterable
 

@@ -14,7 +14,7 @@ Decidim::Consultations::QuestionVotesController.class_eval do
   private
 
   def delegation
-    @delegation ||= Decidim::ActionDelegator::Delegation.find_by(id: params[:decidim_consultations_delegation_id])
+    @delegation ||= Decidim::Liquidvoting::Delegation.find_by(id: params[:decidim_consultations_delegation_id])
   end
 
   def enforce_permission_to_unvote(subject, extra_context = {})

@@ -5,7 +5,7 @@ require "spec_helper"
 # We make sure that the checksum of the file overriden is the same
 # as the expected. If this test fails, it means that the overriden
 # file should be updated to match any change/bug fix introduced in the core
-module Decidim::ActionDelegator
+module Decidim::Liquidvoting
   checksums = [
     {
       package: "decidim-admin",

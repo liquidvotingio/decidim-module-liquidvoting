@@ -12,7 +12,7 @@
   <div class="card card--secondary">
     <div class="card__content">
 
-      <% Decidim::ActionDelegator::ConsultationDelegations.for(question.consultation, current_user).each do |delegation| %>
+      <% Decidim::Liquidvoting::ConsultationDelegations.for(question.consultation, current_user).each do |delegation| %>
         <div class="row">
           <div class="columns medium-5 medium-offset-1">
             <%= delegation.granter.name %>

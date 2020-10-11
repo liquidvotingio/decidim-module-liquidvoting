@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-describe Decidim::ActionDelegator::Permissions do
+describe Decidim::Liquidvoting::Permissions do
   subject { described_class.new(user, permission_action, context).permissions.allowed? }
 
   let(:user) { build(:user, :admin) }
