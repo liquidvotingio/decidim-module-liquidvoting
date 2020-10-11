@@ -2,7 +2,7 @@
 
 require "rails"
 require "decidim/core"
-require "decidim/consultations"
+# require "decidim/consultations"
 
 module Decidim
   module Liquidvoting
@@ -14,8 +14,8 @@ module Decidim
       routes do
         # Add engine routes here
         authenticate(:user) do
-          resources :user_delegations, controller: :user_delegations
-          root to: "user_delegations#index"
+          post "delegations" => "delegations#create", as: :delegations
+          root to: "delegations#index"
         end
       end
 
@@ -32,14 +32,14 @@ module Decidim
         app.config.assets.precompile += %w(decidim_liquidvoting_manifest.js decidim_liquidvoting_manifest.css)
       end
 
-      initializer "decidim.user_menu" do
-        Decidim.menu :user_menu do |menu|
-          menu.item t("vote_delegations", scope: "layouts.decidim.user_profile"),
-                    decidim_liquidvoting.user_delegations_path,
-                    position: 5.0,
-                    active: :exact
-        end
-      end
+      # initializer "decidim.user_menu" do
+      #   Decidim.menu :user_menu do |menu|
+      #     menu.item t("vote_delegations", scope: "layouts.decidim.user_profile"),
+      #               decidim_liquidvoting.user_delegations_path,
+      #               position: 5.0,
+      #               active: :exact
+      #   end
+      # end
     end
   end
 end

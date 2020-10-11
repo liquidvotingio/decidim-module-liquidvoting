@@ -10,11 +10,10 @@ module Decidim
       paths["lib/tasks"] = nil
 
       routes do
-        resources :settings, only: [:index, :new, :create, :destroy] do
-          resources :delegations, only: [:index, :new, :create, :destroy]
-        end
+        # Temporary hack to load the admin interface
+        root to: "application#index"
 
-        root to: "delegations#index"
+        # root to: "delegations#index"
       end
 
       initializer "decidim_liquidvoting.admin_assets" do |app|
