@@ -27,7 +27,7 @@ describe "Delegation vote", type: :system do
           click_link(id: "delegations-button")
           click_link(class: "delegation-vote-button")
 
-          expect(page).to have_content(I18n.t("decidim.action_delegator.delegations_modal.callout"))
+          expect(page).to have_content(I18n.t("decidim.liquidvoting.delegations_modal.callout"))
 
           click_button translated(response.title)
           click_button "Confirm"

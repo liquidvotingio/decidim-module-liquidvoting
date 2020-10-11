@@ -3,7 +3,7 @@
 require "spec_helper"
 
 describe "Admin manages delegations", type: :system do
-  let(:i18n_scope) { "decidim.action_delegator.admin" }
+  let(:i18n_scope) { "decidim.liquidvoting.admin" }
   let(:organization) { create(:organization) }
   let(:user) { create(:user, :admin, :confirmed, organization: organization) }
 
@@ -18,7 +18,7 @@ describe "Admin manages delegations", type: :system do
     before do
       switch_to_host(organization.host)
       login_as user, scope: :user
-      visit decidim_admin_action_delegator.setting_delegations_path(setting)
+      visit decidim_admin_liquidvoting.setting_delegations_path(setting)
     end
 
     it "creates a new delegation" do
@@ -34,7 +34,7 @@ describe "Admin manages delegations", type: :system do
       expect(page).to have_admin_callout("successfully")
       expect(page).to have_content(grantee.name)
       expect(page).to have_content(consultation_translated_title.upcase)
-      expect(page).to have_current_path(decidim_admin_action_delegator.setting_delegations_path(setting.id))
+      expect(page).to have_current_path(decidim_admin_liquidvoting.setting_delegations_path(setting.id))
     end
   end
 
@@ -46,7 +46,7 @@ describe "Admin manages delegations", type: :system do
     before do
       switch_to_host(organization.host)
       login_as user, scope: :user
-      visit decidim_admin_action_delegator.setting_delegations_path(setting)
+      visit decidim_admin_liquidvoting.setting_delegations_path(setting)
     end
 
     it "destroys the delegation" do
@@ -55,7 +55,7 @@ describe "Admin manages delegations", type: :system do
       end
 
       expect(page).not_to have_content(delegation.grantee.name)
-      expect(page).to have_current_path(decidim_admin_action_delegator.setting_delegations_path(setting.id))
+      expect(page).to have_current_path(decidim_admin_liquidvoting.setting_delegations_path(setting.id))
       expect(page).to have_admin_callout("successfully")
     end
   end

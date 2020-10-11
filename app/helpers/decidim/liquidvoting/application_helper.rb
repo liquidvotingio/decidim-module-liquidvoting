@@ -2,7 +2,7 @@
 
 module Decidim
   module Liquidvoting
-    # Custom helpers, scoped to the action_delegator engine.
+    # Custom helpers, scoped to the liquidvoting engine.
     #
     module ApplicationHelper
     end

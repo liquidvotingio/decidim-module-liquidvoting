@@ -1,1 +1,1 @@
-//= link decidim/action_delegator/admin/action_delegator.js
+//= link decidim/liquidvoting/admin/liquidvoting.js

@@ -27,9 +27,9 @@ module Decidim
           get :index, params: { setting_id: setting.id }
         end
 
-        it "renders decidim/action_delegator/admin/delegations layout" do
+        it "renders decidim/liquidvoting/admin/delegations layout" do
           get :index
-          expect(response).to render_template("layouts/decidim/action_delegator/admin/delegations")
+          expect(response).to render_template("layouts/decidim/liquidvoting/admin/delegations")
         end
 
         it "renders the index template" do
@@ -98,7 +98,7 @@ module Decidim
           it "shows an error" do
             post :create, params: { delegation: { granter_id: granter.id }, setting_id: setting.id }
 
-            expect(controller).to set_flash.now[:error].to(I18n.t("decidim.action_delegator.admin.delegations.create.error"))
+            expect(controller).to set_flash.now[:error].to(I18n.t("decidim.liquidvoting.admin.delegations.create.error"))
           end
         end
       end
@@ -128,7 +128,7 @@ module Decidim
             expect { delete :destroy, params: params }.to change(Delegation, :count).by(-1)
 
             expect(response).to redirect_to(setting_delegations_path(setting.id))
-            expect(flash[:notice]).to eq(I18n.t("decidim.action_delegator.admin.delegations.destroy.success"))
+            expect(flash[:notice]).to eq(I18n.t("decidim.liquidvoting.admin.delegations.destroy.success"))
           end
         end
 
@@ -141,7 +141,7 @@ module Decidim
             delete :destroy, params: params
 
             expect(response).to redirect_to(setting_delegations_path(setting.id))
-            expect(flash[:error]).to eq(I18n.t("decidim.action_delegator.admin.delegations.destroy.error"))
+            expect(flash[:error]).to eq(I18n.t("decidim.liquidvoting.admin.delegations.destroy.error"))
           end
         end
       end

@@ -1,5 +1,5 @@
-<%= stylesheet_link_tag "decidim/action_delegator/questions" %>
-<%= javascript_include_tag "decidim/action_delegator/questions" %>
+<%= stylesheet_link_tag "decidim/liquidvoting/questions" %>
+<%= javascript_include_tag "decidim/liquidvoting/questions" %>
 
 <div class="row column">
   <div class="callout hide" id="vote-result-callout" data-closable data-title-ok="<%= t("question_votes.create.title_success", scope: "decidim.consultations") %>" data-message-ok="<%= t("question_votes.create.success", scope: "decidim.consultations") %>" data-title-ko="<%= t("question_votes.create.title_error", scope: "decidim.consultations") %>" data-message-ko="<%= t("question_votes.create.error", scope: "decidim.consultations") %>">
@@ -68,7 +68,7 @@
         <% end %>
       <% end %>
 
-      <%= render partial: "decidim/action_delegator/link_to_delegations", locals: { consultation: question.consultation } %>
+      <%= render partial: "decidim/liquidvoting/link_to_delegations", locals: { consultation: question.consultation } %>
 
     <% elsif question.consultation.active? %>
       <%= logged_button_to decidim_consultations.question_question_votes_path(question),
@@ -99,6 +99,6 @@
 
 <%= render partial: "decidim/consultations/questions/vote_modal", locals: { question: question } %>
 <%= render partial: "decidim/consultations/questions/vote_modal_confirm", locals: { question: question } %>
-<%= render partial: "decidim/action_delegator/delegations_modal", locals: { question: question } %>
+<%= render partial: "decidim/liquidvoting/delegations_modal", locals: { question: question } %>
 <%= javascript_include_tag "decidim/consultations/utils" %>
 <%= javascript_include_tag "decidim/consultations/vote_dialog" %>

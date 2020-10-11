@@ -10,7 +10,7 @@ module Decidim
         helper DelegationHelper
         helper_method :current_setting
 
-        layout "decidim/action_delegator/admin/delegations"
+        layout "decidim/liquidvoting/admin/delegations"
 
         def index
           enforce_permission_to :index, :delegation
@@ -32,10 +32,10 @@ module Decidim
           @delegation = build_delegation
 
           if @delegation.save
-            notice = I18n.t("delegations.create.success", scope: "decidim.action_delegator.admin")
+            notice = I18n.t("delegations.create.success", scope: "decidim.liquidvoting.admin")
             redirect_to setting_delegations_path(@delegation.setting), notice: notice
           else
-            flash.now[:error] = I18n.t("delegations.create.error", scope: "decidim.action_delegator.admin")
+            flash.now[:error] = I18n.t("delegations.create.error", scope: "decidim.liquidvoting.admin")
           end
         end
 
@@ -45,10 +45,10 @@ module Decidim
           setting_id = delegation.setting.id
 
           if delegation.destroy
-            notice = I18n.t("delegations.destroy.success", scope: "decidim.action_delegator.admin")
+            notice = I18n.t("delegations.destroy.success", scope: "decidim.liquidvoting.admin")
             redirect_to setting_delegations_path(setting_id), notice: notice
           else
-            error = I18n.t("delegations.destroy.error", scope: "decidim.action_delegator.admin")
+            error = I18n.t("delegations.destroy.error", scope: "decidim.liquidvoting.admin")
             redirect_to setting_delegations_path(setting_id), flash: { error: error }
           end
         end
