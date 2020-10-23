@@ -27,6 +27,21 @@ module Decidim
         end
       end
 
+      def destroy
+        Decidim::Liquidvoting::Client.delete_delegation(
+          proposal_url: params[:proposal_url],
+          delegator_email: params[:delegator_email],
+          delegate_email: session[:delegated_to]
+        )
+
+        flash[:notice] = "Removed delegation to #{session[:delegated_to]}"
+        session[:delegated_to] = nil
+      rescue Exception => e
+        flash[:error] = e.message
+      ensure
+        redirect_to request.referer
+      end
+
       def current_component
         Decidim::Component.where(manifest_name: "liquidvoting").first
       end
