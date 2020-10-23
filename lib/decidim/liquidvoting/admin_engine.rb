@@ -16,9 +16,9 @@ module Decidim
         # root to: "delegations#index"
       end
 
-      initializer "decidim_liquidvoting.admin_assets" do |app|
-        app.config.assets.precompile += %w(admin/decidim_liquidvoting_manifest.js admin/decidim_liquidvoting_manifest.css)
-      end
+      # initializer "decidim_liquidvoting.admin_assets" do |app|
+      #   app.config.assets.precompile += %w(admin/decidim_liquidvoting_manifest.js admin/decidim_liquidvoting_manifest.css)
+      # end
 
       def load_seed
         nil
