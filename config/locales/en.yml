@@ -1,72 +1,11 @@
 ---
 en:
   decidim:
-    liquidvoting:
-      admin:
-        delegations:
-          create:
-            error: There was a problem creating the delegation
-            success: Delegation created successfully
-          destroy:
-            error: There was a problem destroying this delegation
-            success: Delegation successfully destroyed
-          index:
-            actions:
-              new_delegation: New participant
-            consultation: Consultation
-            created_at: Created at
-            delete: Delete
-            grantee: Grantee
-            granter: Granter
-            title: Participants
-          new:
-            form:
-              title: General information
-            save: Create
-            title: New delegation
-        menu:
-          delegations: User delegations
-          participants: Participants
+    components:
+      liquidvoting:
+        name: Liquidvoting
         settings:
-          create:
-            error: There was a problem creating the settings
-            success: Settings saved successfully
-          destroy:
-            error: There was a problem destroying this setting
-            success: Setting successfully destroyed
-          index:
-            actions:
-              new_setting: New delegation
-            consultation: Consultation
-            created_at: Created at
-            title: Delegations
-          new:
-            form:
-              title: General information
-            max_grants: Maximum delegations
-            save: Save
-            title: Delegation settings
-      delegations:
-        link: You have delegations granted
-      delegations_modal:
-        callout: Remember, you are voting on behalf of
-        contextual_help: 'You have been granted the vote from:'
-        title: 'Consultation: granted delegations'
-      name: Decidim Liquidvoting cooperatives module
-      verification:
-        admin:
-          members:
-            index:
-              title: Members management
-    authorization_handlers:
-      admin:
-        delegations_verifier:
-          help:
-          - A verification method for delegate voting
-      delegations_verifier:
-        explanation: Verified users with this method can delegate votes to other users
-        name: Delegations Verifier
-  layouts:
-    decidim:
-      user_profile:
-        vote_delegations: Vote delegations
+          global:
+            announcement: "Global Announcement"
+          step:
+            announcement: "Step Announcement"
