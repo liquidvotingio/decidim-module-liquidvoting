@@ -1,5 +1,0 @@
-<% if Decidim::Liquidvoting::Delegation.granted_to?(current_user, consultation) %>
-  <div class="delegations-notice flex--cc">
-    <%= link_to t("liquidvoting.delegations.link", scope: "decidim"), "#", id: "delegations-button" %>
-  </div>
-<% end %>
