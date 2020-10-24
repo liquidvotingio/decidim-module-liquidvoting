@@ -3,6 +3,7 @@
 require "decidim/liquidvoting/admin"
 require "decidim/liquidvoting/admin_engine"
 require "decidim/liquidvoting/engine"
+require "decidim/liquidvoting/component"
 require "decidim/liquidvoting/client"
 
 module Decidim
