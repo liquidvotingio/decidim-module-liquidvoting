@@ -8,11 +8,11 @@ ruby RUBY_VERSION
 # the Gemfile is copied to the development_app folder (almost) as is.
 base_path = ""
 base_path = "../" if File.basename(__dir__) == "development_app"
-require_relative "#{base_path}lib/decidim/action_delegator/version"
+require_relative "#{base_path}lib/decidim/liquidvoting/version"
 
 gem "decidim", Decidim::Liquidvoting::DECIDIM_VERSION
-gem "decidim-action_delegator", path: "."
-gem "decidim-consultations", Decidim::Liquidvoting::DECIDIM_VERSION
+gem "decidim-liquidvoting", path: "."
+gem "decidim-proposals", Decidim::Liquidvoting::DECIDIM_VERSION
 
 gem "bootsnap", "~> 1.4"
 gem "puma", ">= 4.3"
