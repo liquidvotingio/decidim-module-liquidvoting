@@ -3,5 +3,11 @@
 <% end %>
 
 <%= render "layouts/decidim/admin/application" do %>
+  <div class="process-title">
+    <div class="process-title-content">
+      <%= translated_attribute(current_setting.consultation.title) %>
+    </div>
+  </div>
+
   <%= yield %>
 <% end %>
