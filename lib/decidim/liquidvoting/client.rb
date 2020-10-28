@@ -53,7 +53,7 @@ module Decidim
       ## On failure it will raise an exception with the errors returned by the API
       def self.create_vote(yes:, proposal_url:, voter_email:)
         variables = { yes: yes, proposal_url: proposal_url, voter_email: voter_email}
-        response = CLIENT.query(CreateVoteMutation, variables: variables)
+        response = send_query(CreateVoteMutation, variables: variables)
 
         if response.data.errors.any?
           raise response.data.errors.messages["createVote"].join(", ")
@@ -78,7 +78,7 @@ module Decidim
 
       def self.delete_vote(proposal_url:, voter_email:)
         variables = { proposal_url: proposal_url, voter_email: voter_email}
-        response = CLIENT.query(DeleteVoteMutation, variables: variables)
+        response = send_query(DeleteVoteMutation, variables: variables)
 
         if response.data.errors.any?
           raise response.data.errors.messages["deleteVote"].join(", ")
@@ -104,7 +104,7 @@ module Decidim
       ## On failure it will raise an exception with the errors returned by the API
       def self.create_delegation(proposal_url:, delegator_email:, delegate_email:)
         variables = { proposal_url: proposal_url, delegator_email: delegator_email, delegate_email: delegate_email }
-        response = CLIENT.query(CreateDelegationMutation, variables: variables)
+        response = send_query(CreateDelegationMutation, variables: variables)
 
         if response.data.errors.any?
           raise response.data.errors.messages["createDelegation"].join(", ")
@@ -135,7 +135,7 @@ module Decidim
       ## On failure it will raise an exception with the errors returned by the API
       def self.delete_delegation(proposal_url:, delegator_email:, delegate_email:)
         variables = { proposal_url: proposal_url, delegator_email: delegator_email, delegate_email: delegate_email }
-        response = CLIENT.query(DeleteDelegationMutation, variables: variables)
+        response = send_query(DeleteDelegationMutation, variables: variables)
 
         if response.data.errors.any?
           raise response.data.errors.messages["deleteDelegation"].join(", ")
@@ -143,6 +143,15 @@ module Decidim
           response.data.delete_delegation
         end
       end
+
+      private
+
+      ## A wrapper for all LiquidVoting calls
+      def self.send_query(query, variables:)
+        Rails.logger.info "Liquidvoting request sent: #{query.inspect} #{variables.inspect}"
+        response = CLIENT.query(query, variables: variables)
+      end
+
     end
   end
 end
