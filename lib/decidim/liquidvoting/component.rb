@@ -8,14 +8,6 @@ Decidim.register_component(:liquidvoting) do |component|
   component.icon = "decidim/liquidvoting/icon.svg"
 
   component.permissions_class_name = "Decidim::Liquidvoting::Permissions"
-
-  component.settings(:global) do |settings|
-    settings.attribute :announcement, type: :text, translated: true, editor: true
-  end
-
-  component.settings(:step) do |settings|
-    settings.attribute :announcement, type: :text, translated: true, editor: true
-  end
 end
 
 # User space engine, used mostly in the context of proposal voting to let users
