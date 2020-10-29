@@ -1,5 +1,5 @@
 <% if session[:delegated_to] %>
-  Support delegated to <%= session[:delegated_to] %>
+  Support delegated to <%= Decidim::User.find_by(email: session[:delegated_to]).name %>
   <form action="/liquidvoting/delegations" method="POST">
     <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
     <input type="hidden" name="delegator_email" value="<%= current_user.email %>">
