@@ -1,26 +1,27 @@
-<% if session[:delegated_to] %>
-  Support delegated to <%= Decidim::User.find_by(email: session[:delegated_to]).name %>
-  <form action="/liquidvoting/delegations" method="POST">
-    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
-    <input type="hidden" name="delegator_email" value="<%= current_user.email %>">
-    <input type="hidden" name="proposal_url" value="<%= proposal_url(proposal) %>">
-    <input name="_method" type="hidden" value="delete">
-    <input type='submit' value='Delete Delegation' class="button">
-  </form>
-<% end -%>
-<!-- TODO: send ajax request instead -->
-<% if !session[:delegated_to] %>
-  <form action="/liquidvoting/delegations" method="POST">
-    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
-    <input type="hidden" name="delegator_email" value="<%= current_user.email %>">
-    <input type="hidden" name="proposal_url" value="<%= proposal_url(proposal) %>">
-    <select name="delegate_email">
-    <% Decidim::User.where(admin: false).order(:name).each do |user| %>
-      <option value="<%= user.email %>"><%= user.name -%></option>
-    <% end %>
-    </select>
-    <input type='submit' value='Choose a Delegate' class="button" style="background:orange;">
-  </form>
+<% if current_user %>
+    <!-- TODO: send ajax requests instead -->
+  <% if session[:delegated_to] %>
+    Support delegated to <%= Decidim::User.find_by(email: session[:delegated_to]).name %>
+    <form action="/liquidvoting/delegations" method="POST">
+      <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+      <input type="hidden" name="delegator_email" value="<%= current_user.email %>">
+      <input type="hidden" name="proposal_url" value="<%= proposal_url(proposal) %>">
+      <input name="_method" type="hidden" value="delete">
+      <input type='submit' value='Delete Delegation' class="button">
+    </form>
+  <% else -%>
+    <form action="/liquidvoting/delegations" method="POST">
+      <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+      <input type="hidden" name="delegator_email" value="<%= current_user.email %>">
+      <input type="hidden" name="proposal_url" value="<%= proposal_url(proposal) %>">
+      <select name="delegate_email">
+      <% Decidim::User.where(admin: false).order(:name).each do |user| %>
+        <option value="<%= user.email %>"><%= user.name -%></option>
+      <% end %>
+      </select>
+      <input type='submit' value='Choose a Delegate' class="button" style="background:orange;">
+    </form>
+  <% end -%>
 <% end -%>
 
 <p>&nbsp;</p>
