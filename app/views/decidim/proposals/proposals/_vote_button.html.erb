@@ -1,6 +1,6 @@
 <% if current_user %>
   <!-- TODO: send ajax requests instead -->
-  <% if !session[:delegated_to] %> <!-- DEBUG set to '==' when developed -->
+  <% if !session[:delegated_to] %>
     <% session[:delegated_to] = "none" %>
     <% delegations = Decidim::Liquidvoting::Client.delegations() %>
     <% if delegations != [] %>
