@@ -1,6 +1,18 @@
 <% if current_user %>
-    <!-- TODO: send ajax requests instead -->
-  <% if session[:delegated_to] %>
+  <!-- TODO: send ajax requests instead -->
+  <% if !session[:delegated_to] %> <!-- DEBUG set to '==' when developed -->
+    <% session[:delegated_to] = "none" %>
+    <% delegations = Decidim::Liquidvoting::Client.delegations() %>
+    <% if delegations != [] %>
+      <% delegations.each do |d| %>
+        <% if d.delegator.email == current_user.email && d.proposal_url == proposal_url(proposal) %>
+          <% session[:delegated_to] = d.delegate.email %>
+        <% end -%>
+      <% end -%>
+    <% end -%>
+  <% end -%>
+
+  <% if session[:delegated_to] != "none" %>
     Support delegated to <%= Decidim::User.find_by(email: session[:delegated_to]).name %>
     <form action="/liquidvoting/delegations" method="POST">
       <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">

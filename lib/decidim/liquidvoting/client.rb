@@ -144,10 +144,45 @@ module Decidim
         end
       end
 
+      ## Example:
+      ##
+      ## delegations()
+      ## => delegations
+      ##    => delegator
+      ##        => email => john@gmail.com
+      ##                 => ...
+      ##    => delegate
+      ##        => email => jane@gmail.com
+      ##                 => ...
+      DelegationsQuery = CLIENT.parse <<-GRAPHQL
+      query {
+        delegations {
+          proposalUrl
+          delegator {
+            email
+          }
+          delegate {
+            email
+          }
+        }
+      }
+
+      GRAPHQL
+
+      def self.delegations()
+      response = send_query(DelegationsQuery)
+
+      if response.data.errors.any?
+        raise response.data.errors.messages["delegations"].join(", ")
+      else
+        response.data.delegations
+      end
+      end
+
       private
 
       ## A wrapper for all LiquidVoting calls
-      def self.send_query(query, variables:)
+      def self.send_query(query, variables: { })
         Rails.logger.info "Liquidvoting request sent: #{query.inspect} #{variables.inspect}"
         response = CLIENT.query(query, variables: variables)
       end
