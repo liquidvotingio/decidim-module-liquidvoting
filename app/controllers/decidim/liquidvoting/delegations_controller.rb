@@ -11,8 +11,7 @@ module Decidim
           delegator_email: params[:delegator_email],
           delegate_email: params[:delegate_email]
         )
-
-        
+   
         session[:delegated_to] = params[:delegate_email]
         flash[:notice] =
           "Delegated support to #{Decidim::User.find_by(email: session[:delegated_to]).name}"
