@@ -155,28 +155,28 @@ module Decidim
       ##        => email => jane@gmail.com
       ##                 => ...
       DelegationsQuery = CLIENT.parse <<-GRAPHQL
-      query {
-        delegations {
-          proposalUrl
-          delegator {
-            email
-          }
-          delegate {
-            email
+        query {
+          delegations {
+            proposalUrl
+            delegator {
+              email
+            }
+            delegate {
+              email
+            }
           }
         }
-      }
 
       GRAPHQL
 
       def self.delegations()
-      response = send_query(DelegationsQuery)
+        response = send_query(DelegationsQuery)
 
-      if response.data.errors.any?
-        raise response.data.errors.messages["delegations"].join(", ")
-      else
-        response.data.delegations
-      end
+        if response.data.errors.any?
+          raise response.data.errors.messages["delegations"].join(", ")
+        else
+          response.data.delegations
+        end
       end
 
       # return exactly one delegation from delegator_email for proposal_url, or nil
