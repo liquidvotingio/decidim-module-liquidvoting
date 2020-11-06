@@ -7,7 +7,16 @@
     <% session[:delegated_to] = d.delegate.email unless d.nil? %>
   <% end -%>
 
-  <% if session[:delegated_to].blank? %>
+  <% if session[:delegated_to].present? %>
+    Support delegated to <%= Decidim::User.find_by(email: session[:delegated_to]).name %>
+    <form action="/liquidvoting/delegations" method="POST">
+      <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+      <input type="hidden" name="delegator_email" value="<%= current_user.email %>">
+      <input type="hidden" name="proposal_url" value="<%= proposal_url(proposal) %>">
+      <input name="_method" type="hidden" value="delete">
+      <input type='submit' value='Delete Delegation' class="button">
+    </form>
+  <% else -%>
     <form action="/liquidvoting/delegations" method="POST">
       <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
       <input type="hidden" name="delegator_email" value="<%= current_user.email %>">
@@ -18,15 +27,6 @@
       <% end %>
       </select>
       <input type='submit' value='Choose a Delegate' class="button" style="background:orange;">
-    </form>
-  <% else -%>
-    Support delegated to <%= Decidim::User.find_by(email: session[:delegated_to]).name %>
-    <form action="/liquidvoting/delegations" method="POST">
-      <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
-      <input type="hidden" name="delegator_email" value="<%= current_user.email %>">
-      <input type="hidden" name="proposal_url" value="<%= proposal_url(proposal) %>">
-      <input name="_method" type="hidden" value="delete">
-      <input type='submit' value='Delete Delegation' class="button">
     </form>
   <% end -%>
 <% end -%>
