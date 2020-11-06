@@ -2,12 +2,10 @@
   <!-- TODO: send ajax requests instead -->
   <!-- A blank session[:delegated_to] means we haven't checked yet;
        let's make it explicitly the delegate email OR "none" -->
-  <% if session[:delegated_to].blank? %>
-    <% d = Decidim::Liquidvoting::Client.delegation_for(current_user.email, proposal_url(proposal)) %>
-    <% session[:delegated_to] = d.present? ? d.delegate.email : "none" %>
-  <% end -%>
+  <% d = Decidim::Liquidvoting::Client.delegation_for(current_user.email, proposal_url(proposal)) %>
+  <% session[:delegated_to] = d.delegate.email unless d.nil? %>
 
-  <% if session[:delegated_to] == "none" %>
+  <% if session[:delegated_to].blank? %>
     <form action="/liquidvoting/delegations" method="POST">
       <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
       <input type="hidden" name="delegator_email" value="<%= current_user.email %>">
