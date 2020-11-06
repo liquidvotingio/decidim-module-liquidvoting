@@ -14,7 +14,8 @@ module Decidim
 
         
         session[:delegated_to] = params[:delegate_email]
-        flash[:notice] = "Delegated support to #{session[:delegated_to]}"
+        flash[:notice] =
+          "Delegated support to #{Decidim::User.find_by(email: session[:delegated_to]).name}"
       rescue Exception => e
         flash[:error] = e.message
       ensure
@@ -34,7 +35,8 @@ module Decidim
           delegate_email: session[:delegated_to]
         )
 
-        flash[:notice] = "Removed delegation to #{session[:delegated_to]}"
+        flash[:notice] =
+          "Removed delegation to #{Decidim::User.find_by(email: session[:delegated_to]).name}"
         session[:delegated_to] = nil
       rescue Exception => e
         flash[:error] = e.message
@@ -51,6 +53,7 @@ module Decidim
           Decidim::Liquidvoting::Permissions
         ]
       end
+
     end
   end
 end
