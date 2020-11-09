@@ -12,7 +12,7 @@ module Decidim
           yes: true,
         )
 
-        session[:vote_cast_by] = params[:participant_email]
+        session[:voted] = true
         flash[:notice] = "You have voted 'in favor' of this proposal"
       rescue Exception => e
         flash[:error] = e.message

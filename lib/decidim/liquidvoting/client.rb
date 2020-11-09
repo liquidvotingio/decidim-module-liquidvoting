@@ -87,6 +87,44 @@ module Decidim
         end
      end
 
+      ## Example:
+      ##
+      ## votes()
+      ## => votes
+      ##    => "https://proposals.com/proposal1"
+      ##    => participant
+      ##        => email => john@gmail.com
+      ##                 => ...
+     VotesQuery = CLIENT.parse <<-GRAPHQL
+      query {
+        votes {
+          proposalUrl
+          participant {
+            email
+          }
+        }
+      }
+
+      GRAPHQL
+
+      def self.votes()
+        response = send_query(VotesQuery)
+
+        if response.data.errors.any?
+          raise response.data.errors.messages["votes"].join(", ")
+        else
+          response.data.votes
+        end
+      end
+
+      # return exactly one vote from participant_email for proposal_url, or nil
+      def self.vote_for(participant_email, proposal_url)
+        # this is a hack until we can properly query a subset of delegations
+        votes = self.votes().
+          select {|v| v.participant.email == participant_email && v.proposal_url == proposal_url}.
+          first   # returns nil if list is empty
+      end 
+
       CreateDelegationMutation = CLIENT.parse <<-GRAPHQL
         mutation($proposal_url: String!, $delegator_email: String!, $delegate_email: String!) {
           createDelegation(proposalUrl: $proposal_url, delegatorEmail: $delegator_email, delegateEmail: $delegate_email) {
