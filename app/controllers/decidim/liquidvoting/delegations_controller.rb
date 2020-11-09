@@ -14,7 +14,7 @@ module Decidim
    
         session[:delegated_to] = params[:delegate_email]
         flash[:notice] =
-          "Delegated support to #{Decidim::User.find_by(email: session[:delegated_to]).name}"
+          "Delegated support to #{Decidim::User.find_by(email: session[:delegated_to]).name}."
       rescue Exception => e
         flash[:error] = e.message
       ensure
@@ -35,7 +35,7 @@ module Decidim
         )
 
         flash[:notice] =
-          "Removed delegation to #{Decidim::User.find_by(email: session[:delegated_to]).name}"
+          "Removed delegation to #{Decidim::User.find_by(email: session[:delegated_to]).name}."
         session[:delegated_to] = nil
       rescue Exception => e
         flash[:error] = e.message
