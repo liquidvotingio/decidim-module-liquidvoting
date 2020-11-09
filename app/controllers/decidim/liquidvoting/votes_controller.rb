@@ -13,6 +13,7 @@ module Decidim
         )
 
         session[:voted] = true
+        session[:delegated_to] = nil
         flash[:notice] = "Vote created."
       rescue Exception => e
         flash[:error] = e.message
