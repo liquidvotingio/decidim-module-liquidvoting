@@ -1,4 +1,4 @@
-<% if current_user %>
+<% if current_user and session[:voted] == false %>
   <!-- TODO: send ajax requests instead -->
   <% if session[:delegated_to].present? %>
     Support delegated to <%= Decidim::User.find_by(email: session[:delegated_to]).name %>.

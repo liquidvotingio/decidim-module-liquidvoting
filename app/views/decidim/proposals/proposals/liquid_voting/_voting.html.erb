@@ -1,4 +1,4 @@
-<% if current_user %>
+<% if current_user and session[:delegated_to].blank? %>
     <!-- TODO: send ajax requests instead -->
   <% if session[:voted].present? %>
     You have voted in favor.
