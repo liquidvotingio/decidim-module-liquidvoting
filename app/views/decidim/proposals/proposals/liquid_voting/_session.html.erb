@@ -1,12 +1,14 @@
-<!-- A blank session[:delegated_to] means we haven't checked yet;
+<% if current_user %>
+  <!-- A blank session[:delegated_to] means we haven't checked yet;
+        let's make it explicitly the delegate email if such a delegation exists -->
+  <% if session[:delegated_to].blank? %>
+    <% d = Decidim::Liquidvoting::Client.delegation_for(current_user.email, proposal_url(proposal)) %>
+    <% session[:delegated_to] = d.delegate.email unless d.nil? %>
+  <% end -%>
+  <!-- A blank session[:delegated_to] means we haven't checked yet;
       let's make it explicitly the delegate email if such a delegation exists -->
-<% if session[:delegated_to].blank? %>
-  <% d = Decidim::Liquidvoting::Client.delegation_for(current_user.email, proposal_url(proposal)) %>
-  <% session[:delegated_to] = d.delegate.email unless d.nil? %>
-<% end -%>
-<!-- A blank session[:delegated_to] means we haven't checked yet;
-    let's make it explicitly the delegate email if such a delegation exists -->
-<% if session[:voted].blank? %>
-  <% d = Decidim::Liquidvoting::Client.vote_for(current_user.email, proposal_url(proposal)) %>
-  <% session[:voted] = true unless d.nil? %>
+  <% if session[:voted].blank? %>
+    <% d = Decidim::Liquidvoting::Client.vote_for(current_user.email, proposal_url(proposal)) %>
+    <% session[:voted] = true unless d.nil? %>
+  <% end -%>
 <% end -%>
