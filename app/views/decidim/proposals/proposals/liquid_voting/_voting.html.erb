@@ -1,12 +1,5 @@
 <% if current_user %>
     <!-- TODO: send ajax requests instead -->
-    <!-- A blank session[:delegated_to] means we haven't checked yet;
-       let's make it explicitly the delegate email if such a delegation exists -->
-  <% if session[:voted].blank? %>
-    <% d = Decidim::Liquidvoting::Client.vote_for(current_user.email, proposal_url(proposal)) %>
-    <% session[:voted] = true unless d.nil? %>
-  <% end -%>
-
   <% if session[:voted].present? %>
     You have voted in favor.
     <form action="/liquidvoting/votes" method="POST">

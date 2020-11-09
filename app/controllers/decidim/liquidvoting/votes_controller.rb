@@ -13,7 +13,7 @@ module Decidim
         )
 
         session[:voted] = true
-        flash[:notice] = "You have voted 'in favor' of this proposal"
+        flash[:notice] = "Vote created."
       rescue Exception => e
         flash[:error] = e.message
       ensure
@@ -27,7 +27,7 @@ module Decidim
         )
 
         flash[:notice] =
-          "Deleted vote."
+          "Vote deleted."
         session[:voted] = false
       rescue Exception => e
         flash[:error] = e.message
