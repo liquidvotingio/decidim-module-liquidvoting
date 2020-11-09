@@ -27,8 +27,8 @@ module Decidim
       CLIENT = ::GraphQL::Client.new(schema: SCHEMA, execute: HTTP)
 
       CreateVoteMutation = CLIENT.parse <<-GRAPHQL
-        mutation($voter_email: String, $proposal_url: String!, $yes: Boolean!) {
-          createVote(participantEmail: $voter_email, proposalUrl: $proposal_url, yes: $yes) {
+        mutation($participant_email: String, $proposal_url: String!, $yes: Boolean!) {
+          createVote(participantEmail: $participant_email, proposalUrl: $proposal_url, yes: $yes) {
             yes
             weight
             participant {
@@ -44,15 +44,15 @@ module Decidim
 
       ## Example:
       ##
-      ## create_vote(yes: true, proposal_url: "https://my.decidim.com/proposal", voter_email: "alice@email.com")
+      ## create_vote(yes: true, proposal_url: "https://my.decidim.com/proposal", participant_email: "alice@email.com")
       ## => vote
       ## vote.yes => true
       ## vote.voting_result.yes => 1
       ## vote.voting_result.no => 0
       ##
       ## On failure it will raise an exception with the errors returned by the API
-      def self.create_vote(yes:, proposal_url:, voter_email:)
-        variables = { yes: yes, proposal_url: proposal_url, voter_email: voter_email}
+      def self.create_vote(yes:, proposal_url:, participant_email:)
+        variables = { yes: yes, proposal_url: proposal_url, participant_email: participant_email}
         response = send_query(CreateVoteMutation, variables: variables)
 
         if response.data.errors.any?
@@ -63,8 +63,8 @@ module Decidim
       end
 
       DeleteVoteMutation = CLIENT.parse <<-GRAPHQL
-        mutation($voter_email: String, $proposal_url: String!) {
-          deleteVote(participantEmail: $voter_email, proposalUrl: $proposal_url) {
+        mutation($participant_email: String, $proposal_url: String!) {
+          deleteVote(participantEmail: $participant_email, proposalUrl: $proposal_url) {
             participant {
               email
             }
@@ -76,8 +76,8 @@ module Decidim
         }
       GRAPHQL
 
-      def self.delete_vote(proposal_url:, voter_email:)
-        variables = { proposal_url: proposal_url, voter_email: voter_email}
+      def self.delete_vote(proposal_url:, participant_email:)
+        variables = { proposal_url: proposal_url, participant_email: participant_email}
         response = send_query(DeleteVoteMutation, variables: variables)
 
         if response.data.errors.any?
