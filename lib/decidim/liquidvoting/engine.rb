@@ -19,6 +19,7 @@ module Decidim
           root to: "delegations#index"
 
           post "votes" => "votes#create", as: :votes
+          delete "votes" => "votes#destroy"
         end
       end
 

@@ -20,6 +20,21 @@ module Decidim
         redirect_to request.referer
       end
 
+      def destroy
+        Decidim::Liquidvoting::Client.delete_vote(
+          proposal_url: params[:proposal_url],
+          participant_email: params[:participant_email]
+        )
+
+        flash[:notice] =
+          "Deleted vote."
+        session[:voted] = false
+      rescue Exception => e
+        flash[:error] = e.message
+      ensure
+        redirect_to request.referer
+      end
+
       def current_component
         Decidim::Component.where(manifest_name: "liquidvoting").first
       end
