@@ -19,11 +19,11 @@ gem "puma", ">= 4.3"
 gem "uglifier", "~> 4.1"
 
 group :development, :test do
-  gem 'rubocop'
-  gem 'rubocop-performance'
-  gem 'rubocop-rails'
-  gem 'rubocop-rspec' # or gem 'rubocop-minitest'
   gem "byebug", "~> 11.0", platform: :mri
+  gem "rubocop"
+  gem "rubocop-performance"
+  gem "rubocop-rails"
+  gem "rubocop-rspec" # or gem 'rubocop-minitest'
 
   gem "decidim-dev", Decidim::Liquidvoting::DECIDIM_VERSION
 end
