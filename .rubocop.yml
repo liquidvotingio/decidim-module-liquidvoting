@@ -395,6 +395,9 @@ Style/Copyright:
   Notice: '^Copyright (\(c\) )?2[0-9]{3} .+'
   AutocorrectNotice: ""
 
+Style/Documentation:
+  Enabled: false
+
 Style/DocumentationMethod:
   RequireForNonPublicMethods: false
 
@@ -1088,6 +1091,11 @@ Metrics/AbcSize:
   Max: 15
   Enabled: false
 
+Metrics/BlockLength:
+  Exclude:
+    - config/**/*
+    - spec/**/*
+
 Metrics/BlockNesting:
   Max: 3
 
@@ -1108,7 +1116,7 @@ Metrics/CyclomaticComplexity:
     - "**/*/permissions.rb"
 
 Metrics/LineLength:
-  Max: 180
+  Max: 100
   # To make it possible to copy or click on URIs in the code, we allow lines
   # containing a URI to be longer than Max.
   AllowHeredoc: true
@@ -1141,6 +1149,7 @@ Lint/AmbiguousBlockAssociation:
   Enabled: true
   Exclude:
     - "**/abilities/**/*"
+    - spec/**/*
 
 # Allow safe assignment in conditions.
 Lint/AssignmentInCondition:
