@@ -46,7 +46,11 @@ module Decidim
 
       ## Example:
       ##
-      ## create_vote(yes: true, proposal_url: "https://my.decidim.com/proposal", participant_email: "alice@email.com")
+      ## create_vote(
+      ##   yes: true,
+      ##   proposal_url: "https://my.decidim.com/proposal",
+      ##   participant_email: "alice@email.com"
+      ## )
       ## => vote
       ## vote.yes => true
       ## vote.voting_result.yes => 1
@@ -123,7 +127,10 @@ module Decidim
       def self.vote_for(participant_email, proposal_url)
         # this is a hack until we can properly query a subset of delegations
         votes = self.votes()
-                    .select { |v| v.participant.email == participant_email && v.proposal_url == proposal_url }
+                    .select {
+                       |v| v.participant.email == participant_email
+                       && v.proposal_url == proposal_url
+                      }
                     .first # returns nil if list is empty
       end
 
