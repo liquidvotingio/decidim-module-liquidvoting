@@ -216,8 +216,6 @@ module Decidim
           .find { |d| d.delegator.email == delegator_email && d.proposal_url == proposal_url }
       end
 
-      private
-
       ## A wrapper for all LiquidVoting calls
       def self.send_query(query, variables: {})
         Rails.logger.info "Liquidvoting request sent: #{query.inspect} #{variables.inspect}"
