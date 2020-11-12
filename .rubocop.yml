@@ -395,9 +395,6 @@ Style/Copyright:
   Notice: '^Copyright (\(c\) )?2[0-9]{3} .+'
   AutocorrectNotice: ""
 
-Style/Documentation:
-  Enabled: false
-
 Style/DocumentationMethod:
   RequireForNonPublicMethods: false
 
