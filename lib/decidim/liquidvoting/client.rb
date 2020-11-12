@@ -134,7 +134,11 @@ module Decidim
 
       ## Example:
       ##
-      ## create_delegation(proposal_url: "https://my.decidim.com/proposal", delegator_email: "bob@email.com", delegate_email: "alice@email.com")
+      ## create_delegation(
+      ##   proposal_url: "https://my.decidim.com/proposal",
+      ##   delegator_email: "bob@email.com",
+      ##   delegate_email: "alice@email.com"
+      ## )
       ## => true
       ##
       ## On failure it will raise an exception with the errors returned by the API
@@ -161,7 +165,11 @@ module Decidim
 
       ## Example:
       ##
-      ## delete_delegation(proposal_url: "https://my.decidim.com/proposal", delegator_email: "bob@email.com", delegate_email: "alice@email.com")
+      ## delete_delegation(
+      ##   proposal_url: "https://my.decidim.com/proposal",
+      ##   delegator_email: "bob@email.com",
+      ##   delegate_email: "alice@email.com"
+      ## )
       ## => deleted_delegation
       ## deleted_delegation.voting_result.yes => 0
       ## deleted_delegation.voting_result.no => 0
