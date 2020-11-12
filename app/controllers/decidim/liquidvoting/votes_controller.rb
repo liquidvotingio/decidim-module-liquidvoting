@@ -15,7 +15,7 @@ module Decidim
         session[:voted] = true
         session[:delegated_to] = nil
         flash[:notice] = "Vote created."
-      rescue Exception => e
+      rescue StandardError => e
         flash[:error] = e.message
       ensure
         redirect_to request.referer
@@ -30,7 +30,7 @@ module Decidim
         flash[:notice] =
           "Vote deleted."
         session[:voted] = false
-      rescue Exception => e
+      rescue StandardError => e
         flash[:error] = e.message
       ensure
         redirect_to request.referer
