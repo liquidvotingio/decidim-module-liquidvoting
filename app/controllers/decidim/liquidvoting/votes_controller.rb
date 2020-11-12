@@ -37,7 +37,7 @@ module Decidim
       end
 
       def current_component
-        Decidim::Component.where(manifest_name: "liquidvoting").first
+        Decidim::Component.find_by(manifest_name: "liquidvoting")
       end
 
       def permission_class_chain

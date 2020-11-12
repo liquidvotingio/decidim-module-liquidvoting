@@ -213,8 +213,7 @@ module Decidim
       def self.delegation_for(delegator_email, proposal_url)
         # this is a hack until we can properly query a subset of delegations
         delegations
-          .select { |d| d.delegator.email == delegator_email && d.proposal_url == proposal_url }
-          .first # returns nil if list is empty
+          .find { |d| d.delegator.email == delegator_email && d.proposal_url == proposal_url }
       end
 
       private
