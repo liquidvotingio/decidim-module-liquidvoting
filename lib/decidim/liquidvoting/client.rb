@@ -212,9 +212,9 @@ module Decidim
       # return exactly one delegation from delegator_email for proposal_url, or nil
       def self.delegation_for(delegator_email, proposal_url)
         # this is a hack until we can properly query a subset of delegations
-        delegations = self.delegations()
-                          .select { |d| d.delegator.email == delegator_email && d.proposal_url == proposal_url }
-                          .first # returns nil if list is empty
+        delegations
+          .select { |d| d.delegator.email == delegator_email && d.proposal_url == proposal_url }
+          .first # returns nil if list is empty
       end
 
       private
@@ -222,7 +222,7 @@ module Decidim
       ## A wrapper for all LiquidVoting calls
       def self.send_query(query, variables: {})
         Rails.logger.info "Liquidvoting request sent: #{query.inspect} #{variables.inspect}"
-        response = CLIENT.query(query, variables: variables)
+        CLIENT.query(query, variables: variables)
       end
     end
   end
