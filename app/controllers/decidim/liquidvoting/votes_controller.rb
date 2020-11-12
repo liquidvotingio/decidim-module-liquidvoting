@@ -9,7 +9,7 @@ module Decidim
         Decidim::Liquidvoting::Client.create_vote(
           proposal_url: params[:proposal_url],
           participant_email: params[:participant_email],
-          yes: true,
+          yes: true
         )
 
         session[:voted] = true
