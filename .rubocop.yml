@@ -1200,8 +1200,8 @@ Lint/UnusedMethodArgument:
 
 ##################### Performance ############################
 
-Metrics/BlockLength:
-  Enabled: false
+# Metrics/BlockLength:
+#   Enabled: false
 
 RSpec/BeforeAfterAll:
   Enabled: true
