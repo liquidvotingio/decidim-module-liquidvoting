@@ -84,11 +84,9 @@ module Decidim
         variables = { proposal_url: proposal_url, participant_email: participant_email }
         response = send_query(DeleteVoteMutation, variables: variables)
 
-        if response.data.errors.any?
-          raise response.data.errors.messages["deleteVote"].join(", ")
-        else
-          response.data.delete_vote
-        end
+        return response.data.delete_vote unless response.data.errors.any?
+
+        raise response.data.errors.messages["deleteVote"].join(", ")
      end
 
       ## Example:
@@ -114,11 +112,9 @@ module Decidim
       def self.votes
         response = send_query(VotesQuery)
 
-        if response.data.errors.any?
-          raise response.data.errors.messages["votes"].join(", ")
-        else
-          response.data.votes
-        end
+        return response.data.votes unless response.data.errors.any?
+
+        raise response.data.errors.messages["votes"].join(", ")
       end
 
       # return exactly one vote from participant_email for proposal_url, or nil
@@ -147,11 +143,9 @@ module Decidim
         variables = { proposal_url: proposal_url, delegator_email: delegator_email, delegate_email: delegate_email }
         response = send_query(CreateDelegationMutation, variables: variables)
 
-        if response.data.errors.any?
-          raise response.data.errors.messages["createDelegation"].join(", ")
-        else
-          true
-        end
+        return true unless response.data.errors.any?
+
+        raise response.data.errors.messages["createDelegation"].join(", ")
       end
 
       DeleteDelegationMutation = CLIENT.parse <<-GRAPHQL
@@ -178,11 +172,9 @@ module Decidim
         variables = { proposal_url: proposal_url, delegator_email: delegator_email, delegate_email: delegate_email }
         response = send_query(DeleteDelegationMutation, variables: variables)
 
-        if response.data.errors.any?
-          raise response.data.errors.messages["deleteDelegation"].join(", ")
-        else
-          response.data.delete_delegation
-        end
+        return response.data.delete_delegation unless response.data.errors.any?
+
+        raise response.data.errors.messages["deleteDelegation"].join(", ")
       end
 
       ## Example:
@@ -213,11 +205,9 @@ module Decidim
       def self.delegations
         response = send_query(DelegationsQuery)
 
-        if response.data.errors.any?
-          raise response.data.errors.messages["delegations"].join(", ")
-        else
-          response.data.delegations
-        end
+        return response.data.delegations unless response.data.errors.any?
+
+        raise response.data.errors.messages["delegations"].join(", ")
       end
 
       # return exactly one delegation from delegator_email for proposal_url, or nil
