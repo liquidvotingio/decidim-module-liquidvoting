@@ -87,7 +87,7 @@ module Decidim
         return response.data.delete_vote unless response.data.errors.any?
 
         raise response.data.errors.messages["deleteVote"].join(", ")
-     end
+      end
 
       ## Example:
       ##
