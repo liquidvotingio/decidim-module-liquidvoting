@@ -33,7 +33,9 @@ module Decidim
       end
 
       initializer "decidim_liquidvoting.assets" do |app|
-        app.config.assets.precompile += %w(decidim_liquidvoting_manifest.js decidim_liquidvoting_manifest.css)
+        app.config.assets.precompile += %w(
+          decidim_liquidvoting_manifest.js decidim_liquidvoting_manifest.css
+        )
       end
     end
   end

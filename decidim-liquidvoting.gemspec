@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.email = ["oliverbarnes@hey.com"]
   s.license = "AGPL-3.0"
   s.homepage = "https://github.com/liquidvotingio/decidim-liquidvoting"
-  s.required_ruby_version = ">= 2.5"
+  s.required_ruby_version = ">= 2.6"
 
   s.name = "decidim-liquidvoting"
   s.summary = "A Decidim Liquidvoting module"

@@ -1,22 +1,24 @@
-require 'graphql/client'
-require 'graphql/client/http'
+# frozen_string_literal: true
+
+require "graphql/client"
+require "graphql/client/http"
 
 module Decidim
   module Liquidvoting
     # Copied over from https://github.com/liquidvotingio/ruby-client/blob/master/liquid_voting_api.rb.
-    # Changes here will be applied there as well. Doing this for development speed, until 
+    # Changes here will be applied there as well. Doing this for development speed, until
     # basics are ironed out and we can we publish the client as a gem.
-    
-    # This client integrates with the liquidvoting.io api, allowing for delegative voting 
+
+    # This client integrates with the liquidvoting.io api, allowing for delegative voting
     # in a participatory space proposal.
     module Client
-      URL = ENV.fetch('LIQUID_VOTING_API_URL', 'http://localhost:4000')
+      URL = ENV.fetch("LIQUID_VOTING_API_URL", "http://localhost:4000")
       # URL = ENV.fetch('LIQUID_VOTING_API_URL', 'https://api.liquidvoting.io')
-      AUTH_KEY = ENV.fetch('LIQUID_VOTING_API_AUTH_KEY', '62309201-d2f0-407f-875b-9f836f94f2ca')
+      AUTH_KEY = ENV.fetch("LIQUID_VOTING_API_AUTH_KEY", "62309201-d2f0-407f-875b-9f836f94f2ca")
 
       HTTP = ::GraphQL::Client::HTTP.new(URL) do
-        def headers(context)
-          { 
+        def headers(_context)
+          {
             "Authorization": "Bearer #{AUTH_KEY}",
             "Org-ID": "62309201-d2f0-407f-875b-9f836f94f2ca"
           }
@@ -44,7 +46,11 @@ module Decidim
 
       ## Example:
       ##
-      ## create_vote(yes: true, proposal_url: "https://my.decidim.com/proposal", participant_email: "alice@email.com")
+      ## create_vote(
+      ##   yes: true,
+      ##   proposal_url: "https://my.decidim.com/proposal",
+      ##   participant_email: "alice@email.com"
+      ## )
       ## => vote
       ## vote.yes => true
       ## vote.voting_result.yes => 1
@@ -52,14 +58,12 @@ module Decidim
       ##
       ## On failure it will raise an exception with the errors returned by the API
       def self.create_vote(yes:, proposal_url:, participant_email:)
-        variables = { yes: yes, proposal_url: proposal_url, participant_email: participant_email}
+        variables = { yes: yes, proposal_url: proposal_url, participant_email: participant_email }
         response = send_query(CreateVoteMutation, variables: variables)
 
-        if response.data.errors.any?
-          raise response.data.errors.messages["createVote"].join(", ")
-        else
-          response.data.create_vote
-        end
+        return response.data.create_vote unless response.data.errors.any?
+
+        raise response.data.errors.messages["createVote"].join(", ")
       end
 
       DeleteVoteMutation = CLIENT.parse <<-GRAPHQL
@@ -77,15 +81,13 @@ module Decidim
       GRAPHQL
 
       def self.delete_vote(proposal_url:, participant_email:)
-        variables = { proposal_url: proposal_url, participant_email: participant_email}
+        variables = { proposal_url: proposal_url, participant_email: participant_email }
         response = send_query(DeleteVoteMutation, variables: variables)
 
-        if response.data.errors.any?
-          raise response.data.errors.messages["deleteVote"].join(", ")
-        else
-          response.data.delete_vote
-        end
-     end
+        return response.data.delete_vote unless response.data.errors.any?
+
+        raise response.data.errors.messages["deleteVote"].join(", ")
+      end
 
       ## Example:
       ##
@@ -95,7 +97,7 @@ module Decidim
       ##    => participant
       ##        => email => john@gmail.com
       ##                 => ...
-     VotesQuery = CLIENT.parse <<-GRAPHQL
+      VotesQuery = CLIENT.parse <<-GRAPHQL
       query {
         votes {
           proposalUrl
@@ -107,23 +109,21 @@ module Decidim
 
       GRAPHQL
 
-      def self.votes()
+      def self.votes
         response = send_query(VotesQuery)
 
-        if response.data.errors.any?
-          raise response.data.errors.messages["votes"].join(", ")
-        else
-          response.data.votes
-        end
+        return response.data.votes unless response.data.errors.any?
+
+        raise response.data.errors.messages["votes"].join(", ")
       end
 
       # return exactly one vote from participant_email for proposal_url, or nil
       def self.vote_for(participant_email, proposal_url)
         # this is a hack until we can properly query a subset of delegations
-        votes = self.votes().
-          select {|v| v.participant.email == participant_email && v.proposal_url == proposal_url}.
-          first   # returns nil if list is empty
-      end 
+        votes.find do |v|
+          v.participant.email == participant_email && v.proposal_url == proposal_url
+        end
+      end
 
       CreateDelegationMutation = CLIENT.parse <<-GRAPHQL
         mutation($proposal_url: String!, $delegator_email: String!, $delegate_email: String!) {
@@ -136,19 +136,25 @@ module Decidim
 
       ## Example:
       ##
-      ## create_delegation(proposal_url: "https://my.decidim.com/proposal", delegator_email: "bob@email.com", delegate_email: "alice@email.com")
+      ## create_delegation(
+      ##   proposal_url: "https://my.decidim.com/proposal",
+      ##   delegator_email: "bob@email.com",
+      ##   delegate_email: "alice@email.com"
+      ## )
       ## => true
       ##
       ## On failure it will raise an exception with the errors returned by the API
       def self.create_delegation(proposal_url:, delegator_email:, delegate_email:)
-        variables = { proposal_url: proposal_url, delegator_email: delegator_email, delegate_email: delegate_email }
+        variables = {
+          proposal_url: proposal_url,
+          delegator_email: delegator_email,
+          delegate_email: delegate_email
+        }
         response = send_query(CreateDelegationMutation, variables: variables)
 
-        if response.data.errors.any?
-          raise response.data.errors.messages["createDelegation"].join(", ")
-        else
-          true
-        end
+        return true unless response.data.errors.any?
+
+        raise response.data.errors.messages["createDelegation"].join(", ")
       end
 
       DeleteDelegationMutation = CLIENT.parse <<-GRAPHQL
@@ -165,21 +171,27 @@ module Decidim
 
       ## Example:
       ##
-      ## delete_delegation(proposal_url: "https://my.decidim.com/proposal", delegator_email: "bob@email.com", delegate_email: "alice@email.com")
+      ## delete_delegation(
+      ##   proposal_url: "https://my.decidim.com/proposal",
+      ##   delegator_email: "bob@email.com",
+      ##   delegate_email: "alice@email.com"
+      ## )
       ## => deleted_delegation
       ## deleted_delegation.voting_result.yes => 0
       ## deleted_delegation.voting_result.no => 0
       ##
       ## On failure it will raise an exception with the errors returned by the API
       def self.delete_delegation(proposal_url:, delegator_email:, delegate_email:)
-        variables = { proposal_url: proposal_url, delegator_email: delegator_email, delegate_email: delegate_email }
+        variables = {
+          proposal_url: proposal_url,
+          delegator_email: delegator_email,
+          delegate_email: delegate_email
+        }
         response = send_query(DeleteDelegationMutation, variables: variables)
 
-        if response.data.errors.any?
-          raise response.data.errors.messages["deleteDelegation"].join(", ")
-        else
-          response.data.delete_delegation
-        end
+        return response.data.delete_delegation unless response.data.errors.any?
+
+        raise response.data.errors.messages["deleteDelegation"].join(", ")
       end
 
       ## Example:
@@ -207,32 +219,27 @@ module Decidim
 
       GRAPHQL
 
-      def self.delegations()
+      def self.delegations
         response = send_query(DelegationsQuery)
 
-        if response.data.errors.any?
-          raise response.data.errors.messages["delegations"].join(", ")
-        else
-          response.data.delegations
-        end
+        return response.data.delegations unless response.data.errors.any?
+
+        raise response.data.errors.messages["delegations"].join(", ")
       end
 
       # return exactly one delegation from delegator_email for proposal_url, or nil
       def self.delegation_for(delegator_email, proposal_url)
         # this is a hack until we can properly query a subset of delegations
-        delegations = self.delegations().
-          select {|d| d.delegator.email == delegator_email && d.proposal_url == proposal_url}.
-          first   # returns nil if list is empty
-      end 
-
-      private
-
-      ## A wrapper for all LiquidVoting calls
-      def self.send_query(query, variables: { })
-        Rails.logger.info "Liquidvoting request sent: #{query.inspect} #{variables.inspect}"
-        response = CLIENT.query(query, variables: variables)
+        delegations.find do |d|
+          d.delegator.email == delegator_email && d.proposal_url == proposal_url
+        end
       end
 
+      ## A wrapper for all LiquidVoting calls
+      def self.send_query(query, variables: {})
+        Rails.logger.info "Liquidvoting request sent: #{query.inspect} #{variables.inspect}"
+        CLIENT.query(query, variables: variables)
+      end
     end
   end
 end

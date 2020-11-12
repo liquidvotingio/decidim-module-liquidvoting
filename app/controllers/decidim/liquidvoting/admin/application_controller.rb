@@ -12,7 +12,7 @@ module Decidim
         def permission_class_chain
           Decidim.permissions_registry.chain_for(ApplicationController)
         end
-        
+
         def index
           respond_to do |format|
             format.html { render html: "<p>placeholder admin page</p>".html_safe }

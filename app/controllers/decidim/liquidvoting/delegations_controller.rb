@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Decidim
-  module Liquidvoting 
+  module Liquidvoting
     class DelegationsController < Decidim::Liquidvoting::ApplicationController
       before_action :authenticate_user!
 
@@ -11,11 +11,11 @@ module Decidim
           delegator_email: params[:delegator_email],
           delegate_email: params[:delegate_email]
         )
-   
+
         session[:delegated_to] = params[:delegate_email]
         flash[:notice] =
           "Delegated support to #{Decidim::User.find_by(email: session[:delegated_to]).name}."
-      rescue Exception => e
+      rescue StandardError => e
         flash[:error] = e.message
       ensure
         redirect_to request.referer
@@ -37,14 +37,14 @@ module Decidim
         flash[:notice] =
           "Removed delegation to #{Decidim::User.find_by(email: session[:delegated_to]).name}."
         session[:delegated_to] = nil
-      rescue Exception => e
+      rescue StandardError => e
         flash[:error] = e.message
       ensure
         redirect_to request.referer
       end
 
       def current_component
-        Decidim::Component.where(manifest_name: "liquidvoting").first
+        Decidim::Component.find_by(manifest_name: "liquidvoting")
       end
 
       def permission_class_chain
@@ -52,7 +52,6 @@ module Decidim
           Decidim::Liquidvoting::Permissions
         ]
       end
-
     end
   end
 end

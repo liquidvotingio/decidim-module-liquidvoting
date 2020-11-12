@@ -1,4 +1,7 @@
-require: rubocop-rspec
+require:
+  - rubocop-performance
+  - rubocop-rails
+  - rubocop-rspec
 
 # Common configuration.
 AllCops:
@@ -11,6 +14,9 @@ AllCops:
     - "**/Gemfile"
     - "**/Rakefile"
   Exclude:
+    - 'db/**/*'
+    - 'script/**/*'
+    - 'bin/**/*'
     - "**/vendor/**/*"
     - "development_app/**/*"
     - "spec/decidim_dummy_app/**/*"
@@ -64,7 +70,7 @@ AllCops:
   # If a value is specified for TargetRubyVersion then it is used.
   # Else if .ruby-version exists and it contains an MRI version it is used.
   # Otherwise we fallback to the oldest officially supported Ruby version (2.0).
-  TargetRubyVersion: 2.5
+  TargetRubyVersion: 2.6
 
   RSpec:
     Patterns:
@@ -1082,6 +1088,11 @@ Metrics/AbcSize:
   Max: 15
   Enabled: false
 
+Metrics/BlockLength:
+  Exclude:
+    - config/**/*
+    - spec/**/*
+
 Metrics/BlockNesting:
   Max: 3
 
@@ -1102,7 +1113,7 @@ Metrics/CyclomaticComplexity:
     - "**/*/permissions.rb"
 
 Metrics/LineLength:
-  Max: 180
+  Max: 100
   # To make it possible to copy or click on URIs in the code, we allow lines
   # containing a URI to be longer than Max.
   AllowHeredoc: true
@@ -1135,6 +1146,7 @@ Lint/AmbiguousBlockAssociation:
   Enabled: true
   Exclude:
     - "**/abilities/**/*"
+    - spec/**/*
 
 # Allow safe assignment in conditions.
 Lint/AssignmentInCondition:
@@ -1188,8 +1200,8 @@ Lint/UnusedMethodArgument:
 
 ##################### Performance ############################
 
-Metrics/BlockLength:
-  Enabled: false
+# Metrics/BlockLength:
+#   Enabled: false
 
 RSpec/BeforeAfterAll:
   Enabled: true

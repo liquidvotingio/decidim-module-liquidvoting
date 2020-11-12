@@ -9,13 +9,13 @@ module Decidim
         Decidim::Liquidvoting::Client.create_vote(
           proposal_url: params[:proposal_url],
           participant_email: params[:participant_email],
-          yes: true,
+          yes: true
         )
 
         session[:voted] = true
         session[:delegated_to] = nil
         flash[:notice] = "Vote created."
-      rescue Exception => e
+      rescue StandardError => e
         flash[:error] = e.message
       ensure
         redirect_to request.referer
@@ -30,14 +30,14 @@ module Decidim
         flash[:notice] =
           "Vote deleted."
         session[:voted] = false
-      rescue Exception => e
+      rescue StandardError => e
         flash[:error] = e.message
       ensure
         redirect_to request.referer
       end
 
       def current_component
-        Decidim::Component.where(manifest_name: "liquidvoting").first
+        Decidim::Component.find_by(manifest_name: "liquidvoting")
       end
 
       def permission_class_chain

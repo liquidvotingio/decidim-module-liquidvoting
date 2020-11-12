@@ -20,6 +20,10 @@ gem "uglifier", "~> 4.1"
 
 group :development, :test do
   gem "byebug", "~> 11.0", platform: :mri
+  gem "rubocop"
+  gem "rubocop-performance"
+  gem "rubocop-rails"
+  gem "rubocop-rspec" # or gem 'rubocop-minitest'
 
   gem "decidim-dev", Decidim::Liquidvoting::DECIDIM_VERSION
 end
