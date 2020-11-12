@@ -127,11 +127,7 @@ module Decidim
       def self.vote_for(participant_email, proposal_url)
         # this is a hack until we can properly query a subset of delegations
         votes = self.votes()
-                    .select {
-                       |v| v.participant.email == participant_email
-                       && v.proposal_url == proposal_url
-                      }
-                    .first # returns nil if list is empty
+                    .find { |v| v.participant.email == participant_email && v.proposal_url == proposal_url }
       end
 
       CreateDelegationMutation = CLIENT.parse <<-GRAPHQL
