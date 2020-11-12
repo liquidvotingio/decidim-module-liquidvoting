@@ -61,11 +61,9 @@ module Decidim
         variables = { yes: yes, proposal_url: proposal_url, participant_email: participant_email }
         response = send_query(CreateVoteMutation, variables: variables)
 
-        if response.data.errors.any?
-          raise response.data.errors.messages["createVote"].join(", ")
-        else
-          response.data.create_vote
-        end
+        return response.data.create_vote unless response.data.errors.any?
+
+        raise response.data.errors.messages["createVote"].join(", ")
       end
 
       DeleteVoteMutation = CLIENT.parse <<-GRAPHQL
