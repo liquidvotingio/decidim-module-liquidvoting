@@ -120,8 +120,7 @@ module Decidim
       # return exactly one vote from participant_email for proposal_url, or nil
       def self.vote_for(participant_email, proposal_url)
         # this is a hack until we can properly query a subset of delegations
-        votes = self.votes()
-                    .find { |v| v.participant.email == participant_email && v.proposal_url == proposal_url }
+        votes.find { |v| v.participant.email == participant_email && v.proposal_url == proposal_url }
       end
 
       CreateDelegationMutation = CLIENT.parse <<-GRAPHQL
