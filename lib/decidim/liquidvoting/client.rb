@@ -120,7 +120,9 @@ module Decidim
       # return exactly one vote from participant_email for proposal_url, or nil
       def self.vote_for(participant_email, proposal_url)
         # this is a hack until we can properly query a subset of delegations
-        votes.find { |v| v.participant.email == participant_email && v.proposal_url == proposal_url }
+        votes.find do |v|
+          v.participant.email == participant_email && v.proposal_url == proposal_url
+        end
       end
 
       CreateDelegationMutation = CLIENT.parse <<-GRAPHQL
@@ -143,7 +145,11 @@ module Decidim
       ##
       ## On failure it will raise an exception with the errors returned by the API
       def self.create_delegation(proposal_url:, delegator_email:, delegate_email:)
-        variables = { proposal_url: proposal_url, delegator_email: delegator_email, delegate_email: delegate_email }
+        variables = {
+          proposal_url: proposal_url,
+          delegator_email: delegator_email,
+          delegate_email: delegate_email
+        }
         response = send_query(CreateDelegationMutation, variables: variables)
 
         return true unless response.data.errors.any?
@@ -176,7 +182,11 @@ module Decidim
       ##
       ## On failure it will raise an exception with the errors returned by the API
       def self.delete_delegation(proposal_url:, delegator_email:, delegate_email:)
-        variables = { proposal_url: proposal_url, delegator_email: delegator_email, delegate_email: delegate_email }
+        variables = {
+          proposal_url: proposal_url,
+          delegator_email: delegator_email,
+          delegate_email: delegate_email
+        }
         response = send_query(DeleteDelegationMutation, variables: variables)
 
         return response.data.delete_delegation unless response.data.errors.any?
@@ -220,8 +230,9 @@ module Decidim
       # return exactly one delegation from delegator_email for proposal_url, or nil
       def self.delegation_for(delegator_email, proposal_url)
         # this is a hack until we can properly query a subset of delegations
-        delegations
-          .find { |d| d.delegator.email == delegator_email && d.proposal_url == proposal_url }
+        delegations.find do |d|
+          d.delegator.email == delegator_email && d.proposal_url == proposal_url
+        end
       end
 
       ## A wrapper for all LiquidVoting calls
