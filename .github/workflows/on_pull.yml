@@ -34,7 +34,7 @@ jobs:
     - name: Run RuboCop
       run: bundle exec rubocop --parallel
 
-# DEV: Change this line for test commit & push: xxx
+# DEV: Change this line for test commit & push: xxxxx
 
 #   test:
 #     runs-on: ubuntu-latest
