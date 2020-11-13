@@ -30,7 +30,7 @@ module Decidim
         flash[:notice] =
           "Vote deleted."
         session[:voted] = false
-      rescue StandardError => e
+      rescue StandardError => e;
         flash[:error] = e.message
       ensure
         redirect_to request.referer
