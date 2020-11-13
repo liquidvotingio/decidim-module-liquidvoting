@@ -1,5 +1,5 @@
 name: CI
-  push:
+  pull_request:
       branches:
       - master
       paths-ignore:
