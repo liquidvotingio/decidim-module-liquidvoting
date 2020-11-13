@@ -14,20 +14,52 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2.0.0
     - name: Set up Ruby 2.6 
-      uses: actions/setup-ruby@v1
-      with:
-        ruby-version: 2.6.x # Replace with your ruby version
-    - name: Gems Cache
-      id: gem-cache
-      uses: actions/cache@v1
-      with:
-        path: vendor/bundle
-        key: ${{ runner.os }}-gem-${{ hashFiles('**/Gemfile.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-gem-
-    - name: Rubocop Linter Action
-      uses: andrewmcodes/rubocop-linter-action@v3.0.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: ruby/setup-ruby@master
+        with:
+          ruby-version: 2.6.x
+    - name: Install Ruby deps
+      run: |
+        gem install bundler:2.1.4
+        bundle install --path vendor/bundle --jobs 4 --retry 3
+
+    - name: Lint and Rubocop
+      run: |
+        bundle exec rubocop
+
+
+#   test:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - uses: actions/checkout@v2.0.0
+#         with:
+#           fetch-depth: 1
+
+#       - name: Set env
+#         run: echo ::set-env name=workspace::$GITHUB_WORKSPACE
+
+#       - uses: ruby/setup-ruby@master
+#         with:
+#           ruby-version: ${{ env.RUBY_VERSION }}
+
+#       - name: Recover Ruby dependency cache
+#         uses: actions/cache@v1
+#         with:
+#           path: ./vendor/bundle
+#           key: ${{ runner.OS }}-rubydeps-${{ hashFiles('Gemfile.lock') }}
+#           restore-keys: |
+#             ${{ runner.OS }}-rubydeps-${{ env.cache-name }}-
+#             ${{ runner.OS }}-rubydeps-
+#             ${{ runner.OS }}-
+
+#       - name: Install Ruby deps
+#         run: |
+#           gem install bundler:2.1.4
+#           bundle install --path vendor/bundle --jobs 4 --retry 3
+
+#       - name: Lint and Rubocop
+#         run: |
+#           bundle exec rubocop
+#           bundle exec erblint app/{cells,views}/**/*.erb
