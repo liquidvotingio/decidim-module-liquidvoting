@@ -1,6 +1,6 @@
 require:
-  #- rubocop-performance
-  #- rubocop-rails
+  - rubocop-performance
+  - rubocop-rails
   - rubocop-rspec
 
 # Common configuration.
