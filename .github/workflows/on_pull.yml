@@ -19,18 +19,20 @@ jobs:
       uses: actions/setup-ruby@v1
       with:
         ruby-version: "2.6"
-    - name: Bundle install with cache
-    - uses: actions/cache@v2
+    - name: Cache gems
+      uses: actions/cache@v1
       with:
         path: vendor/bundle
-        key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+        key: ${{ runner.os }}-rubocop-${{ hashFiles('**/Gemfile.lock') }}
         restore-keys: |
-          ${{ runner.os }}-gems-
-    - run: gem install bundler
-    - run: bundle config path vendor/bundle
-    - run: bundle install --jobs 4 --retry 3
+          ${{ runner.os }}-rubocop-
+    - name: Install gems
+      run: |
+        bundle config path vendor/bundle
+        bundle config set without 'default doc job cable storage ujs test db'
+        bundle install --jobs 4 --retry 3
     - name: Run RuboCop
-    - run: bundle exec rubocop --parallel
+      run: bundle exec rubocop --parallel
 
 # DEV: Change this line for test commit & push: xxx
 
