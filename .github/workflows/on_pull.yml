@@ -1,4 +1,6 @@
 name: CI
+
+on:
   pull_request:
       branches:
       - master
