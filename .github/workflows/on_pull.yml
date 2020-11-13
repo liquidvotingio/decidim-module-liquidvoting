@@ -19,8 +19,8 @@ jobs:
       uses: actions/setup-ruby@v1
       with:
         ruby-version: "2.6"
-    - name: Cache gems
-      uses: actions/cache@v1
+    - name: Bundle install with cache
+    - uses: actions/cache@v2
       with:
         path: vendor/bundle
         key: ${{ runner.os }}-rubocop-${{ hashFiles('**/Gemfile.lock') }}
