@@ -1,6 +1,10 @@
-<%= render partial: "decidim/proposals/proposals/liquid_voting/session", locals: { proposal: proposal, from_proposals_list: true } %>
-<%= render partial: "decidim/proposals/proposals/liquid_voting/delegations", locals: { proposal: proposal, from_proposals_list: true } %>
-<%= render partial: "decidim/proposals/proposals/liquid_voting/voting", locals: { proposal: proposal, from_proposals_list: true } %>
+<% if proposal.rejected? || proposal.withdrawn? %>
+  <div></div>
+<% else %>
+  <%= render partial: "decidim/proposals/proposals/liquid_voting/session", locals: { proposal: proposal, from_proposals_list: true } %>
+  <%= render partial: "decidim/proposals/proposals/liquid_voting/delegations", locals: { proposal: proposal, from_proposals_list: true } %>
+  <%= render partial: "decidim/proposals/proposals/liquid_voting/voting", locals: { proposal: proposal, from_proposals_list: true } %>
+<% end %>
 
 <p>&nbsp;</p>
 
