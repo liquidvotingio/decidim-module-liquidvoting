@@ -6,7 +6,7 @@
       <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
       <input type="hidden" name="participant_email" value="<%= current_user.email %>">
       <input type="hidden" name="proposal_url" value="<%= proposal_url(proposal) %>">
-      <input name="_method" type="hidden" value="delete">
+      <input type="hidden" name="_method" value="delete">
       <input type='submit' value='Delete Vote' class="button">
     </form>
   <% else %>
