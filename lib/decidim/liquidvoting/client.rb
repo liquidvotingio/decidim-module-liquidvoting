@@ -45,12 +45,12 @@ module Decidim
       GRAPHQL
 
       def self.voting_result(proposal_url)
-      variables = { proposal_url: proposal_url }
-      response = send_query(VotingResultQuery, variables: variables)
+        variables = { proposal_url: proposal_url }
+        response = send_query(VotingResultQuery, variables: variables)
 
-      return response.data.voting_result.in_favor unless response.data.errors.any?
+        return response.data.voting_result.in_favor unless response.data.errors.any?
 
-      raise response.data.errors.messages["votingResult"].join(", ")
+        raise response.data.errors.messages["votingResult"].join(", ")
       end
 
       CreateVoteMutation = CLIENT.parse <<-GRAPHQL
