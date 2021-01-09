@@ -28,20 +28,13 @@ module Decidim
       SCHEMA = ::GraphQL::Client.load_schema(HTTP)
       CLIENT = ::GraphQL::Client.new(schema: SCHEMA, execute: HTTP)
 
-
-
-      # TODO: Edit comments to reflect new def.
-
       ## Example:
       ##
-      ## delegations()
-      ## => delegations
-      ##    => delegator
-      ##        => email => john@gmail.com
-      ##                 => ...
-      ##    => delegate
-      ##        => email => jane@gmail.com
-      ##                 => ...
+      ## votingResult(proposal_url: "https://my.decidim.com/proposal")
+      ## => votingResult
+      ##    => inFavor => 17
+      ##
+      ## On failure it will raise an exception with the errors returned by the API
       VotingResultQuery = CLIENT.parse <<-GRAPHQL
       query($proposal_url: String!) {
         votingResult(proposalUrl: $proposal_url) {
@@ -59,9 +52,6 @@ module Decidim
 
       raise response.data.errors.messages["votingResult"].join(", ")
       end
-
-
-
 
       CreateVoteMutation = CLIENT.parse <<-GRAPHQL
         mutation($participant_email: String, $proposal_url: String!, $yes: Boolean!) {
