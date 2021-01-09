@@ -1,6 +1,6 @@
 # Decidim::Liquidvoting
 [![Ruby Style Guide](https://img.shields.io/badge/code_style-rubocop-brightgreen.svg)](https://github.com/rubocop-hq/rubocop)
-[![YourActionName Actions Status](https://github.com/liquidvotingio/decidim-liquidvoting/workflows/CI/badge.svg)](https://github.com/liquidvotingio/decidim-liquidvoting/actions)
+[![YourActionName Actions Status](https://github.com/liquidvotingio/decidim-module-liquidvoting/workflows/CI/badge.svg)](https://github.com/liquidvotingio/decidim-module-liquidvoting/actions)
 
 Integrates decidim with liquidvoting.io.
 
@@ -16,7 +16,7 @@ Space.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem "decidim-liquidvoting", git: "https://github.com/liquidvotingio/decidim-liquidvoting"
+gem "decidim-module-liquidvoting", git: "https://github.com/liquidvotingio/decidim-module-liquidvoting"
 ```
 
 And then execute:

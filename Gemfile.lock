@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    decidim-liquidvoting (0.1)
+    decidim-module-liquidvoting (0.1)
       decidim-core (= 0.22.0)
       decidim-proposals (= 0.22.0)
       graphql-client (~> 0.16.0)
@@ -776,7 +776,7 @@ DEPENDENCIES
   codecov
   decidim (= 0.22.0)
   decidim-dev (= 0.22.0)
-  decidim-liquidvoting!
+  decidim-module-liquidvoting!
   decidim-proposals (= 0.22.0)
   faker (~> 1.9)
   letter_opener_web (~> 1.3)
