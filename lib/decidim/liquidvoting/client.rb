@@ -28,6 +28,41 @@ module Decidim
       SCHEMA = ::GraphQL::Client.load_schema(HTTP)
       CLIENT = ::GraphQL::Client.new(schema: SCHEMA, execute: HTTP)
 
+
+
+      # TODO: Edit comments to reflect new def.
+
+      ## Example:
+      ##
+      ## delegations()
+      ## => delegations
+      ##    => delegator
+      ##        => email => john@gmail.com
+      ##                 => ...
+      ##    => delegate
+      ##        => email => jane@gmail.com
+      ##                 => ...
+      VotingResultQuery = CLIENT.parse <<-GRAPHQL
+      query($proposal_url: String!) {
+        votingResult(proposalUrl: $proposal_url) {
+          inFavor
+        }
+      }
+
+      GRAPHQL
+
+      def self.voting_result(proposal_url)
+      variables = { proposal_url: proposal_url }
+      response = send_query(VotingResultQuery, variables: variables)
+
+      return response.data.voting_result.in_favor unless response.data.errors.any?
+
+      raise response.data.errors.messages["votingResult"].join(", ")
+      end
+
+
+
+
       CreateVoteMutation = CLIENT.parse <<-GRAPHQL
         mutation($participant_email: String, $proposal_url: String!, $yes: Boolean!) {
           createVote(participantEmail: $participant_email, proposalUrl: $proposal_url, yes: $yes) {

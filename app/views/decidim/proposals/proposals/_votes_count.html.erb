@@ -2,8 +2,7 @@
   <% if component_settings.participatory_texts_enabled? && from_proposals_list %>
     <%= render partial: "decidim/proposals/proposals/participatory_texts/proposal_votes_count", locals: { proposal: proposal, from_proposals_list: true } %>
   <% else %>
-    <p>Hello from the overriding votes_count partial!</p> <!-- print text to confirm we are overriding -->
-    <% progress = 99 %> <!-- set progress to 99 to confirm we can see the number change -->
+    <% progress = Decidim::Liquidvoting::Client.voting_result(proposal_url(proposal)) %> <!-- set progress to current LV votingResult.inFavor -->
     <% progress ||= proposal.proposal_votes_count || 0 %>
     <% total ||= proposal.maximum_votes || 0 %>
     <% subtitle_text = progress >= total ? t("decidim.proposals.proposals.votes_count.most_popular_proposal") : t("decidim.proposals.proposals.votes_count.need_more_votes") %>
