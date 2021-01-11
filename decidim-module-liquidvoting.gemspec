@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.homepage = "https://github.com/liquidvotingio/decidim-module-liquidvoting"
   s.required_ruby_version = ">= 2.6"
 
-  s.name = "decidim-module-liquidvoting"
+  s.name = "decidim-liquidvoting"
   s.summary = "A Decidim Liquidvoting module"
   s.description = "Integrates Decidim with liquidvoting.io."
 

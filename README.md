@@ -16,7 +16,7 @@ Space.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem "decidim-module-liquidvoting", git: "https://github.com/liquidvotingio/decidim-module-liquidvoting"
+gem "decidim-liquidvoting", git: "https://github.com/liquidvotingio/decidim-module-liquidvoting"
 ```
 
 And then execute:
