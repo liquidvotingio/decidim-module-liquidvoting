@@ -776,7 +776,7 @@ DEPENDENCIES
   codecov
   decidim (= 0.22.0)
   decidim-dev (= 0.22.0)
-  decidim-module-liquidvoting!
+  decidim-liquidvoting!
   decidim-proposals (= 0.22.0)
   faker (~> 1.9)
   letter_opener_web (~> 1.3)
