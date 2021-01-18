@@ -48,7 +48,7 @@ module Decidim
         variables = { proposal_url: proposal_url }
         response = send_query(VotingResultQuery, variables: variables)
 
-        return response.data.voting_result.in_favor unless response.data.errors.any?
+        return response.data.voting_result&.in_favor unless response.data.errors.any?
 
         raise response.data.errors.messages["votingResult"].join(", ")
       end
