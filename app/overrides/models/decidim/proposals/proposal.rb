@@ -27,5 +27,5 @@ Decidim::Proposals::Proposal.class_eval do
     update_columns(proposal_votes_count: get_progress(component))
   end
 
-  # rubocop:enable
+  # rubocop:enable Rails/SkipsModelValidations
 end
