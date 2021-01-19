@@ -29,11 +29,12 @@ module Decidim
         # update_temporary_votes
 
         Decidim::Liquidvoting::Client.delete_vote(
-          proposal_url: "http://localhost/processes/#{process.slug}/f/#{component.id}/proposals/#{proposal.id}",
+          proposal_url: "http://localhost/processes/" +
+            "#{process.slug}/f/#{component.id}/proposals/#{proposal.id}",
           participant_email: current_user.email
         )
 
-        #Decidim::Gamification.decrement_score(@current_user, :proposal_votes)
+        # Decidim::Gamification.decrement_score(@current_user, :proposal_votes)
 
         broadcast(:ok, @proposal)
       end

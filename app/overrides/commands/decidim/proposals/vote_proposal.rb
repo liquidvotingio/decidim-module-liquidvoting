@@ -20,7 +20,8 @@ module Decidim
       #
       # Returns nothing.
       def call
-        return broadcast(:invalid) if @proposal.maximum_votes_reached? && !@proposal.can_accumulate_supports_beyond_threshold
+        return broadcast(:invalid) if @proposal.maximum_votes_reached? &&
+                                      !@proposal.can_accumulate_supports_beyond_threshold
 
         build_proposal_vote
         return broadcast(:invalid) unless vote.valid?
@@ -33,14 +34,16 @@ module Decidim
         # end
 
         Decidim::Liquidvoting::Client.create_vote(
-          # NOTE: This is a clunky way of creating the url. Probably can find a better way to pass the url here.
+          # NOTE: This is a clunky way of creating the url.
+          # Probably can find a better way to pass the url here.
           # Also, what is the '.../f/...' part of the url?
-          proposal_url: "http://localhost/processes/#{process.slug}/f/#{component.id}/proposals/#{proposal.id}",
+          proposal_url: "http://localhost/processes/" +
+            "#{process.slug}/f/#{component.id}/proposals/#{proposal.id}",
           participant_email: current_user.email,
           yes: true
         )
 
-        #Decidim::Gamification.increment_score(@current_user, :proposal_votes)
+        # Decidim::Gamification.increment_score(@current_user, :proposal_votes)
 
         broadcast(:ok, vote)
       end
