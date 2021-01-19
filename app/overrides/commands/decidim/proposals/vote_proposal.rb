@@ -37,7 +37,7 @@ module Decidim
           # NOTE: This is a clunky way of creating the url.
           # Probably can find a better way to pass the url here.
           # Also, what is the '.../f/...' part of the url?
-          proposal_url: "http://localhost/processes/" +
+          proposal_url: "http://localhost/processes/"\
             "#{process.slug}/f/#{component.id}/proposals/#{proposal.id}",
           participant_email: current_user.email,
           yes: true

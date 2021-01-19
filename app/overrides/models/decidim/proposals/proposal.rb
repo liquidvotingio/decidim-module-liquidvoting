@@ -13,7 +13,7 @@ Decidim::Proposals::Proposal.class_eval do
   #
   # Returns an integer.
   def get_progress(component)
-    url = "http://localhost/processes/" +
+    url = "http://localhost/processes/"\
       "#{component.participatory_space.slug}/f/#{component.id}/proposals/#{id}"
     Decidim::Liquidvoting::Client.voting_result(url) || 0
   end
@@ -26,4 +26,6 @@ Decidim::Proposals::Proposal.class_eval do
   def update_votes_count(component)
     update_columns(proposal_votes_count: get_progress(component))
   end
+
+  # rubocop:enable
 end
