@@ -19,10 +19,15 @@ module Decidim
           on(:ok) do
             proposal.reload
 
+            # TODO: Replace with search that uses LV proposals to select which proposals to include.
             proposals = ProposalVote.where(
               author: current_user,
               proposal: Proposal.where(component: current_component)
             ).map(&:proposal)
+
+            # Because we do not create a vote on Decidim, we now use this to replace;
+            # `after_save :update_proposal_votes_count` (in Proposals::ProposalVote)
+            proposal.update_votes_count(current_component)
 
             expose(proposals: proposals + [proposal])
             render :update_buttons_and_counters
@@ -42,10 +47,15 @@ module Decidim
           on(:ok) do
             proposal.reload
 
+            # TODO: Replace with search that uses LV proposals to select which proposals to include.
             proposals = ProposalVote.where(
               author: current_user,
               proposal: Proposal.where(component: current_component)
             ).map(&:proposal)
+
+            # Because we do not create a vote on Decidim, we now use this to replace;
+            # `after_save :update_proposal_votes_count` (in Proposals::ProposalVote)
+            proposal.update_votes_count(current_component)
 
             expose(proposals: proposals + [proposal])
             render :update_buttons_and_counters

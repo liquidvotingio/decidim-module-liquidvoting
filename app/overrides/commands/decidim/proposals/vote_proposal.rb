@@ -40,10 +40,6 @@ module Decidim
           yes: true
         )
 
-        # NOTE: These were used by our non-ajax first attempt at a separate vote_button partial
-        # session[:voted] = true
-        # session[:delegated_to] = nil
-
         #Decidim::Gamification.increment_score(@current_user, :proposal_votes)
 
         broadcast(:ok, vote)

@@ -44,7 +44,7 @@ module Decidim
         @component ||= @proposal.component
       end
 
-      # Used in creation of proposal url (for use by LV) which includes process title
+      # Used in creation of proposal url (for use by LV) which includes process slug
       def process
         @process ||= component.participatory_space
       end
