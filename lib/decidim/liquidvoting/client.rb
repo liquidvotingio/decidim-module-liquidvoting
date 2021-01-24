@@ -43,38 +43,13 @@ module Decidim
       def self.current_proposal_state(participant_email, proposal_url)
         # TODO: this is three calls to LV, maybe we can consolidate to a single graphql call
         user_has_voted = !!vote_for(participant_email, proposal_url)
-        votes_count = voting_result(proposal_url)
+        votes_count = count_in_favor(proposal_url)
         delegate_email = nil
 
         ProposalState.new(participant_email, proposal_url, user_has_voted, votes_count, delegate_email)
       end
 
 
-
-      ## Example:
-      ##
-      ## votingResult(proposal_url: "https://my.decidim.com/proposal")
-      ## => votingResult
-      ##    => inFavor => 17
-      ##
-      ## On failure it will raise an exception with the errors returned by the API
-      VotingResultQuery = CLIENT.parse <<-GRAPHQL
-      query($proposal_url: String!) {
-        votingResult(proposalUrl: $proposal_url) {
-          inFavor
-        }
-      }
-
-      GRAPHQL
-
-      def self.voting_result(proposal_url)
-        variables = { proposal_url: proposal_url }
-        response = send_query(VotingResultQuery, variables: variables)
-
-        raise response.data.errors.messages["votingResult"].join(", ") if response.data.errors.any?
-
-        response.data.voting_result&.in_favor
-      end
 
       CreateVoteMutation = CLIENT.parse <<-GRAPHQL
         mutation($participant_email: String, $proposal_url: String!, $yes: Boolean!) {
@@ -283,11 +258,39 @@ module Decidim
         end
       end
 
+      private
+
       ## A wrapper for all Liquidvoting calls
       def self.send_query(query, variables: {})
         Rails.logger.info "Liquidvoting request sent: #{query.inspect} #{variables.inspect}"
         CLIENT.query(query, variables: variables)
       end
+
+            ## Example:
+      ##
+      ## votingResult(proposal_url: "https://my.decidim.com/proposal")
+      ## => votingResult
+      ##    => inFavor => 17
+      ##
+      ## On failure it will raise an exception with the errors returned by the API
+      VotingResultQuery = CLIENT.parse <<-GRAPHQL
+      query($proposal_url: String!) {
+        votingResult(proposalUrl: $proposal_url) {
+          inFavor
+        }
+      }
+
+      GRAPHQL
+
+      def self.count_in_favor(proposal_url)
+        variables = { proposal_url: proposal_url }
+        response = send_query(VotingResultQuery, variables: variables)
+
+        raise response.data.errors.messages["votingResult"].join(", ") if response.data.errors.any?
+
+        response.data.voting_result&.in_favor
+      end
+
     end
   end
 end
