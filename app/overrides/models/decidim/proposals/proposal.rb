@@ -9,22 +9,20 @@ Decidim::Proposals::Proposal.class_eval do
     Decidim::Liquidvoting::Client.vote_for(email, url).nil? ? false : true
   end
 
-  # Public: Gets current vote count for proposal (identified by id).
-  #
-  # Returns an integer.
-  def get_progress(component)
-    url = "http://localhost/processes/"\
-      "#{component.participatory_space.slug}/f/#{component.id}/proposals/#{id}"
-    Decidim::Liquidvoting::Client.voting_result(url) || 0
-  end
-
   # Public: Updates the vote count of this proposal.
   #
   # Returns nothing.
   #
   # rubocop:disable Rails/SkipsModelValidations
   def update_votes_count(component)
+# TODO: remove this :proposal_votes_count updater"
+fail "This module uses Liquidvoting to determine proposal votes count; this code path is probably obsolete"
     update_columns(proposal_votes_count: get_progress(component))
+  end
+
+  def proposal_votes_count
+# TODO: remove this :proposal_votes_count accessor"
+fail "This module uses Liquidvoting to determine proposal votes count; this code path is probably obsolete"
   end
 
   # rubocop:enable Rails/SkipsModelValidations
