@@ -66,18 +66,18 @@ module Decidim
         variables = { yes: yes, proposal_url: proposal_url, participant_email: participant_email }
         response = send_query(CreateVoteMutation, variables: variables)
 
-        return response.data.create_vote unless response.data.errors.any?
+        raise response.data.errors.messages["createVote"].join(", ") if response.data.errors.any?
 
-        raise response.data.errors.messages["createVote"].join(", ")
+        response.data.create_vote
       end
 
       def self.delete_vote(proposal_url:, participant_email:)
         variables = { proposal_url: proposal_url, participant_email: participant_email }
         response = send_query(DeleteVoteMutation, variables: variables)
 
-        return response.data.delete_vote unless response.data.errors.any?
+        raise response.data.errors.messages["deleteVote"].join(", ") if response.data.errors.any?
 
-        raise response.data.errors.messages["deleteVote"].join(", ")
+        response.data.delete_vote
       end
 
       # return exactly one vote from participant_email for proposal_url, or nil
@@ -106,9 +106,10 @@ module Decidim
         }
         response = send_query(CreateDelegationMutation, variables: variables)
 
-        return true unless response.data.errors.any?
+        raise response.data.errors.messages["createDelegation"].join(", ") if response.data.errors.any?
 
-        raise response.data.errors.messages["createDelegation"].join(", ")
+        # TODO: why do we return a boolean rather than a data.delete_delegation like other methods?
+        true
       end
 
       ## Example:
@@ -131,9 +132,9 @@ module Decidim
         }
         response = send_query(DeleteDelegationMutation, variables: variables)
 
-        return response.data.delete_delegation unless response.data.errors.any?
+        raise response.data.errors.messages["deleteDelegation"].join(", ") if response.data.errors.any?
 
-        raise response.data.errors.messages["deleteDelegation"].join(", ")
+        response.data.delete_delegation
       end
 
       # return exactly one delegation from delegator_email for proposal_url, or nil
@@ -166,17 +167,17 @@ module Decidim
       def self.votes
         response = send_query(VotesQuery)
 
-        return response.data.votes unless response.data.errors.any?
+        raise response.data.errors.messages["votes"].join(", ") if response.data.errors.any?
 
-        raise response.data.errors.messages["votes"].join(", ")
+        response.data.votes
       end
 
       def self.delegations
         response = send_query(DelegationsQuery)
 
-        return response.data.delegations unless response.data.errors.any?
+        raise response.data.errors.messages["delegations"].join(", ") if response.data.errors.any?
 
-        raise response.data.errors.messages["delegations"].join(", ")
+        response.data.delegations
       end
 
       ## All graphql query definitions here:
