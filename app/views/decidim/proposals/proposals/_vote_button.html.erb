@@ -1,5 +1,5 @@
 <div id="proposal-<%= proposal.id %>-vote-button" class="button--vote-button">
-  <% if proposal.user_has_voted?(current_user.email, proposal_url(proposal)) %>
+  <% if @lv_state.user_has_voted %>
     <%= action_authorized_button_to(
       :vote,
       proposal_proposal_vote_path(proposal_id: proposal, from_proposals_list: from_proposals_list),

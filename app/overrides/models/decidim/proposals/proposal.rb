@@ -1,14 +1,6 @@
 # frozen_string_literal: true
 
 Decidim::Proposals::Proposal.class_eval do
-  # Public: Returns true if vote by user (identified by email) on a propsal
-  # (identified by url) exists.
-  #
-  # Returns a boolean
-  def user_has_voted?(email, url)
-    Decidim::Liquidvoting::Client.vote_for(email, url).nil? ? false : true
-  end
-
   # Public: Updates the vote count of this proposal.
   #
   # Returns nothing.
