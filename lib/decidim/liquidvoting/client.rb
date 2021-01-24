@@ -5,6 +5,9 @@ require "graphql/client/http"
 
 module Decidim
   module Liquidvoting
+
+    ProposalState = Struct.new(:participant_email, :proposal_url, :votes_count, :delegate_email)
+
     # Copied over from https://github.com/liquidvotingio/ruby-client/blob/master/liquid_voting_api.rb.
     # Changes here will be applied there as well. Doing this for development speed, until
     # basics are ironed out and we can we publish the client as a gem.
@@ -27,6 +30,17 @@ module Decidim
 
       SCHEMA = ::GraphQL::Client.load_schema(HTTP)
       CLIENT = ::GraphQL::Client.new(schema: SCHEMA, execute: HTTP)
+
+
+      ## Return snapshot of current Liquidvoting state for the given user and proposal.
+      def self.current_proposal_state(participant_email, proposal_url)
+        votes_count = voting_result(proposal_url)
+        delegate_email = nil
+
+        ProposalState.new(participant_email, proposal_url, votes_count, delegate_email)
+      end
+
+
 
       ## Example:
       ##
@@ -260,7 +274,7 @@ module Decidim
         end
       end
 
-      ## A wrapper for all LiquidVoting calls
+      ## A wrapper for all Liquidvoting calls
       def self.send_query(query, variables: {})
         Rails.logger.info "Liquidvoting request sent: #{query.inspect} #{variables.inspect}"
         CLIENT.query(query, variables: variables)
