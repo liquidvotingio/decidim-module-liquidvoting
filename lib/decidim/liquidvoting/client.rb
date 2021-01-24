@@ -49,24 +49,6 @@ module Decidim
         ProposalState.new(participant_email, proposal_url, user_has_voted, votes_count, delegate_email)
       end
 
-
-
-      CreateVoteMutation = CLIENT.parse <<-GRAPHQL
-        mutation($participant_email: String, $proposal_url: String!, $yes: Boolean!) {
-          createVote(participantEmail: $participant_email, proposalUrl: $proposal_url, yes: $yes) {
-            yes
-            weight
-            participant {
-              email
-            }
-            votingResult {
-              inFavor
-              against
-            }
-          }
-        }
-      GRAPHQL
-
       ## Example:
       ##
       ## create_vote(
@@ -89,20 +71,6 @@ module Decidim
         raise response.data.errors.messages["createVote"].join(", ")
       end
 
-      DeleteVoteMutation = CLIENT.parse <<-GRAPHQL
-        mutation($participant_email: String, $proposal_url: String!) {
-          deleteVote(participantEmail: $participant_email, proposalUrl: $proposal_url) {
-            participant {
-              email
-            }
-            votingResult {
-              inFavor
-              against
-            }
-          }
-        }
-      GRAPHQL
-
       def self.delete_vote(proposal_url:, participant_email:)
         variables = { proposal_url: proposal_url, participant_email: participant_email }
         response = send_query(DeleteVoteMutation, variables: variables)
@@ -119,15 +87,6 @@ module Decidim
           v.participant.email == participant_email && v.proposal_url == proposal_url
         end
       end
-
-      CreateDelegationMutation = CLIENT.parse <<-GRAPHQL
-        mutation($proposal_url: String!, $delegator_email: String!, $delegate_email: String!) {
-          createDelegation(proposalUrl: $proposal_url, delegatorEmail: $delegator_email, delegateEmail: $delegate_email) {
-            id
-          }
-        }
-
-      GRAPHQL
 
       ## Example:
       ##
@@ -151,18 +110,6 @@ module Decidim
 
         raise response.data.errors.messages["createDelegation"].join(", ")
       end
-
-      DeleteDelegationMutation = CLIENT.parse <<-GRAPHQL
-        mutation($proposal_url: String!, $delegator_email: String!, $delegate_email: String!) {
-          deleteDelegation(proposalUrl: $proposal_url, delegatorEmail: $delegator_email, delegateEmail: $delegate_email) {
-            votingResult {
-              inFavor
-              against
-            }
-          }
-        }
-
-      GRAPHQL
 
       ## Example:
       ##
@@ -207,6 +154,84 @@ module Decidim
         CLIENT.query(query, variables: variables)
       end
 
+      def self.count_in_favor(proposal_url)
+        variables = { proposal_url: proposal_url }
+        response = send_query(VotingResultQuery, variables: variables)
+
+        raise response.data.errors.messages["votingResult"].join(", ") if response.data.errors.any?
+
+        response.data.voting_result&.in_favor
+      end
+
+      def self.votes
+        response = send_query(VotesQuery)
+
+        return response.data.votes unless response.data.errors.any?
+
+        raise response.data.errors.messages["votes"].join(", ")
+      end
+
+      def self.delegations
+        response = send_query(DelegationsQuery)
+
+        return response.data.delegations unless response.data.errors.any?
+
+        raise response.data.errors.messages["delegations"].join(", ")
+      end
+
+      ## All graphql query definitions here:
+
+      CreateVoteMutation = CLIENT.parse <<-GRAPHQL
+        mutation($participant_email: String, $proposal_url: String!, $yes: Boolean!) {
+          createVote(participantEmail: $participant_email, proposalUrl: $proposal_url, yes: $yes) {
+            yes
+            weight
+            participant {
+              email
+            }
+            votingResult {
+              inFavor
+              against
+            }
+          }
+        }
+      GRAPHQL
+
+      DeleteVoteMutation = CLIENT.parse <<-GRAPHQL
+        mutation($participant_email: String, $proposal_url: String!) {
+          deleteVote(participantEmail: $participant_email, proposalUrl: $proposal_url) {
+            participant {
+              email
+            }
+            votingResult {
+              inFavor
+              against
+            }
+          }
+        }
+      GRAPHQL
+
+      CreateDelegationMutation = CLIENT.parse <<-GRAPHQL
+        mutation($proposal_url: String!, $delegator_email: String!, $delegate_email: String!) {
+          createDelegation(proposalUrl: $proposal_url, delegatorEmail: $delegator_email, delegateEmail: $delegate_email) {
+            id
+          }
+        }
+
+      GRAPHQL
+
+      DeleteDelegationMutation = CLIENT.parse <<-GRAPHQL
+        mutation($proposal_url: String!, $delegator_email: String!, $delegate_email: String!) {
+          deleteDelegation(proposalUrl: $proposal_url, delegatorEmail: $delegator_email, delegateEmail: $delegate_email) {
+            votingResult {
+              inFavor
+              against
+            }
+          }
+        }
+
+      GRAPHQL
+
       ## Example:
       ##
       ## votingResult(proposal_url: "https://my.decidim.com/proposal")
@@ -222,15 +247,6 @@ module Decidim
       }
 
       GRAPHQL
-
-      def self.count_in_favor(proposal_url)
-        variables = { proposal_url: proposal_url }
-        response = send_query(VotingResultQuery, variables: variables)
-
-        raise response.data.errors.messages["votingResult"].join(", ") if response.data.errors.any?
-
-        response.data.voting_result&.in_favor
-      end
 
       ## Example:
       ##
@@ -251,14 +267,6 @@ module Decidim
       }
 
       GRAPHQL
-
-      def self.votes
-        response = send_query(VotesQuery)
-
-        return response.data.votes unless response.data.errors.any?
-
-        raise response.data.errors.messages["votes"].join(", ")
-      end
 
       ## Example:
       ##
@@ -284,14 +292,6 @@ module Decidim
         }
 
       GRAPHQL
-
-      def self.delegations
-        response = send_query(DelegationsQuery)
-
-        return response.data.delegations unless response.data.errors.any?
-
-        raise response.data.errors.messages["delegations"].join(", ")
-      end
 
     end
   end
