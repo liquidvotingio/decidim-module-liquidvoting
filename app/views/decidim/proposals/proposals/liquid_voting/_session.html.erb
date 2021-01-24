@@ -1,10 +1,7 @@
 <% if current_user %>
   <!-- A blank session[:delegated_to] means we haven't checked yet;
         let's make it explicitly the delegate email if such a delegation exists -->
-  <% if session[:delegated_to].blank? %>
-    <% d = Decidim::Liquidvoting::Client.delegation_for(current_user.email, proposal_url(proposal)) %>
-    <% session[:delegated_to] = d.delegate.email unless d.nil? %>
-  <% end -%>
+  <% session[:delegated_to] = @lv_state.delegate_email %>
   <!-- A blank session[:voted] means we haven't checked yet;
       let's make it explicitly true if such a vote exists -->
   <% if session[:voted].blank? %>

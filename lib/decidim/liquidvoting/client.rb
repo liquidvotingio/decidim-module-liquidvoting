@@ -40,11 +40,18 @@ module Decidim
 
 
       ## Return a snapshot of current Liquidvoting state for the given user and proposal.
+      ##
+      ## The intent is to encapsulate all of the LV state relevant to a user and a specific proposal
+      ## in a single LV state object, to give controllers a simple way to acquire that object, and
+      ## to make that state available throughout the duration of the web request.
+      ##
+      ## As a ruby Struct, the object is immutable; the best way to refresh the state is to
+      ## reacquire this state object.
       def self.current_proposal_state(participant_email, proposal_url)
         # TODO: this is three calls to LV, maybe we can consolidate to a single graphql call
         user_has_voted = !!vote_for(participant_email, proposal_url)
         votes_count = count_in_favor(proposal_url)
-        delegate_email = nil
+        delegate_email = delegate_email_for(participant_email, proposal_url)
 
         ProposalState.new(participant_email, proposal_url, user_has_voted, votes_count, delegate_email)
       end
@@ -137,14 +144,6 @@ module Decidim
         response.data.delete_delegation
       end
 
-      # return exactly one delegation from delegator_email for proposal_url, or nil
-      def self.delegation_for(delegator_email, proposal_url)
-        # this is a hack until we can properly query a subset of delegations
-        delegations.find do |d|
-          d.delegator.email == delegator_email && d.proposal_url == proposal_url
-        end
-      end
-
 
 
       private
@@ -180,7 +179,18 @@ module Decidim
         response.data.delegations
       end
 
-      ## All graphql query definitions here:
+       def self.delegate_email_for(delegator_email, proposal_url)
+        # this is a hack until we can properly query a subset of delegations
+        delegation = delegations.find do |d|
+          d.delegator.email == delegator_email && d.proposal_url == proposal_url
+        end
+
+        delegation&.delegate&.email
+      end
+
+
+
+     ## All graphql query definitions here:
 
       CreateVoteMutation = CLIENT.parse <<-GRAPHQL
         mutation($participant_email: String, $proposal_url: String!, $yes: Boolean!) {
