@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+
+# TODO: why do we need to explicitly require this when we're overriding?
 require "decidim/proposals/proposals_controller"
 
 module Decidim
@@ -9,7 +11,7 @@ module Decidim
       helper ProposalWizardHelper
       helper ParticipatoryTextsHelper
       include Decidim::ApplicationHelper
-## next two concerns are missing constants, don't know why, taking out for now -dave
+      # TODO: why do we get "uninitialized constant" errors on startup for these includes?
       # include Flaggable
       # include Withdrawable
       include FormFactory
