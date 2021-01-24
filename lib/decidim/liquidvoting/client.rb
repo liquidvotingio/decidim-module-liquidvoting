@@ -112,34 +112,6 @@ module Decidim
         raise response.data.errors.messages["deleteVote"].join(", ")
       end
 
-      ## Example:
-      ##
-      ## votes()
-      ## => votes
-      ##    => "https://proposals.com/proposal1"
-      ##    => participant
-      ##        => email => john@gmail.com
-      ##                 => ...
-      VotesQuery = CLIENT.parse <<-GRAPHQL
-      query {
-        votes {
-          proposalUrl
-          participant {
-            email
-          }
-        }
-      }
-
-      GRAPHQL
-
-      def self.votes
-        response = send_query(VotesQuery)
-
-        return response.data.votes unless response.data.errors.any?
-
-        raise response.data.errors.messages["votes"].join(", ")
-      end
-
       # return exactly one vote from participant_email for proposal_url, or nil
       def self.vote_for(participant_email, proposal_url)
         # this is a hack until we can properly query a subset of delegations
@@ -217,6 +189,77 @@ module Decidim
         raise response.data.errors.messages["deleteDelegation"].join(", ")
       end
 
+      # return exactly one delegation from delegator_email for proposal_url, or nil
+      def self.delegation_for(delegator_email, proposal_url)
+        # this is a hack until we can properly query a subset of delegations
+        delegations.find do |d|
+          d.delegator.email == delegator_email && d.proposal_url == proposal_url
+        end
+      end
+
+
+
+      private
+
+      ## A logging wrapper for all Liquidvoting api calls
+      def self.send_query(query, variables: {})
+        Rails.logger.info "Liquidvoting request sent: #{query.inspect} #{variables.inspect}"
+        CLIENT.query(query, variables: variables)
+      end
+
+      ## Example:
+      ##
+      ## votingResult(proposal_url: "https://my.decidim.com/proposal")
+      ## => votingResult
+      ##    => inFavor => 17
+      ##
+      ## On failure it will raise an exception with the errors returned by the API
+      VotingResultQuery = CLIENT.parse <<-GRAPHQL
+      query($proposal_url: String!) {
+        votingResult(proposalUrl: $proposal_url) {
+          inFavor
+        }
+      }
+
+      GRAPHQL
+
+      def self.count_in_favor(proposal_url)
+        variables = { proposal_url: proposal_url }
+        response = send_query(VotingResultQuery, variables: variables)
+
+        raise response.data.errors.messages["votingResult"].join(", ") if response.data.errors.any?
+
+        response.data.voting_result&.in_favor
+      end
+
+      ## Example:
+      ##
+      ## votes()
+      ## => votes
+      ##    => "https://proposals.com/proposal1"
+      ##    => participant
+      ##        => email => john@gmail.com
+      ##                 => ...
+      VotesQuery = CLIENT.parse <<-GRAPHQL
+      query {
+        votes {
+          proposalUrl
+          participant {
+            email
+          }
+        }
+      }
+
+      GRAPHQL
+
+      def self.votes
+        response = send_query(VotesQuery)
+
+        return response.data.votes unless response.data.errors.any?
+
+        raise response.data.errors.messages["votes"].join(", ")
+      end
+
       ## Example:
       ##
       ## delegations()
@@ -248,47 +291,6 @@ module Decidim
         return response.data.delegations unless response.data.errors.any?
 
         raise response.data.errors.messages["delegations"].join(", ")
-      end
-
-      # return exactly one delegation from delegator_email for proposal_url, or nil
-      def self.delegation_for(delegator_email, proposal_url)
-        # this is a hack until we can properly query a subset of delegations
-        delegations.find do |d|
-          d.delegator.email == delegator_email && d.proposal_url == proposal_url
-        end
-      end
-
-      private
-
-      ## A wrapper for all Liquidvoting calls
-      def self.send_query(query, variables: {})
-        Rails.logger.info "Liquidvoting request sent: #{query.inspect} #{variables.inspect}"
-        CLIENT.query(query, variables: variables)
-      end
-
-            ## Example:
-      ##
-      ## votingResult(proposal_url: "https://my.decidim.com/proposal")
-      ## => votingResult
-      ##    => inFavor => 17
-      ##
-      ## On failure it will raise an exception with the errors returned by the API
-      VotingResultQuery = CLIENT.parse <<-GRAPHQL
-      query($proposal_url: String!) {
-        votingResult(proposalUrl: $proposal_url) {
-          inFavor
-        }
-      }
-
-      GRAPHQL
-
-      def self.count_in_favor(proposal_url)
-        variables = { proposal_url: proposal_url }
-        response = send_query(VotingResultQuery, variables: variables)
-
-        raise response.data.errors.messages["votingResult"].join(", ") if response.data.errors.any?
-
-        response.data.voting_result&.in_favor
       end
 
     end
