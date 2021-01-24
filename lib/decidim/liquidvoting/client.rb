@@ -49,7 +49,7 @@ module Decidim
       ## reacquire this state object.
       def self.current_proposal_state(participant_email, proposal_url)
         # TODO: this is three calls to LV, maybe we can consolidate to a single graphql call
-        user_has_voted = !!vote_for(participant_email, proposal_url)
+        user_has_voted = has_user_voted?(participant_email, proposal_url)
         votes_count = count_in_favor(proposal_url)
         delegate_email = delegate_email_for(participant_email, proposal_url)
 
@@ -85,14 +85,6 @@ module Decidim
         raise response.data.errors.messages["deleteVote"].join(", ") if response.data.errors.any?
 
         response.data.delete_vote
-      end
-
-      # return exactly one vote from participant_email for proposal_url, or nil
-      def self.vote_for(participant_email, proposal_url)
-        # this is a hack until we can properly query a subset of delegations
-        votes.find do |v|
-          v.participant.email == participant_email && v.proposal_url == proposal_url
-        end
       end
 
       ## Example:
@@ -169,6 +161,15 @@ module Decidim
         raise response.data.errors.messages["votes"].join(", ") if response.data.errors.any?
 
         response.data.votes
+      end
+
+      def self.has_user_voted?(participant_email, proposal_url)
+        # this is a hack until we can properly query a subset of delegations
+        vote = votes.find do |v|
+          v.participant.email == participant_email && v.proposal_url == proposal_url
+        end
+
+        !!vote
       end
 
       def self.delegations
