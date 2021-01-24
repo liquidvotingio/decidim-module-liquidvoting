@@ -18,12 +18,13 @@ module Decidim
       URL = ENV.fetch("LIQUID_VOTING_API_URL", "http://localhost:4000")
       # URL = ENV.fetch('LIQUID_VOTING_API_URL', 'https://api.liquidvoting.io')
       AUTH_KEY = ENV.fetch("LIQUID_VOTING_API_AUTH_KEY", "62309201-d2f0-407f-875b-9f836f94f2ca")
+      ORG_ID = ENV.fetch("LIQUID_VOTING_API_ORG_ID", "62309201-d2f0-407f-875b-9f836f94f2ca")
 
       HTTP = ::GraphQL::Client::HTTP.new(URL) do
         def headers(_context)
           {
             "Authorization": "Bearer #{AUTH_KEY}",
-            "Org-ID": "62309201-d2f0-407f-875b-9f836f94f2ca"
+            "Org-ID": "#{ORG_ID}"
           }
         end
       end
