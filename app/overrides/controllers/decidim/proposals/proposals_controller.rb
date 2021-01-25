@@ -44,6 +44,8 @@ module Decidim
                        .published
                        .not_hidden
                        .includes(:component, :coauthorships)
+                       # TODO: why did proposals_controller.rbIGNORE have this instead of the above?
+                       # .includes(:amendable, :category, :component, :resource_permission, :scope)
 
           @voted_proposals = if current_user
                                ProposalVote.where(
