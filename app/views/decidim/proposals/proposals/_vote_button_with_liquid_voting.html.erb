@@ -1,16 +1,12 @@
 <% if proposal.rejected? || proposal.withdrawn? %>
   <div></div>
 <% else %>
+  <%# This is the Liquidvoting delegation UI %>
   <%= render partial: "decidim/proposals/proposals/liquid_voting/session", locals: { proposal: proposal, from_proposals_list: true } %>
   <%= render partial: "decidim/proposals/proposals/liquid_voting/delegations", locals: { proposal: proposal, from_proposals_list: true } %>
   <%= render partial: "decidim/proposals/proposals/liquid_voting/voting", locals: { proposal: proposal, from_proposals_list: true } %>
-<% end %>
+  <p>&nbsp;</p>
 
-<p>&nbsp;</p>
-
-<% if proposal.rejected? || proposal.withdrawn? %>
-  <div></div>
-<% else %>
   <% if component_settings.participatory_texts_enabled? && from_proposals_list %>
     <%= render partial: "decidim/proposals/proposals/participatory_texts/proposal_vote_button", locals: { proposal: proposal, from_proposals_list: true } %>
   <% else %>
