@@ -1,28 +1,14 @@
 # frozen_string_literal: true
 
 Decidim::Proposals::Proposal.class_eval do
-  # Public: Updates the vote count of this proposal.
-  #
-  # Returns nothing.
-  #
-  # rubocop:disable Rails/SkipsModelValidations
-  def update_votes_count(component)
-    # TODO: remove this :proposal_votes_count updater"
-    msg = "BOOM Proposal#update_votes_count: This module uses Liquidvoting to manage proposal votes count; this code path is probably obsolete"
-    Rails.logger.warn msg
-    # fail msg
+  # TODO: We should probably un-override the Proposal model from the liquidvoting module;
+  #       for now, we're just logging the use of the proposal_votes_count attribute (we use LV instead for vote counts)
 
-    update_columns(proposal_votes_count: get_progress(component))
+  def update_votes_count(component)
+    Rails.logger.warn "SURPRISE: Proposal#update_votes_count: This module uses Liquidvoting to manage proposal votes count; this code path is probably obsolete"
   end
 
   def proposal_votes_count
-    # TODO: remove this :proposal_votes_count accessor"
-    msg = "BOOM Proposal#proposal_votes_count: This module uses Liquidvoting to manage proposal votes count; this code path is probably obsolete"
-    Rails.logger.warn msg
-    # fail msg
-
-    super
+    Rails.logger.warn "SURPRISE: Proposal#proposal_votes_count: This module uses Liquidvoting to manage proposal votes count; this code path is probably obsolete"
   end
-
-  # rubocop:enable Rails/SkipsModelValidations
 end
