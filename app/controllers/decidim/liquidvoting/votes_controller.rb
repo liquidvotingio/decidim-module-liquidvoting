@@ -6,6 +6,8 @@ module Decidim
       before_action :authenticate_user!
 
       def create
+# TODO: Remove? I think this Controller was a LV add, not an override, and we probably are not using it?
+fail "BOOM: did not expect to create a vote in VotesController; maybe you want ProposalVotesController?"
         Decidim::Liquidvoting::Client.create_vote(
           proposal_url: params[:proposal_url],
           participant_email: params[:participant_email],
@@ -22,6 +24,7 @@ module Decidim
       end
 
       def destroy
+fail "BOOM: did not expect to create a vote in VotesController; maybe you want ProposalVotesController?"
         Decidim::Liquidvoting::Client.delete_vote(
           proposal_url: params[:proposal_url],
           participant_email: params[:participant_email]
