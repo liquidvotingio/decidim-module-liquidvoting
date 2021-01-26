@@ -141,6 +141,8 @@ module Decidim
       end
 
       def self.count_in_favor(proposal_url)
+        proposal_url.present? or return
+
         variables = { proposal_url: proposal_url }
         response = send_query(VotingResultQuery, variables: variables)
 
@@ -158,6 +160,8 @@ module Decidim
       end
 
       def self.has_user_voted?(participant_email, proposal_url)
+        participant_email.present? && proposal_url.present? or return false
+
         # this is a hack until we can properly query a subset of delegations
         vote = votes.find do |v|
           v.participant.email == participant_email && v.proposal_url == proposal_url
@@ -175,6 +179,8 @@ module Decidim
       end
 
        def self.delegate_email_for(delegator_email, proposal_url)
+        delegator_email.present? && proposal_url.present? or return
+
         # this is a hack until we can properly query a subset of delegations
         delegation = delegations.find do |d|
           d.delegator.email == delegator_email && d.proposal_url == proposal_url
