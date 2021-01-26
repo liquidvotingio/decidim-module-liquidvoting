@@ -29,7 +29,7 @@ module Decidim
             # `after_save :update_proposal_votes_count` (in Proposals::ProposalVote)
             proposal.update_votes_count(current_component)
 
-            expose(proposals: proposals + [proposal])
+            expose(proposals: proposals + [proposal], lv_state: lv_state)
             render :update_buttons_and_counters
           end
 
@@ -59,7 +59,7 @@ module Decidim
             # `after_save :update_proposal_votes_count` (in Proposals::ProposalVote)
             proposal.update_votes_count(current_component)
 
-            expose(proposals: proposals + [proposal])
+            expose(proposals: proposals + [proposal], lv_state: lv_state)
             render :update_buttons_and_counters
           end
         end
@@ -69,6 +69,14 @@ module Decidim
 
       def proposal
         @proposal ||= Proposal.where(component: current_component).find(params[:proposal_id])
+      end
+
+      def lv_state
+        # don't conditionally assign, always get a fresh one
+        @lv_state = Decidim::Liquidvoting::Client.current_proposal_state(
+          current_user&.email,
+          ResourceLocatorPresenter.new(proposal).url
+          )
       end
     end
   end
