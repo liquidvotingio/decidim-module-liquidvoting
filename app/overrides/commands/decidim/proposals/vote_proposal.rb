@@ -23,27 +23,15 @@ module Decidim
         return broadcast(:invalid) if @proposal.maximum_votes_reached? &&
                                       !@proposal.can_accumulate_supports_beyond_threshold
 
+        # We build only to validate; we don't save votes in Decidim
         build_proposal_vote
         return broadcast(:invalid) unless vote.valid?
 
-        # ActiveRecord::Base.transaction do
-        #   @proposal.with_lock do
-        #     vote.save!
-        #     update_temporary_votes
-        #   end
-        # end
-
         Decidim::Liquidvoting::Client.create_vote(
-          # NOTE: This is a clunky way of creating the url.
-          # Probably can find a better way to pass the url here.
-          # Also, what is the '.../f/...' part of the url?
-          proposal_url: "http://localhost/processes/"\
-            "#{process.slug}/f/#{component.id}/proposals/#{proposal.id}",
+          proposal_url: ResourceLocatorPresenter.new(@proposal).url,
           participant_email: current_user.email,
           yes: true
         )
-
-        # Decidim::Gamification.increment_score(@current_user, :proposal_votes)
 
         broadcast(:ok, vote)
       end
@@ -54,11 +42,6 @@ module Decidim
 
       def component
         @component ||= @proposal.component
-      end
-
-      # Used in creation of proposal url (for use by LV) which includes process title
-      def process
-        @process ||= component.participatory_space
       end
 
       def minimum_votes_per_user

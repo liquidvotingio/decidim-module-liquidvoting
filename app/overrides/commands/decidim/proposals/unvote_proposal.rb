@@ -20,21 +20,10 @@ module Decidim
       #
       # Returns nothing.
       def call
-        # ActiveRecord::Base.transaction do
-        #   ProposalVote.where(
-        #     author: @current_user,
-        #     proposal: @proposal
-        #   ).destroy_all
-
-        # update_temporary_votes
-
         Decidim::Liquidvoting::Client.delete_vote(
-          proposal_url: "http://localhost/processes/"\
-            "#{process.slug}/f/#{component.id}/proposals/#{proposal.id}",
+          proposal_url: ResourceLocatorPresenter.new(@proposal).url,
           participant_email: current_user.email
         )
-
-        # Decidim::Gamification.decrement_score(@current_user, :proposal_votes)
 
         broadcast(:ok, @proposal)
       end
@@ -43,11 +32,6 @@ module Decidim
 
       def component
         @component ||= @proposal.component
-      end
-
-      # Used in creation of proposal url (for use by LV) which includes process slug
-      def process
-        @process ||= component.participatory_space
       end
 
       def minimum_votes_per_user
