@@ -25,10 +25,6 @@ module Decidim
               proposal: Proposal.where(component: current_component)
             ).map(&:proposal)
 
-            # Because we do not create a vote on Decidim, we now use this to replace;
-            # `after_save :update_proposal_votes_count` (in Proposals::ProposalVote)
-            proposal.update_votes_count(current_component)
-
             expose(proposals: proposals + [proposal], lv_state: lv_state)
             render :update_buttons_and_counters
           end
@@ -54,10 +50,6 @@ module Decidim
               author: current_user,
               proposal: Proposal.where(component: current_component)
             ).map(&:proposal)
-
-            # Because we do not create a vote on Decidim, we now use this to replace;
-            # `after_save :update_proposal_votes_count` (in Proposals::ProposalVote)
-            proposal.update_votes_count(current_component)
 
             expose(proposals: proposals + [proposal], lv_state: lv_state)
             render :update_buttons_and_counters

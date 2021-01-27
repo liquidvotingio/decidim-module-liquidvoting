@@ -6,7 +6,7 @@ require "graphql/client/http"
 module Decidim
   module Liquidvoting
 
-    ProposalState = Struct.new(:user_has_voted, :votes_count, :delegate_email)
+    ProposalState = Struct.new(:user_has_voted, :delegate_email)
 
     # Copied over from https://github.com/liquidvotingio/ruby-client/blob/master/liquid_voting_api.rb.
     # Changes here will be applied there as well. Doing this for development speed, until
@@ -44,10 +44,9 @@ module Decidim
       def self.current_proposal_state(participant_email, proposal_url)
         # TODO: this is three calls to LV, maybe we can consolidate to a single graphql call
         user_has_voted = has_user_voted?(participant_email, proposal_url)
-        votes_count = count_in_favor(proposal_url)
         delegate_email = delegate_email_for(participant_email, proposal_url)
 
-        ProposalState.new(user_has_voted, votes_count, delegate_email)
+        ProposalState.new(user_has_voted, delegate_email)
       end
 
       ## Example:
@@ -138,17 +137,6 @@ module Decidim
       def self.send_query(query, variables: {})
         Rails.logger.info "Liquidvoting request sent: #{query.inspect} #{variables.inspect}"
         CLIENT.query(query, variables: variables)
-      end
-
-      def self.count_in_favor(proposal_url)
-        proposal_url.present? or return
-
-        variables = { proposal_url: proposal_url }
-        response = send_query(VotingResultQuery, variables: variables)
-
-        raise response.data.errors.messages["votingResult"].join(", ") if response.data.errors.any?
-
-        response.data.voting_result&.in_favor
       end
 
       def self.votes

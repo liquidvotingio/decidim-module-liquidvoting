@@ -23,16 +23,22 @@ module Decidim
         return broadcast(:invalid) if @proposal.maximum_votes_reached? &&
                                       !@proposal.can_accumulate_supports_beyond_threshold
 
-        # We build only to validate; we don't save votes in Decidim
+        # We build only to validate; we don't save votes in Decidim, we abandoned the ProposalVote model
         build_proposal_vote
         return broadcast(:invalid) unless vote.valid?
 
-        Decidim::Liquidvoting::Client.create_vote(
+        response = Decidim::Liquidvoting::Client.create_vote(
           proposal_url: ResourceLocatorPresenter.new(@proposal).url,
           participant_email: current_user.email,
           yes: true
         )
+        # TODO: test this error broadcast, I'm making stuff up here, maybe broadcast(:our_tag, errors) is better?
+        return broadcast(:invalid, response.errors.messages["votes"].join(", ")) if response.errors.any?
 
+        new_vote_count = response.voting_result&.in_favor
+        @proposal.update_votes_count(new_vote_count)
+
+        # TODO: what does it mean that we broadcast a "vote" (an unsaved ProposalVote)?
         broadcast(:ok, vote)
       end
 

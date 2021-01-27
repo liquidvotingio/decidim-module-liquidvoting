@@ -20,10 +20,15 @@ module Decidim
       #
       # Returns nothing.
       def call
-        Decidim::Liquidvoting::Client.delete_vote(
+        response = Decidim::Liquidvoting::Client.delete_vote(
           proposal_url: ResourceLocatorPresenter.new(@proposal).url,
           participant_email: current_user.email
         )
+        # TODO: test this error broadcast, I'm making stuff up here, maybe broadcast(:our_tag, errors) is better?
+        return broadcast(:invalid, response.errors.messages["votes"].join(", ")) if response.errors.any?
+
+        new_vote_count = response.voting_result&.in_favor
+        @proposal.update_votes_count(new_vote_count)
 
         broadcast(:ok, @proposal)
       end
