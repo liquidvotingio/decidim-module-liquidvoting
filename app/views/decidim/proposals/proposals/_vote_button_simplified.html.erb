@@ -1,0 +1,38 @@
+<div id="proposal-<%= proposal.id %>-vote-button" class="button--vote-button">
+  <% if @lv_state.user_has_voted %>
+    <%= action_authorized_button_to(
+      :vote,
+      proposal_proposal_vote_path(proposal_id: proposal, from_proposals_list: from_proposals_list),
+      resource: proposal,
+      method: :delete,
+      remote: true,
+      data: {
+        disable: true,
+        original: t("decidim.proposals.proposals.vote_button.already_voted"),
+        replace: t("decidim.proposals.proposals.vote_button.already_voted_hover"),
+        "redirect-url": proposal_path(proposal)
+      },
+      class: "button #{vote_button_classes(from_proposals_list)} active light",
+      id: "vote_button-#{proposal.id}"
+    ) do %>
+      <%= icon("check", class: "icon--small") %>
+      <%= t("decidim.proposals.proposals.vote_button.already_voted") %>
+      <span class="show-for-sr"><%= decidim_html_escape(present(proposal).title) %></span>
+    <% end %>
+  <% else %>
+    <%= action_authorized_button_to(
+      :vote,
+      proposal_proposal_vote_path(proposal_id: proposal, from_proposals_list: from_proposals_list),
+      resource: proposal,
+      remote: true,
+      data: {
+        disable: true,
+        "redirect-url": proposal_path(proposal)
+      },
+      class: "button #{vote_button_classes(from_proposals_list)}"
+    ) do %>
+      <%= t("decidim.proposals.proposals.vote_button.vote") %>
+      <span class="show-for-sr"><%= decidim_html_escape(present(proposal).title) %></span>
+    <% end %>
+  <% end %>
+</div>

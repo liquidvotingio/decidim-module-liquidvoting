@@ -47,14 +47,6 @@ module Decidim
                        # TODO: why did proposals_controller.rbIGNORE have this instead of the above?
                        # .includes(:amendable, :category, :component, :resource_permission, :scope)
 
-          @voted_proposals = if current_user
-                               ProposalVote.where(
-                                 author: current_user,
-                                 proposal: @proposals.pluck(:id)
-                               ).pluck(:decidim_proposal_id)
-                             else
-                               []
-                             end
           @proposals = paginate(@proposals)
           @proposals = reorder(@proposals)
         end

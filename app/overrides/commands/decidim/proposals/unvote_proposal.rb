@@ -54,6 +54,8 @@ module Decidim
       end
 
       def user_votes
+        # TODO: do we need this? we've abandoned ProposalVotes, would need to populate from LV
+        Rails.logger.info "TRACE: UnvoteProposal#user_votes, who called this, Liquidvoting is managing user votes!"
         @user_votes ||= ProposalVote.where(
           author: @current_user,
           proposal: Proposal.where(component: component)
