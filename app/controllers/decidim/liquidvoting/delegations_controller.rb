@@ -12,9 +12,9 @@ module Decidim
           delegate_email: params[:delegate_email]
         )
 
-        session[:delegated_to] = params[:delegate_email]
-        flash[:notice] =
-          "Delegated support to #{Decidim::User.find_by(email: session[:delegated_to]).name}."
+        @lv_state = Decidim::Liquidvoting::Client.current_proposal_state(current_user&.email, proposal_url)
+        flash[:notice] = "Delegated support to #{Decidim::User.find_by(email: @lv_state.delegate_email).name}."
+
       rescue StandardError => e
         flash[:error] = e.message
       ensure
@@ -31,12 +31,12 @@ module Decidim
         Decidim::Liquidvoting::Client.delete_delegation(
           proposal_url: params[:proposal_url],
           delegator_email: params[:delegator_email],
-          delegate_email: session[:delegated_to]
+          delegate_email: @lv_state.delegate_email
         )
 
-        flash[:notice] =
-          "Removed delegation to #{Decidim::User.find_by(email: session[:delegated_to]).name}."
-        session[:delegated_to] = nil
+        @lv_state = Decidim::Liquidvoting::Client.current_proposal_state(current_user&.email, proposal_url)
+        flash[:notice] = "Removed delegation to #{Decidim::User.find_by(email: @lv_state.delegate_email).name}."
+
       rescue StandardError => e
         flash[:error] = e.message
       ensure

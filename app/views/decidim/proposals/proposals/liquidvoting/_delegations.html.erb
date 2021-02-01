@@ -1,25 +1,26 @@
-<% if current_user and session[:voted] == false %>
+<% if current_user %>
   <!-- TODO: send ajax requests instead -->
-  <% if session[:delegated_to].present? %>
-    Support delegated to <%= Decidim::User.find_by(email: session[:delegated_to]).name %>.
+  <% if @lv_state.user_has_voted    # VOTED so disable delegation UI %>
+  <% elsif @lv_state.delegate_email # NOT VOTED BUT DELEGATED so present undelegation UI -%>
+    Support delegated to <%= Decidim::User.find_by(email: @lv_state.delegate_email).name %>.
     <form action="/liquidvoting/delegations" method="POST">
       <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
       <input type="hidden" name="delegator_email" value="<%= current_user.email %>">
       <input type="hidden" name="proposal_url" value="<%= proposal_url(proposal) %>">
       <input type="hidden" name="_method" value="delete">
-      <input type='submit' value='Cancel Delegate' class="button" style="width:100%;">
+      <input type='submit' value='X Cancel Delegate' class="button" style="width:100%;">
     </form>
-  <% else -%>
+  <% else    # NOT VOTED NOT DELEGATED so present delegation UI-%>
     <form action="/liquidvoting/delegations" method="POST">
       <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
       <input type="hidden" name="delegator_email" value="<%= current_user.email %>">
       <input type="hidden" name="proposal_url" value="<%= proposal_url(proposal) %>">
       <select name="delegate_email">
-      <% Decidim::User.where(admin: false).order(:name).each do |user| %>
-        <option value="<%= user.email %>"><%= user.name -%></option>
+      <% (Decidim::User.where(admin: false).order(:name).pluck(:email, :name).unshift(["", "(choose delegate)"])).each do |email, name| %>
+        <option value="<%= email %>"><%= name -%></option>
       <% end %>
       </select>
-      <input type='submit' value='Choose Delegate' class="button" style="background:orange;width:100%;">
+      <input type='submit' value='X Choose Delegate' class="button" style="background:orange;width:100%;">
     </form>
   <% end -%>
 <% end -%>
