@@ -12,7 +12,7 @@ en:
     proposals:
       proposals:
         vote_button:
-          already_delegated: Support delegated
+          already_delegated: Remove delegation
           already_delegated_hover: Withdraw delegation
           already_voted: Already supported
           already_voted_hover: Withdraw support

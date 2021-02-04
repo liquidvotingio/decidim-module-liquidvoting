@@ -1,18 +1,9 @@
+<div id="proposal-<%= proposal.id %>-delegate-button" class="button--vote-button">
 <% if current_user %>
   <!-- TODO: send ajax requests instead -->
   <% if @lv_state.user_has_voted    # VOTED so disable delegation UI %>
-  <% elsif @lv_state.delegate_email # NOT VOTED BUT DELEGATED so present undelegation UI -%>
-    Support delegated to <%= Decidim::User.find_by(email: @lv_state.delegate_email).name %>.
+
     <form action="/liquidvoting/delegations" method="POST">
-      <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
-      <input type="hidden" name="delegator_email" value="<%= current_user.email %>">
-      <input type="hidden" name="proposal_url" value="<%= proposal_url(proposal) %>">
-      <input type="hidden" name="_method" value="delete">
-      <input type='submit' value='X Cancel Delegate' class="button" style="width:100%;">
-    </form>
-  <% else    # NOT VOTED NOT DELEGATED so present delegation UI-%>
-    <form action="/liquidvoting/delegations" method="POST">
-      <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
       <input type="hidden" name="delegator_email" value="<%= current_user.email %>">
       <input type="hidden" name="proposal_url" value="<%= proposal_url(proposal) %>">
       <select name="delegate_email">
@@ -20,7 +11,73 @@
         <option value="<%= email %>"><%= name -%></option>
       <% end %>
       </select>
-      <input type='submit' value='X Choose Delegate' class="button" style="background:orange;width:100%;">
+      <%= action_authorized_button_to(
+        :delegate,
+        "/liquidvoting/delegations",
+        resource: proposal,
+        remote: true,
+        data: {
+          disable: true,
+          "redirect-url": proposal_path(proposal)
+        },
+        class: "button #{vote_button_classes(from_proposals_list)}",
+        disabled: true
+      ) do %>
+        <%= t("decidim.proposals.proposals.vote_button.delegate") %>
+        <span class="show-for-sr"><%= decidim_html_escape(present(proposal).title) %></span>
+      <% end %>
     </form>
+
+  <% elsif @lv_state.delegate_email # NOT VOTED BUT DELEGATED so present undelegation UI -%>
+
+    <form action="/liquidvoting/delegations" method="POST">
+      Support delegated to: <br>
+      <%= Decidim::User.find_by(email: @lv_state.delegate_email).name %>.
+      <input type="hidden" name="delegator_email" value="<%= current_user.email %>">
+      <input type="hidden" name="proposal_url" value="<%= proposal_url(proposal) %>">
+      <%= action_authorized_button_to(
+        :undelegate,
+        "/liquidvoting/delegations",
+        resource: proposal,
+        method: :delete,
+        remote: true,
+        data: {
+          disable: true,
+          "redirect-url": proposal_path(proposal)
+        },
+        class: "button #{vote_button_classes(from_proposals_list)}",
+      ) do %>
+        <%= t("decidim.proposals.proposals.vote_button.already_delegated") %>
+        <span class="show-for-sr"><%= decidim_html_escape(present(proposal).title) %></span>
+      <% end %>
+    </form>
+
+  <% else    # NOT VOTED NOT DELEGATED so present delegation UI-%>
+
+    <form action="/liquidvoting/delegations" method="POST">
+      <input type="hidden" name="delegator_email" value="<%= current_user.email %>">
+      <input type="hidden" name="proposal_url" value="<%= proposal_url(proposal) %>">
+      <select name="delegate_email">
+      <% (Decidim::User.where(admin: false).order(:name).pluck(:email, :name).unshift(["", "(choose delegate)"])).each do |email, name| %>
+        <option value="<%= email %>"><%= name -%></option>
+      <% end %>
+      </select>
+      <%= action_authorized_button_to(
+        :delegate,
+        "/liquidvoting/delegations",
+        resource: proposal,
+        remote: true,
+        data: {
+          disable: true,
+          "redirect-url": proposal_path(proposal)
+        },
+        class: "button #{vote_button_classes(from_proposals_list)}",
+      ) do %>
+        <%= t("decidim.proposals.proposals.vote_button.delegate") %>
+        <span class="show-for-sr"><%= decidim_html_escape(present(proposal).title) %></span>
+      <% end %>
+    </form>
+
   <% end -%>
 <% end -%>
+</div>
