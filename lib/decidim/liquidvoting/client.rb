@@ -122,7 +122,8 @@ module Decidim
           delegate_email: delegate_email
         }
         response = send_query(DeleteDelegationMutation, variables: variables)
-        raise response.data.errors.messages["deleteDelegation"].join(", ") if response.data.errors.any?
+
+        raise response.errors.messages["data"].join(", ") if response.errors.any?
 
         response.data.delete_delegation
       end

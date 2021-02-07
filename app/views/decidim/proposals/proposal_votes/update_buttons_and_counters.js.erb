@@ -6,6 +6,12 @@
       morphdom($proposalVotesCount[0], '<%= j(render partial: "decidim/proposals/proposals/votes_count", locals: { proposal: proposal, from_proposals_list: @from_proposals_list }).strip.html_safe %>');
     }
 
+    var $proposalDelegationUI = $('#proposal-<%= proposal.id %>-delegate-ui');
+
+    if($proposalDelegationUI[0]) {
+      morphdom($proposalDelegationUI[0], '<%= j(render partial: "decidim/proposals/liquidvoting/delegation", locals: { proposal: proposal, from_proposals_list: @from_proposals_list }).strip.html_safe %>');
+    }
+
     var $proposalVoteButton = $('#proposal-<%= proposal.id %>-vote-button');
 
     if($proposalVoteButton[0]) {

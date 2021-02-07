@@ -11,10 +11,14 @@ en:
             announcement: "Step Announcement"
     proposals:
       proposals:
+        delegate_button:
+          delegate: Delegate support
+          withdraw: Withdraw
         vote_button:
-          already_delegated: Remove delegation
-          already_delegated_hover: Withdraw delegation
           already_voted: Already supported
           already_voted_hover: Withdraw support
-          delegate: Delegate support
+          maximum_votes_reached: Support limit reached
+          no_votes_remaining: No supports remaining
           vote: Support
+          vote_delegated: Support
+          votes_blocked: Supports disabled
