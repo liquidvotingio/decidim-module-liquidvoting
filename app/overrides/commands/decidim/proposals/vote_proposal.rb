@@ -32,7 +32,7 @@ module Decidim
           participant_email: current_user.email,
           yes: true
         )
-        # TODO: test this error broadcast, I'm making stuff up here, maybe broadcast(:our_tag, errors) is better?
+        # TODO: figure out api error approach; currently client raises a RuntimeError, maybe we want an error response for broadcast
         return broadcast(:invalid, response.errors.messages["votes"].join(", ")) if response.errors.any?
 
         new_vote_count = response.voting_result&.in_favor

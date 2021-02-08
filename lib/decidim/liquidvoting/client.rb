@@ -66,6 +66,7 @@ module Decidim
         variables = { yes: yes, proposal_url: proposal_url, participant_email: participant_email }
         response = send_query(CreateVoteMutation, variables: variables)
 
+        # TODO: CreateVoteMutation returns a different structure for errors than the three other api calls do
         raise response.data.errors.messages["createVote"].join(", ") if response.data.errors.any?
 
         response.data.create_vote
@@ -75,7 +76,7 @@ module Decidim
         variables = { proposal_url: proposal_url, participant_email: participant_email }
         response = send_query(DeleteVoteMutation, variables: variables)
 
-        raise response.data.errors.messages["deleteVote"].join(", ") if response.data.errors.any?
+        raise response.errors.messages["data"].join(", ") if response.errors.any?
 
         response.data.delete_vote
       end
@@ -97,7 +98,8 @@ module Decidim
           delegate_email: delegate_email
         }
         response = send_query(CreateDelegationMutation, variables: variables)
-        raise response.data.errors.messages["createDelegation"].join(", ") if response.data.errors.any?
+
+        raise response.errors.messages["data"].join(", ") if response.errors.any?
 
         # TODO: why do we return a boolean rather than a data.delete_delegation like other methods?
         true
