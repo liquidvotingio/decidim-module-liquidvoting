@@ -6,15 +6,17 @@ module Decidim
       before_action :authenticate_user!
 
       def create
+        # TODO: enforce_permission_to :delegate, :proposal, proposal: proposal
+
         Decidim::Liquidvoting::Client.create_delegation(
           proposal_url: params[:proposal_url],
-          delegator_email: params[:delegator_email],
+          delegator_email: current_user&.email,
           delegate_email: params[:delegate_email]
         )
 
-        session[:delegated_to] = params[:delegate_email]
-        flash[:notice] =
-          "Delegated support to #{Decidim::User.find_by(email: session[:delegated_to]).name}."
+        @lv_state = Decidim::Liquidvoting::Client.current_proposal_state(current_user&.email, params[:proposal_url])
+        flash[:notice] = "Delegated support to #{Decidim::User.find_by(email: @lv_state.delegate_email).name}."
+
       rescue StandardError => e
         flash[:error] = e.message
       ensure
@@ -28,15 +30,17 @@ module Decidim
       end
 
       def destroy
+        # TODO: enforce_permission_to :undelegate, :proposal, proposal: proposal
+
         Decidim::Liquidvoting::Client.delete_delegation(
           proposal_url: params[:proposal_url],
-          delegator_email: params[:delegator_email],
-          delegate_email: session[:delegated_to]
+          delegator_email: current_user&.email,
+          delegate_email: params[:delegate_email]
         )
 
-        flash[:notice] =
-          "Removed delegation to #{Decidim::User.find_by(email: session[:delegated_to]).name}."
-        session[:delegated_to] = nil
+        @lv_state = Decidim::Liquidvoting::Client.current_proposal_state(current_user&.email, params[:proposal_url])
+        flash[:notice] = "Removed delegation to #{Decidim::User.find_by(email: params[:delegate_email]).name}."
+
       rescue StandardError => e
         flash[:error] = e.message
       ensure
