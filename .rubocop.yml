@@ -405,6 +405,10 @@ Layout/DotPosition:
     - leading
     - trailing
 
+# DoubleNegation checks for uses of (`!!`) to convert something to a boolean value.
+Style/DoubleNegation:
+  Enabled: false
+
 # Warn on empty else statements
 # empty - warn only on empty else
 # nil - warn on else with nil in it

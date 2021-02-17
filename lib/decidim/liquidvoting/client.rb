@@ -5,7 +5,6 @@ require "graphql/client/http"
 
 module Decidim
   module Liquidvoting
-
     ProposalState = Struct.new(:user_has_voted, :delegate_email)
 
     # Copied over from https://github.com/liquidvotingio/ruby-client/blob/master/liquid_voting_api.rb.
@@ -23,15 +22,14 @@ module Decidim
       HTTP = ::GraphQL::Client::HTTP.new(URL) do
         def headers(_context)
           {
-            "Authorization": "Bearer #{AUTH_KEY}",
-            "Org-ID": "#{ORG_ID}"
+            "Authorization": AUTH_KEY.to_s,
+            "Org-ID": ORG_ID.to_s
           }
         end
       end
 
       SCHEMA = ::GraphQL::Client.load_schema(HTTP)
       CLIENT = ::GraphQL::Client.new(schema: SCHEMA, execute: HTTP)
-
 
       ## Return a snapshot of current Liquidvoting state for the given user and proposal.
       ##
@@ -66,7 +64,7 @@ module Decidim
         variables = { yes: yes, proposal_url: proposal_url, participant_email: participant_email }
         response = send_query(CreateVoteMutation, variables: variables)
 
-        # TODO: CreateVoteMutation returns a different structure for errors than the three other api calls do
+        # TODO: align CreateVoteMutation's error structure with that of the three other api calls
         raise response.data.errors.messages["createVote"].join(", ") if response.data.errors.any?
 
         response.data.create_vote
@@ -130,17 +128,15 @@ module Decidim
         response.data.delete_delegation
       end
 
-
-
-      private
+      ## private class methods
 
       ## A logging wrapper for all Liquidvoting api calls
-      def self.send_query(query, variables: {})
+      private_class_method def self.send_query(query, variables: {})
         Rails.logger.info "Liquidvoting request sent: #{query.inspect} #{variables.inspect}"
         CLIENT.query(query, variables: variables)
       end
 
-      def self.votes
+      private_class_method def self.votes
         response = send_query(VotesQuery)
 
         raise response.data.errors.messages["votes"].join(", ") if response.data.errors.any?
@@ -148,8 +144,8 @@ module Decidim
         response.data.votes
       end
 
-      def self.has_user_voted?(participant_email, proposal_url)
-        participant_email.present? && proposal_url.present? or return false
+      private_class_method def self.has_user_voted?(participant_email, proposal_url)
+        return false unless participant_email.present? && proposal_url.present?
 
         # this is a hack until we can properly query a subset of delegations
         vote = votes.find do |v|
@@ -159,7 +155,7 @@ module Decidim
         !!vote
       end
 
-      def self.delegations
+      private_class_method def self.delegations
         response = send_query(DelegationsQuery)
 
         raise response.data.errors.messages["delegations"].join(", ") if response.data.errors.any?
@@ -167,8 +163,8 @@ module Decidim
         response.data.delegations
       end
 
-       def self.delegate_email_for(delegator_email, proposal_url)
-        delegator_email.present? && proposal_url.present? or return
+      private_class_method def self.delegate_email_for(delegator_email, proposal_url)
+        return unless delegator_email.present? && proposal_url.present?
 
         # this is a hack until we can properly query a subset of delegations
         delegation = delegations.find do |d|
@@ -178,9 +174,7 @@ module Decidim
         delegation&.delegate&.email
       end
 
-
-
-     ## All graphql query definitions here:
+      ## All graphql query definitions here:
 
       CreateVoteMutation = CLIENT.parse <<-GRAPHQL
         mutation($participant_email: String, $proposal_url: String!, $yes: Boolean!) {
@@ -293,7 +287,6 @@ module Decidim
         }
 
       GRAPHQL
-
     end
   end
 end

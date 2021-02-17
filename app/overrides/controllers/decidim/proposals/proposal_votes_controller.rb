@@ -68,7 +68,7 @@ module Decidim
         @lv_state = Decidim::Liquidvoting::Client.current_proposal_state(
           current_user&.email,
           ResourceLocatorPresenter.new(proposal).url
-          )
+        )
       end
     end
   end
