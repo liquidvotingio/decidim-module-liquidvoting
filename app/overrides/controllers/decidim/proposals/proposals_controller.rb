@@ -22,7 +22,8 @@ module Decidim
       helper_method :proposal_presenter, :form_presenter
 
       before_action :authenticate_user!, only: [:new, :create, :complete]
-      before_action :ensure_is_draft, only: [:compare, :complete, :preview, :publish, :edit_draft, :update_draft, :destroy_draft]
+      before_action :ensure_is_draft, only: [:compare, :complete, :preview, :publish,
+                                             :edit_draft, :update_draft, :destroy_draft]
       before_action :set_proposal, only: [:show, :edit, :update, :withdraw]
       before_action :edit_form, only: [:edit_draft, :edit]
 
@@ -44,8 +45,8 @@ module Decidim
                        .published
                        .not_hidden
                        .includes(:component, :coauthorships)
-                       # TODO: why did proposals_controller.rbIGNORE have this instead of the above?
-                       # .includes(:amendable, :category, :component, :resource_permission, :scope)
+          # TODO: why did proposals_controller.rbIGNORE have this instead of the above
+          # .includes(:amendable, :category, :component, :resource_permission, :scope)
 
           @proposals = paginate(@proposals)
           @proposals = reorder(@proposals)
@@ -63,7 +64,11 @@ module Decidim
         enforce_permission_to :create, :proposal
         @step = :step_1
         if proposal_draft.present?
-          redirect_to edit_draft_proposal_path(proposal_draft, component_id: proposal_draft.component.id, question_slug: proposal_draft.component.participatory_space.slug)
+          redirect_to edit_draft_proposal_path(
+            proposal_draft,
+            component_id: proposal_draft.component.id,
+            question_slug: proposal_draft.component.participatory_space.slug
+          )
         else
           @form = form(ProposalWizardCreateStepForm).from_params(body: translated_proposal_body_template)
         end

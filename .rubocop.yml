@@ -405,6 +405,10 @@ Layout/DotPosition:
     - leading
     - trailing
 
+# DoubleNegation checks for uses of (`!!`) to convert something to a boolean value.
+Style/DoubleNegation:
+  Enabled: false
+
 # Warn on empty else statements
 # empty - warn only on empty else
 # nil - warn on else with nil in it
@@ -1113,7 +1117,7 @@ Metrics/CyclomaticComplexity:
     - "**/*/permissions.rb"
 
 Metrics/LineLength:
-  Max: 100
+  Max: 120
   # To make it possible to copy or click on URIs in the code, we allow lines
   # containing a URI to be longer than Max.
   AllowHeredoc: true

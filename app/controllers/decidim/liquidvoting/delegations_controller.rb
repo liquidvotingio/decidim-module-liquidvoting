@@ -16,7 +16,6 @@ module Decidim
 
         @lv_state = Decidim::Liquidvoting::Client.current_proposal_state(current_user&.email, params[:proposal_url])
         flash[:notice] = "Delegated support to #{Decidim::User.find_by(email: @lv_state.delegate_email).name}."
-
       rescue StandardError => e
         flash[:error] = e.message
       ensure
@@ -40,7 +39,6 @@ module Decidim
 
         @lv_state = Decidim::Liquidvoting::Client.current_proposal_state(current_user&.email, params[:proposal_url])
         flash[:notice] = "Removed delegation to #{Decidim::User.find_by(email: params[:delegate_email]).name}."
-
       rescue StandardError => e
         flash[:error] = e.message
       ensure
