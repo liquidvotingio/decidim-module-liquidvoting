@@ -14,12 +14,17 @@ module Decidim
           delegate_email: params[:delegate_email]
         )
 
+        # TODO: how do we step up to proposal lists?
+        @from_proposals_list = params[:from_proposals_list] == "true"
+        @proposals = [] + [proposal]
+
         @lv_state = Decidim::Liquidvoting::Client.current_proposal_state(current_user&.email, params[:proposal_url])
-        flash[:notice] = "Delegated support to #{Decidim::User.find_by(email: @lv_state.delegate_email).name}."
-      rescue StandardError => e
-        flash[:error] = e.message
-      ensure
-        redirect_to request.referer
+        render :update_buttons_and_counters
+        # flash[:notice] = "Delegated support to #{Decidim::User.find_by(email: @lv_state.delegate_email).name}."
+      # rescue StandardError => e
+      #   flash[:error] = e.message
+      # ensure
+      #   redirect_to request.referer
       end
 
       def index
@@ -37,14 +42,20 @@ module Decidim
           delegate_email: params[:delegate_email]
         )
 
+        # TODO: how do we step up to proposal lists?
+        @from_proposals_list = params[:from_proposals_list] == "true"
+        @proposals = [] + [proposal]
+
         @lv_state = Decidim::Liquidvoting::Client.current_proposal_state(current_user&.email, params[:proposal_url])
-        flash[:notice] = "Removed delegation to #{Decidim::User.find_by(email: params[:delegate_email]).name}."
-      rescue StandardError => e
-        flash[:error] = e.message
-      ensure
-        redirect_to request.referer
+        render :update_buttons_and_counters
+        # flash[:notice] = "Removed delegation to #{Decidim::User.find_by(email: params[:delegate_email]).name}."
+      # rescue StandardError => e
+      #   flash[:error] = e.message
+      # ensure
+      #   redirect_to request.referer
       end
 
+      # TODO is this used? how is it used? elsewhere we use "proposals" component for db filtering for example
       def current_component
         Decidim::Component.find_by(manifest_name: "liquidvoting")
       end
@@ -54,6 +65,24 @@ module Decidim
           Decidim::Liquidvoting::Permissions
         ]
       end
+
+      private
+
+      def proposal
+        # TODO: not filtering on current_component because confused about "proposals" vs "liquidvoting"
+        # @proposal ||= Decidim::Proposals::Proposal.where(component: current_component).find(params[:proposal_id])
+        # TODO: why do we have to qualify Proposal? is it "isolate_namespace Decidim::Liquidvoting" in engine.rb?
+        @proposal ||= Decidim::Proposals::Proposal.find(params[:proposal_id])
+      end
+
+      def lv_state
+        # don't conditionally assign, always get a fresh one
+        @lv_state = Decidim::Liquidvoting::Client.current_proposal_state(
+          current_user&.email,
+          ResourceLocatorPresenter.new(proposal).url
+        )
+      end
+
     end
   end
 end

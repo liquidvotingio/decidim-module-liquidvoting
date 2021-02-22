@@ -4,18 +4,21 @@
   <% if @lv_state.user_has_voted    # VOTED so disable delegation UI %>
     <%= content_tag :button, t("decidim.proposals.proposals.delegate_button.delegate"), class: "button #{vote_button_classes(from_proposals_list)} disabled", disabled: true %>
   <% elsif @lv_state.delegate_email # NOT VOTED BUT DELEGATED so present undelegation UI -%>
-    <form action="/liquidvoting/delegations" method="POST">
+    <form action="/liquidvoting/delegations" method="POST" data-remote="true">
       You delegated to: <br>
       <%= Decidim::User.find_by(email: @lv_state.delegate_email).name %>.
-      <input type="hidden" name="delegator_email" value="<%= current_user.email %>">
-      <input type="hidden" name="delegate_email" value="<%= @lv_state.delegate_email %>">
-      <input type="hidden" name="proposal_url" value="<%= proposal_url(proposal) %>">
       <%= action_authorized_button_to(
         :undelegate,
         "/liquidvoting/delegations",
         resource: proposal,
         method: :delete,
         remote: true,
+        params: {
+          delegator_email: current_user.email,
+          delegate_email: @lv_state.delegate_email,
+          proposal_url: proposal_url(proposal),
+          proposal_id: proposal.id,
+        },
         data: {
           disable: true,
           "redirect-url": proposal_path(proposal)
@@ -27,9 +30,7 @@
       <% end %>
     </form>
   <% else    # NOT VOTED NOT DELEGATED so present delegation UI-%>
-    <form action="/liquidvoting/delegations" method="POST">
-      <input type="hidden" name="delegator_email" value="<%= current_user.email %>">
-      <input type="hidden" name="proposal_url" value="<%= proposal_url(proposal) %>">
+    <form action="/liquidvoting/delegations" method="POST" data-remote="true">
       <select name="delegate_email">
       <% (Decidim::User.where(admin: false).order(:name).pluck(:email, :name).unshift(["", "(choose delegate)"])).each do |email, name| %>
         <option value="<%= email %>"><%= name -%></option>
@@ -40,6 +41,11 @@
         "/liquidvoting/delegations",
         resource: proposal,
         remote: true,
+        params: {
+          delegator_email: current_user.email,
+          proposal_url: proposal_url(proposal),
+          proposal_id: proposal.id,
+        },
         data: {
           disable: true,
           "redirect-url": proposal_path(proposal)

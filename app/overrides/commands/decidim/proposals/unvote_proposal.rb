@@ -25,7 +25,7 @@ module Decidim
           participant_email: current_user.email
         )
         # TODO: figure out api error approach; currently client raises a RuntimeError
-        return broadcast(:invalid, response.errors.messages["votes"].join(", ")) if response.errors.any?
+        # return broadcast(:invalid, response.errors.messages["votes"].join(", ")) if response.errors.any?
 
         new_vote_count = response.voting_result&.in_favor
         @proposal.update_votes_count(new_vote_count)
