@@ -56,16 +56,15 @@ module Decidim
       #   redirect_to request.referer
       end
 
-      # TODO is this used? how is it used? elsewhere we use "proposals" component for db filtering for example
-      def current_component
-        Decidim::Component.find_by(manifest_name: "liquidvoting")
-      end
+      # def current_component
+      #   Decidim::Component.find_by(manifest_name: "liquidvoting")
+      # end
 
-      def permission_class_chain
-        [
-          Decidim::Liquidvoting::Permissions
-        ]
-      end
+      # def permission_class_chain
+      #   [
+      #     Decidim::Liquidvoting::Permissions
+      #   ]
+      # end
 
       private
 

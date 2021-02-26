@@ -41,15 +41,15 @@ module Decidim
       end
       # rubocop:enable Lint/UnreachableCode
 
-      def current_component
-        Decidim::Component.find_by(manifest_name: "liquidvoting")
-      end
+      # def current_component
+      #   Decidim::Component.find_by(manifest_name: "liquidvoting")
+      # end
 
-      def permission_class_chain
-        [
-          Decidim::Liquidvoting::Permissions
-        ]
-      end
+      # def permission_class_chain
+      #   [
+      #     Decidim::Liquidvoting::Permissions
+      #   ]
+      # end
     end
   end
 end
