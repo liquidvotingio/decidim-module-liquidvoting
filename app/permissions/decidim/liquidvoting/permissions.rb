@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-# TODO: do we keep this class, or is it specific to the LV component that we've removed?
 
 module Decidim
   module Liquidvoting
