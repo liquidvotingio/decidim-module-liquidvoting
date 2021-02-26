@@ -39,6 +39,7 @@ module Decidim
         @component ||= @proposal.component
       end
 
+      # TODO: can we undo this override of minimum_votes_per_user? Also in VoteProposal
       def minimum_votes_per_user
         component.settings.minimum_votes_per_user
       end

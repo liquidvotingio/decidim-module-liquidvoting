@@ -45,14 +45,31 @@ module Decidim
         redirect_to request.referer
       end
 
-      def current_component
-        Decidim::Component.find_by(manifest_name: "liquidvoting")
+      # def current_component
+      #   Decidim::Component.find_by(manifest_name: "liquidvoting")
+      # end
+
+      # def permission_class_chain
+      #   [
+      #     Decidim::Liquidvoting::Permissions
+      #   ]
+      # end
+
+      private
+
+      def proposal
+        # TODO: not filtering on current_component because confused about "proposals" vs "liquidvoting"
+        # @proposal ||= Decidim::Proposals::Proposal.where(component: current_component).find(params[:proposal_id])
+        # TODO: why do we have to qualify Proposal? is it "isolate_namespace Decidim::Liquidvoting" in engine.rb?
+        @proposal ||= Decidim::Proposals::Proposal.find(params[:proposal_id])
       end
 
-      def permission_class_chain
-        [
-          Decidim::Liquidvoting::Permissions
-        ]
+      def lv_state
+        # don't conditionally assign, always get a fresh one
+        @lv_state = Decidim::Liquidvoting::Client.current_proposal_state(
+          current_user&.email,
+          ResourceLocatorPresenter.new(proposal).url
+        )
       end
     end
   end
