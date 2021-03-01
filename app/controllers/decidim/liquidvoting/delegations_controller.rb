@@ -2,10 +2,17 @@
 
 module Decidim
   module Liquidvoting
-    class DelegationsController < Decidim::Liquidvoting::ApplicationController
+    # class DelegationsController < Decidim::ApplicationController
+    # class DelegationsController < Decidim::Components::BaseController
+    class DelegationsController < Decidim::Proposals::ApplicationController
       before_action :authenticate_user!
 
       def create
+byebug
+# proposal proposals @proposal
+# request.env["decidim.current_component"]
+# current_component current_settings
+# model.component resource.component
         # TODO: enforce_permission_to :delegate, :proposal, proposal: proposal
 
         Decidim::Liquidvoting::Client.create_delegation(
@@ -56,18 +63,19 @@ module Decidim
       #   redirect_to request.referer
       end
 
-      # TODO is this used? how is it used? elsewhere we use "proposals" component for db filtering for example
-      def current_component
-        Decidim::Component.find_by(manifest_name: "liquidvoting")
-      end
-
-      private
-
       def proposal
         # TODO: not filtering on current_component because confused about "proposals" vs "liquidvoting"
         # @proposal ||= Decidim::Proposals::Proposal.where(component: current_component).find(params[:proposal_id])
         # TODO: why do we have to qualify Proposal? is it "isolate_namespace Decidim::Liquidvoting" in engine.rb?
         @proposal ||= Decidim::Proposals::Proposal.find(params[:proposal_id])
+      end
+
+      def current_component
+        proposal.component
+      end
+
+      def current_participatory_space
+        current_component.participatory_space
       end
 
       def lv_state

@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-# TODO: why do we need to explicitly require this when we're overriding?
-require "decidim/proposals/proposals_controller"
-
 module Decidim
   module Proposals
     # Exposes the proposal resource so users can view and create them.
@@ -11,9 +8,6 @@ module Decidim
       helper ProposalWizardHelper
       helper ParticipatoryTextsHelper
       include Decidim::ApplicationHelper
-      # TODO: why do we get "uninitialized constant" errors on startup for these includes?
-      # include Flaggable
-      # include Withdrawable
       include FormFactory
       include FilterResource
       include Decidim::Proposals::Orderable
@@ -44,9 +38,7 @@ module Decidim
                        .results
                        .published
                        .not_hidden
-                       .includes(:component, :coauthorships)
-          # TODO: why did proposals_controller.rbIGNORE have this instead of the above
-          # .includes(:amendable, :category, :component, :resource_permission, :scope)
+                       .includes(:amendable, :category, :component, :resource_permission, :scope)
 
           @proposals = paginate(@proposals)
           @proposals = reorder(@proposals)
