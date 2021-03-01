@@ -45,14 +45,14 @@ module Decidim
         redirect_to request.referer
       end
 
-      def current_component
-        Decidim::Component.find_by(manifest_name: "liquidvoting")
-      end
+      private
 
-      def permission_class_chain
-        [
-          Decidim::Liquidvoting::Permissions
-        ]
+      def lv_state
+        # don't conditionally assign, always get a fresh one
+        @lv_state = Decidim::Liquidvoting::Client.current_proposal_state(
+          current_user&.email,
+          ResourceLocatorPresenter.new(proposal).url
+        )
       end
     end
   end

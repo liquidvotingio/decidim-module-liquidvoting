@@ -1,14 +1,6 @@
 ---
 en:
   decidim:
-    components:
-      liquidvoting:
-        name: Liquidvoting
-        settings:
-          global:
-            announcement: "Global Announcement"
-          step:
-            announcement: "Step Announcement"
     proposals:
       proposals:
         delegate_button:
