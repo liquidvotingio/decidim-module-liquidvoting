@@ -61,12 +61,6 @@ module Decidim
         Decidim::Component.find_by(manifest_name: "liquidvoting")
       end
 
-      def permission_class_chain
-        [
-          Decidim::Liquidvoting::Permissions
-        ]
-      end
-
       private
 
       def proposal

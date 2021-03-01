@@ -41,7 +41,7 @@ module Decidim
       ## reacquire this state object.
       def self.current_proposal_state(participant_email, proposal_url)
         # TODO: this is multiple calls to LV, maybe we can consolidate to a single graphql call
-        user_has_voted = has_user_voted?(participant_email, proposal_url)
+        user_has_voted = user_voted?(participant_email, proposal_url)
         delegate_email = delegate_email_for(participant_email, proposal_url)
 
         ProposalState.new(user_has_voted, delegate_email)
@@ -144,7 +144,7 @@ module Decidim
         response.data.votes
       end
 
-      private_class_method def self.has_user_voted?(participant_email, proposal_url)
+      private_class_method def self.user_voted?(participant_email, proposal_url)
         return false unless participant_email.present? && proposal_url.present?
 
         # this is a hack until we can properly query a subset of delegations
