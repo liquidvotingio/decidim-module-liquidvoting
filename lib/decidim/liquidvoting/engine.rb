@@ -14,8 +14,14 @@ module Decidim
       routes do
         # Add engine routes here
         authenticate(:user) do
-          post "/:spacetype/:slug/f/:component_id/proposals/:id/delegations" => "delegations#create", as: :delegations
-          delete "delegations" => "delegations#destroy"
+          # post "/:spacetype/:spaceslug/f/:component_id/proposals/:id/delegations" => "delegations#create", as: :delegations
+          post "/processes/:participatory_process_slug/f/:component_id/proposals/:id/delegations" => "delegations#create", as: :delegations
+          delete "/processes/:participatory_process_slug/f/:component_id/proposals/:id/delegations" => "delegations#destroy"
+          # To generalise, have to either manually make routes for each case, or find a clever way to generate
+          # post "/processes/:participatory_process_slug/f/:component_id/budgets/:id/delegations" => "delegations#create", as: :delegations
+          # delete "/processes/:participatory_process_slug/f/:component_id/budgets/:id/delegations" => "delegations#destroy"
+          # post "delegations" => "delegations#create", as: :delegations
+          # delete "delegations" => "delegations#destroy"
           root to: "delegations#index"
         end
       end

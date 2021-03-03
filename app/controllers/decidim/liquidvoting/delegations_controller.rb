@@ -2,18 +2,15 @@
 
 module Decidim
   module Liquidvoting
-    # class DelegationsController < Decidim::ApplicationController
-    # class DelegationsController < Decidim::Components::BaseController
     class DelegationsController < Decidim::Proposals::ApplicationController
       before_action :authenticate_user!
+      before_action :set_proposal
+      helper_method :proposal_path
+      helper_method :proposal_proposal_vote_path
 
       def create
-byebug
-# proposal proposals @proposal
-# request.env["decidim.current_component"]
-# current_component current_settings
-# model.component resource.component
         # TODO: enforce_permission_to :delegate, :proposal, proposal: proposal
+        # enforce_permission_to :vote, :proposal, proposal: proposal
 
         Decidim::Liquidvoting::Client.create_delegation(
           proposal_url: params[:proposal_url],
@@ -43,6 +40,7 @@ byebug
 
       def destroy
         # TODO: enforce_permission_to :undelegate, :proposal, proposal: proposal
+        # enforce_permission_to :unvote, :proposal, proposal: proposal
 
         Decidim::Liquidvoting::Client.delete_delegation(
           proposal_url: params[:proposal_url],
@@ -50,7 +48,7 @@ byebug
           delegate_email: params[:delegate_email]
         )
 
-        # TODO: how do we step up to proposal lists?
+        # TODO: how do we step up to proposal lists? maybe remove, make people vote from proposal page itself
         @from_proposals_list = params[:from_proposals_list] == "true"
         @proposals = [] + [proposal]
 
@@ -63,27 +61,45 @@ byebug
       #   redirect_to request.referer
       end
 
-      def proposal
-        # TODO: not filtering on current_component because confused about "proposals" vs "liquidvoting"
-        # @proposal ||= Decidim::Proposals::Proposal.where(component: current_component).find(params[:proposal_id])
-        # TODO: why do we have to qualify Proposal? is it "isolate_namespace Decidim::Liquidvoting" in engine.rb?
-        @proposal ||= Decidim::Proposals::Proposal.find(params[:proposal_id])
+      def lv_state
+        # don't conditionally assign, always get a fresh one
+        @lv_state = Decidim::Liquidvoting::Client.current_proposal_state(
+          current_user&.email,
+          proposal_locator_presenter.url
+        )
       end
 
       def current_component
         proposal.component
+        # proposal_locator_presenter.component
       end
 
       def current_participatory_space
         current_component.participatory_space
       end
 
-      def lv_state
-        # don't conditionally assign, always get a fresh one
-        @lv_state = Decidim::Liquidvoting::Client.current_proposal_state(
-          current_user&.email,
-          ResourceLocatorPresenter.new(proposal).url
-        )
+      private
+
+      def proposal_locator_presenter
+        ResourceLocatorPresenter.new(@proposal)
+      end
+
+      def proposal_path(_proposal)
+        proposal_locator_presenter.path
+      end
+
+      def proposal_proposal_vote_path(_ignore)
+        "#{proposal_path(nil)}/proposal_vote"
+      end
+
+      def proposal
+        # TODO: why do we have to qualify Proposal? something to do with "isolate_namespace Decidim::Liquidvoting" in engine.rb?
+        # This is a cheat; :set_proposal isn't firing early enough for general Decidim work
+        @proposal ||= Decidim::Proposals::Proposal.find(params[:proposal_id])
+      end
+
+      def set_proposal
+        @proposal = Decidim::Proposals::Proposal.published.not_hidden.where(component: current_component).find_by(id: params[:id])
       end
 
     end

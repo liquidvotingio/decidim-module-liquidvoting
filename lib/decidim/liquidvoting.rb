@@ -16,8 +16,9 @@ end
 Decidim.register_global_engine(
   :liquidvoting, # this is the name of the global method to access engine routes
   Decidim::Liquidvoting::Engine,
-  at: "/liquidvoting"
-)
+  # at: "/liquidvoting"
+  at: "/"
+  )
 
 # # Admin side of the delegations management. Admins can overlook all delegations and
 # # create their own
