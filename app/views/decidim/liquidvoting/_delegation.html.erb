@@ -4,7 +4,7 @@
   <% if @lv_state.user_has_voted        # VOTED so disable delegation UI %>
     <%= content_tag :button, t("decidim.proposals.proposals.delegate_button.delegate"), class: "button #{vote_button_classes(from_proposals_list)} disabled", disabled: true %>
   <% elsif @lv_state.delegate_email     # NOT VOTED BUT DELEGATED so present undelegation UI -%>
-    <form action="/processes/praesentium-rerum/f/3/proposals/7/delegations" method="POST" data-remote="true">
+    <form action=<%= "#{proposal_path(proposal)}/delegations" %> method="POST" data-remote="true">
       You delegated to: <br>
       <%= Decidim::User.find_by(email: @lv_state.delegate_email).name %>.
       <%= action_authorized_button_to(
@@ -30,7 +30,7 @@
       <% end %>
     </form>
   <% else                               # NOT VOTED NOT DELEGATED so present delegation UI %>
-    <form action="/processes/praesentium-rerum/f/3/proposals/7/delegations" method="POST" data-remote="true">
+    <form action=<%= "#{proposal_path(proposal)}/delegations" %> method="POST" data-remote="true">
       <select name="delegate_email">
       <% (Decidim::User.where(admin: false).order(:name).pluck(:email, :name).unshift(["", "(choose delegate)"])).each do |email, name| %>
         <option value="<%= email %>"><%= name -%></option>
