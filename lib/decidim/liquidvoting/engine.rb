@@ -16,9 +16,9 @@ module Decidim
         authenticate(:user) do
           # post "/:space_type/:space_id/f/:component_id/proposals/:id/delegations" => "delegations#create", as: :delegations
           # delete "/:space_type/:space_id/f/:component_id/proposals/:id/delegations" => "delegations#delete", as: :delegations
-          post "/processes/:participatory_process_slug/f/:component_id/proposals/:id/delegations" => "delegations#create", as: :delegations
-          delete "/processes/:participatory_process_slug/f/:component_id/proposals/:id/delegations" => "delegations#destroy"
-          root to: "delegations#index"
+          post "/processes/:participatory_process_slug/f/:component_id/proposals/:id/delegations" => "proposal_vote_delegations#create", as: :delegations
+          delete "/processes/:participatory_process_slug/f/:component_id/proposals/:id/delegations" => "proposal_vote_delegations#destroy"
+          root to: "proposal_vote_delegations#index"
         end
       end
 

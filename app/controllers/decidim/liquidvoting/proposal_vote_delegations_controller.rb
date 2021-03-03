@@ -2,7 +2,7 @@
 
 module Decidim
   module Liquidvoting
-    class DelegationsController < Decidim::Proposals::ApplicationController
+    class ProposalVoteDelegationsController < Decidim::Proposals::ApplicationController
       before_action :authenticate_user!
 
       helper_method :proposal
