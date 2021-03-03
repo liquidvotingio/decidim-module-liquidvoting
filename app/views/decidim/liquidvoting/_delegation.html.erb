@@ -4,31 +4,29 @@
   <% if @lv_state.user_has_voted        # VOTED so disable delegation UI %>
     <%= content_tag :button, t("decidim.proposals.proposals.delegate_button.delegate"), class: "button #{vote_button_classes(from_proposals_list)} disabled", disabled: true %>
   <% elsif @lv_state.delegate_email     # NOT VOTED BUT DELEGATED so present undelegation UI -%>
-    <form action=<%= "#{proposal_path(proposal)}/delegations" %> method="POST" data-remote="true">
-      You delegated to: <br>
-      <%= Decidim::User.find_by(email: @lv_state.delegate_email).name %>.
-      <%= action_authorized_button_to(
-        :undelegate,
-        "overridden-by-form-action",
-        resource: proposal,
-        method: :delete,
-        remote: true,
-        params: {
-          delegator_email: current_user.email,
-          delegate_email: @lv_state.delegate_email,
-          proposal_url: "http://localhost/processes/praesentium-rerum/f/3/proposals/7",
-          proposal_id: proposal.id,
-        },
-        data: {
-          disable: true,
-          "redirect-url": proposal_path(proposal)
-        },
-        class: "button #{vote_button_classes(from_proposals_list)}",
-      ) do %>
-        <%= t("decidim.proposals.proposals.delegate_button.withdraw") %>
-        <span class="show-for-sr"><%= decidim_html_escape(present(proposal).title) %></span>
-      <% end %>
-    </form>
+    You delegated to: <br>
+    <%= Decidim::User.find_by(email: @lv_state.delegate_email).name %>.
+    <%= action_authorized_button_to(
+      :undelegate,
+      "#{proposal_path(proposal)}/delegations",
+      resource: proposal,
+      method: :delete,
+      remote: true,
+      params: {
+        delegator_email: current_user.email,
+        delegate_email: @lv_state.delegate_email,
+        proposal_url: "http://localhost/processes/praesentium-rerum/f/3/proposals/7",
+        proposal_id: proposal.id,
+      },
+      data: {
+        disable: true,
+        "redirect-url": proposal_path(proposal)
+      },
+      class: "button #{vote_button_classes(from_proposals_list)}",
+    ) do %>
+      <%= t("decidim.proposals.proposals.delegate_button.withdraw") %>
+      <span class="show-for-sr"><%= decidim_html_escape(present(proposal).title) %></span>
+    <% end %>
   <% else                               # NOT VOTED NOT DELEGATED so present delegation UI %>
     <form action=<%= "#{proposal_path(proposal)}/delegations" %> method="POST" data-remote="true">
       <select name="delegate_email">
