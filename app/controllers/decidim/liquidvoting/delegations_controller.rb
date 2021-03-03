@@ -10,8 +10,7 @@ module Decidim
       helper_method :proposal_proposal_vote_path
 
       def create
-        # TODO: enforce_permission_to :delegate, :proposal, proposal: proposal
-        # enforce_permission_to :vote, :proposal, proposal: proposal
+        enforce_permission_to :vote, :proposal, proposal: proposal
 
         Decidim::Liquidvoting::Client.create_delegation(
           proposal_url: params[:proposal_url],
@@ -40,8 +39,7 @@ module Decidim
       end
 
       def destroy
-        # TODO: enforce_permission_to :undelegate, :proposal, proposal: proposal
-        # enforce_permission_to :unvote, :proposal, proposal: proposal
+        enforce_permission_to :unvote, :proposal, proposal: proposal
 
         Decidim::Liquidvoting::Client.delete_delegation(
           proposal_url: params[:proposal_url],
