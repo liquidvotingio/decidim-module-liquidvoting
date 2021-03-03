@@ -24,12 +24,6 @@ module Decidim
 
         @lv_state = Decidim::Liquidvoting::Client.current_proposal_state(current_user&.email, params[:proposal_url])
         render "decidim/proposals/proposal_votes/update_buttons_and_counters"
-
-        # flash[:notice] = "Delegated support to #{Decidim::User.find_by(email: @lv_state.delegate_email).name}."
-      # rescue StandardError => e
-      #   flash[:error] = e.message
-      # ensure
-      #   redirect_to request.referer
       end
 
       def index
@@ -53,11 +47,6 @@ module Decidim
 
         @lv_state = Decidim::Liquidvoting::Client.current_proposal_state(current_user&.email, params[:proposal_url])
         render "decidim/proposals/proposal_votes/update_buttons_and_counters"
-        # flash[:notice] = "Removed delegation to #{Decidim::User.find_by(email: params[:delegate_email]).name}."
-      # rescue StandardError => e
-      #   flash[:error] = e.message
-      # ensure
-      #   redirect_to request.referer
       end
 
       def proposal
@@ -74,6 +63,8 @@ module Decidim
         )
       end
 
+      # Helpers for cross-engine routing
+
       def proposal_locator_presenter
         ResourceLocatorPresenter.new(@proposal)
       end
@@ -85,7 +76,6 @@ module Decidim
       def proposal_proposal_vote_path(_ignore)
         "#{proposal_path(nil)}/proposal_vote"
       end
-
     end
   end
 end
