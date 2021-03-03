@@ -16,7 +16,6 @@ end
 Decidim.register_global_engine(
   :liquidvoting, # this is the name of the global method to access engine routes
   Decidim::Liquidvoting::Engine,
-  # at: "/liquidvoting"
   at: "/"
   )
 
@@ -25,5 +24,5 @@ Decidim.register_global_engine(
 # Decidim.register_global_engine(
 #   :decidim_admin_liquidvoting,
 #   ::Decidim::Liquidvoting::AdminEngine,
-#   at: "/admin/liquidvoting"
+#   at: "/admin/"
 # )
