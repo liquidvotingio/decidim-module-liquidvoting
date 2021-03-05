@@ -32,13 +32,10 @@ module Decidim
           participant_email: current_user.email,
           yes: true
         )
-        # TODO: figure out api error approach; currently client raises a RuntimeError
-        # return broadcast(:invalid, response.errors.messages["votes"].join(", ")) if response.errors.any?
 
         new_vote_count = response.voting_result&.in_favor
         @proposal.update_votes_count(new_vote_count)
 
-        # TODO: what does it mean that we broadcast a "vote" (an unsaved ProposalVote)?
         broadcast(:ok, vote)
       end
 
@@ -65,7 +62,6 @@ module Decidim
       end
 
       def user_votes
-        # TODO: do we need this? we've abandoned ProposalVotes, would need to populate from LV
         Rails.logger.info "TRACE: VoteProposal#user_votes, who called this, Liquidvoting is managing user votes!"
         @user_votes ||= ProposalVote.where(
           author: @current_user,

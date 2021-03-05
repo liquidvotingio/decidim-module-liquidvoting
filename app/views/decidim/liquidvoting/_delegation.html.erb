@@ -1,6 +1,5 @@
 <div id="proposal-<%= proposal.id %>-delegate-ui" class="button--vote-button">
 <% if current_user %>
-  <!-- TODO: send ajax requests instead -->
   <% if @lv_state.user_has_voted        # VOTED so disable delegation UI %>
     <%= content_tag :button, t("decidim.proposals.proposals.delegate_button.delegate"), class: "button #{vote_button_classes(from_proposals_list)} disabled", disabled: true %>
   <% elsif @lv_state.delegate_email     # NOT VOTED BUT DELEGATED so present undelegation UI -%>

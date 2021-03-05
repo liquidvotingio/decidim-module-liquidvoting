@@ -5,9 +5,7 @@ module Decidim
     class ProposalVoteDelegationsController < Decidim::Proposals::ApplicationController
       before_action :authenticate_user!
 
-      helper_method :proposal
-      helper_method :proposal_path
-      helper_method :proposal_proposal_vote_path
+      helper_method :proposal, :proposal_path, :proposal_proposal_vote_path
 
       def create
         enforce_permission_to :vote, :proposal, proposal: proposal
@@ -18,7 +16,6 @@ module Decidim
           delegate_email: params[:delegate_email]
         )
 
-        # TODO: how do we step up to proposal lists?
         @from_proposals_list = params[:from_proposals_list] == "true"
         @proposals = [] + [proposal]
 
@@ -41,7 +38,6 @@ module Decidim
           delegate_email: params[:delegate_email]
         )
 
-        # TODO: how do we step up to proposal lists? maybe remove, make people vote from proposal page itself
         @from_proposals_list = params[:from_proposals_list] == "true"
         @proposals = [] + [proposal]
 
@@ -49,18 +45,10 @@ module Decidim
         render "decidim/proposals/proposal_votes/update_buttons_and_counters"
       end
 
-      def proposal
-        @proposal ||= Decidim::Proposals::Proposal.where(component: current_component).find(params[:proposal_id])
-      end
-
       private
 
-      def lv_state
-        # don't conditionally assign, always get a fresh one
-        @lv_state = Decidim::Liquidvoting::Client.current_proposal_state(
-          current_user&.email,
-          proposal_locator_presenter.url
-        )
+      def proposal
+        @proposal ||= Decidim::Proposals::Proposal.where(component: current_component).find(params[:proposal_id])
       end
 
       # Helpers for cross-engine routing

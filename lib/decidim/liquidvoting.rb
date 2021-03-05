@@ -11,18 +11,10 @@ module Decidim
   end
 end
 
-# User space engine, used mostly in the context of proposal voting to let users
+# User space engine, generally used in the context of proposal voting to let users
 # manage their delegations
 Decidim.register_global_engine(
   :liquidvoting, # this is the name of the global method to access engine routes
   Decidim::Liquidvoting::Engine,
   at: "/"
 )
-
-# # Admin side of the delegations management. Admins can overlook all delegations and
-# # create their own
-# Decidim.register_global_engine(
-#   :decidim_admin_liquidvoting,
-#   ::Decidim::Liquidvoting::AdminEngine,
-#   at: "/admin/"
-# )

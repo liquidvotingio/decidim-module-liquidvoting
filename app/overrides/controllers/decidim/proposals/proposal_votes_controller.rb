@@ -19,7 +19,6 @@ module Decidim
           on(:ok) do
             proposal.reload
 
-            # TODO: Replace with search that uses LV proposals to select which proposals to include.
             proposals = ProposalVote.where(
               author: current_user,
               proposal: Proposal.where(component: current_component)
@@ -45,7 +44,6 @@ module Decidim
           on(:ok) do
             proposal.reload
 
-            # TODO: Replace with search that uses LV proposals to select which proposals to include.
             proposals = ProposalVote.where(
               author: current_user,
               proposal: Proposal.where(component: current_component)
@@ -64,7 +62,7 @@ module Decidim
       end
 
       def lv_state
-        # don't conditionally assign, always get a fresh one
+        # don't memoize, always get a fresh one
         @lv_state = Decidim::Liquidvoting::Client.current_proposal_state(
           current_user&.email,
           ResourceLocatorPresenter.new(proposal).url
