@@ -40,7 +40,6 @@ module Decidim
       ## As a ruby Struct, the object is immutable; the best way to refresh the state is to
       ## reacquire this state object.
       def self.current_proposal_state(participant_email, proposal_url)
-        # TODO: this is multiple calls to LV, maybe we can consolidate to a single graphql call
         user_has_voted = user_voted?(participant_email, proposal_url)
         delegate_email = delegate_email_for(participant_email, proposal_url)
 
@@ -64,7 +63,6 @@ module Decidim
         variables = { yes: yes, proposal_url: proposal_url, participant_email: participant_email }
         response = send_query(CreateVoteMutation, variables: variables)
 
-        # TODO: align CreateVoteMutation's error structure with that of the three other api calls
         raise response.data.errors.messages["createVote"].join(", ") if response.data.errors.any?
 
         response.data.create_vote
@@ -99,7 +97,6 @@ module Decidim
 
         raise response.errors.messages["data"].join(", ") if response.errors.any?
 
-        # TODO: why do we return a boolean rather than a data.delete_delegation like other methods?
         true
       end
 

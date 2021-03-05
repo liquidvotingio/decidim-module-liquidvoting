@@ -14,9 +14,11 @@ module Decidim
       routes do
         # Add engine routes here
         authenticate(:user) do
-          post "delegations" => "delegations#create", as: :delegations
-          delete "delegations" => "delegations#destroy"
-          root to: "delegations#index"
+          proposal_delegation_path = "/processes/:participatory_process_slug/f/:component_id/proposals/:id/delegations"
+          post proposal_delegation_path => "proposal_vote_delegations#create", as: :delegations
+          delete proposal_delegation_path => "proposal_vote_delegations#destroy"
+
+          root to: "proposal_vote_delegations#index"
         end
       end
 
