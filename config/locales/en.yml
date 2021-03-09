@@ -3,9 +3,12 @@ en:
   decidim:
     proposals:
       proposals:
+        delegation_ui:
+          intro: Or delegate your support
+          to: You delegated to
         delegate_button:
-          delegate: Delegate support
-          withdraw: Withdraw
+          delegate: Delegate Support
+          withdraw: Withdraw Delegation
         vote_button:
           already_voted: Already supported
           already_voted_hover: Withdraw support
