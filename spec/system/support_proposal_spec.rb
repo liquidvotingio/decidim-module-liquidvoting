@@ -26,7 +26,7 @@ describe "Supporting a Proposal", type: :system do
   it "works" do
     # If the api is running locally, this passes.
     # We need to add VCR
-    click_button "Support"
+    click_button("Support", id: "vote_button-#{proposal.id}")
     expect(page).to have_button("Already supported")
   end
 end
