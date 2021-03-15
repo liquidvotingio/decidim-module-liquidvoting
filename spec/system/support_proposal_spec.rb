@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-describe "Supporting a Proposal", type: :system do
+describe "Supporting a Proposal", :vcr, type: :system do
   include_context "with a component"
   let!(:component) do
     create(
@@ -24,9 +24,12 @@ describe "Supporting a Proposal", type: :system do
   end
 
   it "works" do
-    # If the api is running locally, this passes.
-    # We need to add VCR
-    click_button("Support", id: "vote_button-#{proposal.id}")
-    expect(page).to have_button("Already supported")
+    VCR.use_cassette('create_vote') do
+      # If the api is running locally, this passes.
+      # We need to add VCR
+byebug
+      click_button("Support", id: "vote_button-#{proposal.id}")
+      expect(page).to have_button("Already supported")
+    end
   end
 end

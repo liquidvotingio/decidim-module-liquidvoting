@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require "decidim/dev"
+require_relative 'support/vcr_setup'
+require "byebug"
 
 ENV["ENGINE_ROOT"] = File.dirname(__dir__)
 
