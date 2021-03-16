@@ -41,5 +41,16 @@ jobs:
         bundle install --jobs 4 --retry 3
     - name: Run RuboCop
       run: bundle exec rubocop --parallel
-    - name: Tests
+    - name: Create test app
+      run: bundle exec rake test_app
+    - run: mkdir -p ./spec/decidim_dummy_app/tmp/screenshots
+      name: Create the screenshots folder
+    - uses: nanasess/setup-chromedriver@v1.0.1
+    - name: RSpec
       run: bundle exec rspec
+    - uses: actions/upload-artifact@v2
+      if: always()
+      with:
+        name: screenshots
+        path: ./spec/decidim_dummy_app/tmp/screenshots
+        if-no-files-found: ignore
