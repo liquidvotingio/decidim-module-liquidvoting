@@ -19,5 +19,5 @@ VCR.configure do |config|
   config.hook_into :webmock
   config.configure_rspec_metadata!
   config.ignore_request { |request| !LiquidvotingApiVcr.liquidvoting_api_uri?(URI(request.uri)) }
-  config.allow_http_connections_when_no_cassette = true
+  # config.allow_http_connections_when_no_cassette = true
 end
