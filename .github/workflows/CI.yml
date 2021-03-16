@@ -1,6 +1,14 @@
 name: CI
 
 on:
+  pull_request:
+    branches:
+    - master
+    paths-ignore:
+    - 'README.md'
+    - 'LICENSE'
+    - 'CODE_OF_CONDUCT.md'
+    - 'CONTRIBUTING.md'
   push:
     branches:
     - master
@@ -33,3 +41,5 @@ jobs:
         bundle install --jobs 4 --retry 3
     - name: Run RuboCop
       run: bundle exec rubocop --parallel
+    - name: Tests
+      run: bundle exec rspec
