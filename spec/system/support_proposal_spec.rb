@@ -3,7 +3,7 @@
 require "spec_helper"
 
 describe "Supporting a Proposal", :vcr, type: :system do
-  VCR.use_cassette('fetch_schema') do 
+  VCR.use_cassette("fetch_schema") do
     include_context "with a component"
     let!(:component) do
       create(
