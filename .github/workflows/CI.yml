@@ -42,6 +42,9 @@ jobs:
       run: bundle exec rubocop --parallel
     - name: Create test app
       run: bundle exec rake test_app
+      env:
+        LIQUID_VOTING_API_URL: "https://api.liquidvoting.io"
+        LIQUID_VOTING_API_AUTH_KEY: ${{ secrets.TEST_API_AUTH_KEY }}
     - run: mkdir -p ./spec/decidim_dummy_app/tmp/screenshots
       name: Create the screenshots folder
     - uses: nanasess/setup-chromedriver@v1.0.1
