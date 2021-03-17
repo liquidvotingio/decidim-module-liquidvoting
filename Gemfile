@@ -18,6 +18,9 @@ gem "bootsnap", "~> 1.4"
 gem "puma", ">= 5.0"
 gem "uglifier", "~> 4.1"
 
+# Fixes CI build error where it can't find v0.1.1
+gem "declarative-option", "0.1.0"
+
 group :development, :test do
   gem "byebug", "~> 11.0", platform: :mri
   gem "rubocop"

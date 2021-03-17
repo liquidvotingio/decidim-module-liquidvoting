@@ -344,7 +344,7 @@ GEM
       decidim-core (= 0.24.0.rc2)
     declarative-builder (0.1.0)
       declarative-option (< 0.2.0)
-    declarative-option (0.1.1)
+    declarative-option (0.1.0)
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
     devise (4.7.3)
@@ -838,6 +838,7 @@ DEPENDENCIES
   decidim-dev (= 0.24.0.rc2)
   decidim-liquidvoting!
   decidim-proposals (= 0.24.0.rc2)
+  declarative-option (= 0.1.0)
   faker (~> 2.14)
   letter_opener_web (~> 1.3)
   listen (~> 3.1)
