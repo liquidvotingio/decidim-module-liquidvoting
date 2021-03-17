@@ -71,3 +71,20 @@ jobs:
         name: screenshots
         path: ./spec/decidim_dummy_app/tmp/screenshots
         if-no-files-found: ignore
+
+  teardown:
+    name: Teardown test API data
+    runs-on: ubuntu-latest
+    steps:
+    - name: Teardown smoke test data
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.LINODE_KUBE_CONFIG }}
+      run: |
+        echo "$KUBE_CONFIG_DATA" | base64 --decode > /tmp/config
+        export KUBECONFIG=/tmp/config
+        pod=$(kubectl get pods -l app=api  -o json | jq -r '.items[].metadata.name' | head -1)
+        kubectl wait --timeout=120s --for=condition=Ready pod/$pod
+        kubectl exec -i pod/$pod \
+        --container api-container \
+        -- /opt/app/bin/liquid_voting \
+        eval "LiquidVoting.Release.smoke_test_teardown"
