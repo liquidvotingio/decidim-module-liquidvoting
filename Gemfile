@@ -24,7 +24,6 @@ group :development, :test do
   gem "rubocop-performance"
   gem "rubocop-rails"
   gem "rubocop-rspec" # or gem 'rubocop-minitest'
-  gem "vcr", "~> 6.0"
 
   gem "decidim-dev", Decidim::Liquidvoting::DECIDIM_VERSION
 end
