@@ -15,7 +15,7 @@ gem "decidim-liquidvoting", path: "."
 gem "decidim-proposals", Decidim::Liquidvoting::DECIDIM_VERSION
 
 gem "bootsnap", "~> 1.4"
-gem "puma", ">= 4.3"
+gem "puma", ">= 5.0"
 gem "uglifier", "~> 4.1"
 
 group :development, :test do
@@ -29,7 +29,7 @@ group :development, :test do
 end
 
 group :development do
-  gem "faker", "~> 1.9"
+  gem "faker", "~> 2.14"
   gem "letter_opener_web", "~> 1.3"
   gem "listen", "~> 3.1"
   gem "spring", "~> 2.0"
