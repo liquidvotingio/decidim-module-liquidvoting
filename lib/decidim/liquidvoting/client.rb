@@ -22,8 +22,8 @@ module Decidim
       HTTP = ::GraphQL::Client::HTTP.new(URL) do
         def headers(_context)
           {
-            "Authorization": "Bearer #{AUTH_KEY.to_s}",
-            "Org-ID": ORG_ID.to_s
+            "Authorization": "Bearer #{AUTH_KEY}",
+            "Org-ID": ORG_ID
           }
         end
       end
