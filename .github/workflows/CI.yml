@@ -45,8 +45,8 @@ jobs:
       run: bundle exec rubocop --parallel
     - name: Create test app
       run: bundle exec rake test_app
-    - run: mkdir -p ./spec/decidim_dummy_app/tmp/screenshots
-      name: Create the screenshots folder
+    - name: Create the screenshots folder
+      run: mkdir -p ./spec/decidim_dummy_app/tmp/screenshots
     - uses: nanasess/setup-chromedriver@v1.0.1
     - name: RSpec
       run: bundle exec rspec
