@@ -19,7 +19,8 @@ on:
     - 'CONTRIBUTING.md'
 
 jobs:
-  build:
+  build_and_test:
+    name: Build and test
     runs-on: ubuntu-18.04
     services:
       postgres:
@@ -74,6 +75,7 @@ jobs:
 
   teardown:
     name: Teardown test API data
+    needs: [build_and_test]
     runs-on: ubuntu-latest
     steps:
     - name: Teardown smoke test data
