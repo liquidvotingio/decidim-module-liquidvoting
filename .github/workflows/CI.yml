@@ -56,9 +56,8 @@ jobs:
       run: |
         bundle config path vendor/bundle
         bundle install --jobs 4 --retry 3
-    # Disabling until cops are renamed according to recent updates
-    # - name: Run RuboCop
-    #   run: bundle exec rubocop --parallel
+    - name: Run RuboCop
+      run: bundle exec rubocop --parallel
     - name: Create test app
       run: bundle exec rake test_app
     - name: Create the screenshots folder

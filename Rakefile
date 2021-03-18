@@ -21,7 +21,7 @@ task test_app: "decidim:generate_external_test_app" do
 end
 
 desc "Generates a development app."
-task :development_app do
+task development_app: :environment do
   Bundler.with_original_env do
     generate_decidim_app(
       "development_app",
