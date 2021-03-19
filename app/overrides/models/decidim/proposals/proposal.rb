@@ -6,8 +6,13 @@ Decidim::Proposals::Proposal.class_eval do
   # ProposalVote model, which we've abandoned.
   #
   # The :proposal_votes_count attribute is now completely managed by Liquidvoting, in this method.
+
+  # If some legacy code still calls this without an argument (eg rake db:seed), return w/o action
+  #
   # rubocop:disable Rails/SkipsModelValidations
-  def update_votes_count(lv_count)
+  def update_votes_count(lv_count = nil)
+    return unless lv_count
+
     Rails.logger.info "TRACE: Proposal#update_votes_count updating with #{lv_count.inspect}"
     update_columns(proposal_votes_count: lv_count)
   end
