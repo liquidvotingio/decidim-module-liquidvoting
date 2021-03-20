@@ -13,13 +13,15 @@
 #
 Decidim::Proposals::Proposal.class_eval do
   def update_votes_count
-    Decidim::Liquidvoting::Logger.info "TRACE: Surprise, who called Proposal#update_votes_count? Liquidvoting uses :set_votes_count"
+    Decidim::Liquidvoting::Logger.info "TRACE: Surprise :update_votes_count call; Liquidvoting uses :set_votes_count"
   end
 
+  # rubocop:disable Naming/AccessorMethodName
   # rubocop:disable Rails/SkipsModelValidations
   def set_votes_count(lv_count)
     update_columns(proposal_votes_count: lv_count)
     Decidim::Liquidvoting::Logger.info "TRACE: Liquidvoting set the proposal_votes_count to #{lv_count.inspect}"
   end
+  # rubocop:enable Naming/AccessorMethodName
   # rubocop:enable Rails/SkipsModelValidations
 end
