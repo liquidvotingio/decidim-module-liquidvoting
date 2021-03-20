@@ -9,6 +9,7 @@ module Decidim
       # proposal     - A Decidim::Proposals::Proposal object.
       # current_user - The current user.
       def initialize(proposal, current_user)
+        super()
         @proposal = proposal
         @current_user = current_user
       end
