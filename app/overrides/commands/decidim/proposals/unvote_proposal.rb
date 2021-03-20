@@ -26,7 +26,7 @@ module Decidim
         )
 
         new_vote_count = response.voting_result&.in_favor
-        @proposal.update_votes_count(new_vote_count)
+        @proposal.set_votes_count(new_vote_count)
 
         broadcast(:ok, @proposal)
       end
