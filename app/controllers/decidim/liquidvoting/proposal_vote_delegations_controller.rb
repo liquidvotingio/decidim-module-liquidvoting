@@ -11,15 +11,15 @@ module Decidim
         enforce_permission_to :vote, :proposal, proposal: proposal
 
         Decidim::Liquidvoting::Client.create_delegation(
-          proposal_url: params[:proposal_url],
-          delegator_email: current_user&.email,
+          proposal_url: proposal_locator_presenter.url,
+          delegator_email: delegator_email,
           delegate_email: params[:delegate_email]
         )
 
         @from_proposals_list = params[:from_proposals_list] == "true"
         @proposals = [] + [proposal]
 
-        @lv_state = Decidim::Liquidvoting::Client.current_proposal_state(current_user&.email, params[:proposal_url])
+        @lv_state = Decidim::Liquidvoting::Client.current_proposal_state(delegator_email, proposal_locator_presenter.url)
         render "decidim/proposals/proposal_votes/update_buttons_and_counters"
       end
 
@@ -33,15 +33,15 @@ module Decidim
         enforce_permission_to :unvote, :proposal, proposal: proposal
 
         Decidim::Liquidvoting::Client.delete_delegation(
-          proposal_url: params[:proposal_url],
-          delegator_email: current_user&.email,
+          proposal_url: proposal_locator_presenter.url,
+          delegator_email: delegator_email,
           delegate_email: params[:delegate_email]
         )
 
         @from_proposals_list = params[:from_proposals_list] == "true"
         @proposals = [] + [proposal]
 
-        @lv_state = Decidim::Liquidvoting::Client.current_proposal_state(current_user&.email, params[:proposal_url])
+        @lv_state = Decidim::Liquidvoting::Client.current_proposal_state(delegator_email, proposal_locator_presenter.url)
         render "decidim/proposals/proposal_votes/update_buttons_and_counters"
       end
 
@@ -51,13 +51,17 @@ module Decidim
         @proposal ||= Decidim::Proposals::Proposal.where(component: current_component).find(params[:proposal_id])
       end
 
+      def delegator_email
+        current_user&.email
+      end
+
       # Helpers for cross-engine routing
 
       def proposal_locator_presenter
-        ResourceLocatorPresenter.new(@proposal)
+        @plp ||= ResourceLocatorPresenter.new(@proposal)
       end
 
-      def proposal_path(_proposal)
+      def proposal_path(_ignore)
         proposal_locator_presenter.path
       end
 
