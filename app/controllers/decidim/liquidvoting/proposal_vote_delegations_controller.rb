@@ -11,7 +11,7 @@ module Decidim
         enforce_permission_to :vote, :proposal, proposal: proposal
 
         Decidim::Liquidvoting::Client.create_delegation(
-          proposal_url: proposal_locator_presenter.url,
+          proposal_url: proposal_locator.url,
           delegator_email: delegator_email,
           delegate_email: params[:delegate_email]
         )
@@ -19,7 +19,7 @@ module Decidim
         @from_proposals_list = params[:from_proposals_list] == "true"
         @proposals = [] + [proposal]
 
-        @lv_state = Decidim::Liquidvoting::Client.current_proposal_state(delegator_email, proposal_locator_presenter.url)
+        @lv_state = Decidim::Liquidvoting::Client.current_proposal_state(delegator_email, proposal_locator.url)
         render "decidim/proposals/proposal_votes/update_buttons_and_counters"
       end
 
@@ -33,7 +33,7 @@ module Decidim
         enforce_permission_to :unvote, :proposal, proposal: proposal
 
         Decidim::Liquidvoting::Client.delete_delegation(
-          proposal_url: proposal_locator_presenter.url,
+          proposal_url: proposal_locator.url,
           delegator_email: delegator_email,
           delegate_email: params[:delegate_email]
         )
@@ -41,7 +41,7 @@ module Decidim
         @from_proposals_list = params[:from_proposals_list] == "true"
         @proposals = [] + [proposal]
 
-        @lv_state = Decidim::Liquidvoting::Client.current_proposal_state(delegator_email, proposal_locator_presenter.url)
+        @lv_state = Decidim::Liquidvoting::Client.current_proposal_state(delegator_email, proposal_locator.url)
         render "decidim/proposals/proposal_votes/update_buttons_and_counters"
       end
 
@@ -57,12 +57,12 @@ module Decidim
 
       # Helpers for cross-engine routing
 
-      def proposal_locator_presenter
-        @plp ||= ResourceLocatorPresenter.new(@proposal)
+      def proposal_locator
+        @proposal_locator ||= ResourceLocatorPresenter.new(@proposal)
       end
 
       def proposal_path(_ignore)
-        proposal_locator_presenter.path
+        proposal_locator.path
       end
 
       def proposal_proposal_vote_path(_ignore)
