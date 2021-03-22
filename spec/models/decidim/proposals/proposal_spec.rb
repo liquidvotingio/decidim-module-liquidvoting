@@ -15,12 +15,12 @@ describe Decidim::Proposals::Proposal do
     end
   end
 
-  describe "#set_votes_count" do
+  describe "#update_with_lv_vote_count" do
     let(:new_vote_count) { 35 }
 
     context "when we update the vote count" do
       before do
-        subject.set_votes_count(new_vote_count)
+        subject.update_with_lv_vote_count(new_vote_count)
         subject.reload
       end
 
@@ -35,7 +35,7 @@ describe Decidim::Proposals::Proposal do
       it "logs the call" do
         expect(Decidim::Liquidvoting::Logger).to receive(:info).with(/TRACE: Liquidvoting set/)
 
-        subject.set_votes_count(new_vote_count)
+        subject.update_with_lv_vote_count(new_vote_count)
       end
     end
   end
