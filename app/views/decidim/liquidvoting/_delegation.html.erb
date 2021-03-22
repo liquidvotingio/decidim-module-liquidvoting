@@ -12,9 +12,7 @@
       method: :delete,
       remote: true,
       params: {
-        delegator_email: current_user.email,
         delegate_email: @lv_state.delegate_email,
-        proposal_url: "http://localhost/processes/praesentium-rerum/f/3/proposals/7",
         proposal_id: proposal.id,
       },
       data: {
@@ -40,8 +38,6 @@
         resource: proposal,
         remote: true,
         params: {
-          delegator_email: current_user.email,
-          proposal_url: "http://localhost/processes/praesentium-rerum/f/3/proposals/7",
           proposal_id: proposal.id,
         },
         data: {

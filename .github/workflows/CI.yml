@@ -1,0 +1,91 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+    - master
+    paths-ignore:
+    - 'README.md'
+    - 'LICENSE'
+    - 'CODE_OF_CONDUCT.md'
+    - 'CONTRIBUTING.md'
+  push:
+    branches:
+    - master
+    paths-ignore:
+    - 'README.md'
+    - 'LICENSE'
+    - 'CODE_OF_CONDUCT.md'
+    - 'CONTRIBUTING.md'
+
+jobs:
+  build_and_test:
+    name: Build and test
+    runs-on: ubuntu-18.04
+    services:
+      postgres:
+        image: postgres:11
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        env:
+          POSTGRES_PASSWORD: postgres
+    env:
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: postgres
+      DATABASE_HOST: localhost
+      LIQUID_VOTING_API_URL: "https://api.liquidvoting.io"
+      LIQUID_VOTING_API_AUTH_KEY: ${{ secrets.TEST_API_AUTH_KEY }}
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Ruby 2.7
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.7.2
+    - name: Cache gems
+      uses: actions/cache@v1
+      with:
+        path: vendor/bundle
+        key: ${{ runner.os }}-rubocop-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-rubocop-
+    - name: Install gems
+      run: |
+        bundle config path vendor/bundle
+        bundle install --jobs 4 --retry 3
+    - name: Run RuboCop
+      run: bundle exec rubocop --parallel
+    - name: Create test app
+      run: bundle exec rake test_app
+    - name: Create the screenshots folder
+      run: mkdir -p ./spec/decidim_dummy_app/tmp/screenshots
+    - uses: nanasess/setup-chromedriver@v1.0.1
+    - name: RSpec
+      run: bundle exec rspec
+    - uses: actions/upload-artifact@v2
+      if: always()
+      with:
+        name: screenshots
+        path: ./spec/decidim_dummy_app/tmp/screenshots
+        if-no-files-found: ignore
+
+  teardown:
+    name: Teardown test API data
+    needs: [build_and_test]
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Teardown smoke test data
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.LINODE_KUBE_CONFIG }}
+      run: |
+        echo "$KUBE_CONFIG_DATA" | base64 --decode > /tmp/config
+        export KUBECONFIG=/tmp/config
+        pod=$(kubectl get pods -l app=api  -o json | jq -r '.items[].metadata.name' | head -1)
+        kubectl wait --timeout=120s --for=condition=Ready pod/$pod
+        kubectl exec -i pod/$pod \
+        --container api-container \
+        -- /opt/app/bin/liquid_voting \
+        eval "LiquidVoting.Release.smoke_test_teardown"

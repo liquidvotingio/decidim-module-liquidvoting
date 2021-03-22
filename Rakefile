@@ -4,7 +4,6 @@ require "decidim/dev/common_rake"
 
 def install_module(path)
   Dir.chdir(path) do
-    system("bundle exec rake decidim_liquidvoting:install:migrations")
     system("bundle exec rake db:migrate")
   end
 end
@@ -22,7 +21,7 @@ task test_app: "decidim:generate_external_test_app" do
 end
 
 desc "Generates a development app."
-task :development_app do
+task development_app: :environment do
   Bundler.with_original_env do
     generate_decidim_app(
       "development_app",

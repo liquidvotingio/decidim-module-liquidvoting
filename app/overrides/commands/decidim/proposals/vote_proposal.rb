@@ -9,6 +9,7 @@ module Decidim
       # proposal     - A Decidim::Proposals::Proposal object.
       # current_user - The current user.
       def initialize(proposal, current_user)
+        super()
         @proposal = proposal
         @current_user = current_user
       end
@@ -34,7 +35,7 @@ module Decidim
         )
 
         new_vote_count = response.voting_result&.in_favor
-        @proposal.update_votes_count(new_vote_count)
+        @proposal.update_with_lv_vote_count(new_vote_count)
 
         broadcast(:ok, vote)
       end
