@@ -7,7 +7,7 @@ describe Decidim::Proposals::Proposal do
 
   it { is_expected.to be_valid }
 
-  describe "#update_votes_count (deprecated)" do
+  describe "#update_votes_count (no-op stubbed Decidim method)" do
     it "logs the unexpected call" do
       expect(Decidim::Liquidvoting::Logger).to receive(:info).with(/TRACE: Surprise/)
 
