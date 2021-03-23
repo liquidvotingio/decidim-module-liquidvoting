@@ -14,6 +14,7 @@ describe "Supporting and Delegating a Proposal", type: :system do
 
   let!(:proposal) { create :proposal, component: component }
   let!(:user) { create(:user, :confirmed, organization: organization) }
+  let!(:delegate) { create(:user, :confirmed, organization: organization) }
 
   def visit_proposal
     visit resource_locator(proposal).path
@@ -24,11 +25,12 @@ describe "Supporting and Delegating a Proposal", type: :system do
       visit_proposal
     end
 
-    it "can be supported" do
+    it "shows a support button" do
       expect(page).to have_button("Support")
     end
 
-    it "can NOT be delegated" do
+    it "does not show a delegation UI" do
+      expect(page).to_not have_select("delegate_email")
       expect(page).to_not have_button("Delegate Support")
     end
   end
@@ -38,21 +40,57 @@ describe "Supporting and Delegating a Proposal", type: :system do
       login_as user, scope: :user
     end
 
-    context "when the proposal is not yet supported or delegated" do
+    context "and has not yet supported or delegated" do
       before do
         visit_proposal
       end
 
-      it "can be supported" do
+      it "shows a support button" do
         expect(page).to have_button("Support", id: "vote_button-#{proposal.id}", disabled: false)
       end
 
-      it "can be delegated" do
+      context "and the user supports"
+
+      it "shows a delegation UI" do
+        expect(page).to have_select("delegate_email")
         expect(page).to have_button("Delegate Support", disabled: false)
+      end
+
+      context "and the user delegates"
+    end
+
+    context "when the proposal has been supported" do
+      before do
+        visit_proposal
+        click_button("Support", id: "vote_button-#{proposal.id}")
+      end
+
+      it "shows an unsupport button" do
+        expect(page).to have_button("Already supported", id: "vote_button-#{proposal.id}", disabled: false)
+      end
+
+      it "shows a disabled delegation UI" do
+        expect(page).to_not have_select("delegate_email")
+        expect(page).to have_button("Delegate Support", disabled: true)
       end
     end
 
-    context "when the proposal has been supported"
-    context "when the proposal has been delegated"
+    context "when the proposal has been delegated" do
+      before do
+        visit_proposal
+        select delegate.name, from: "delegate_email"
+        click_button "Delegate Support"
+      end
+
+      it "shows a disabled support button" do
+        expect(page).to have_button("Support", id: "vote_button-#{proposal.id}", disabled: true)
+      end
+
+      it "shows a delegated UI" do
+        expect(page).to_not have_select("delegate_email")
+        # have text for delegated to delegate.name
+        expect(page).to have_button("Withdraw Delegation")
+      end
+    end
   end
 end

@@ -15,7 +15,7 @@
         <% end %>
       <% end %>
     <% elsif @lv_state.delegate_email %>
-      <%= content_tag :button, t("decidim.proposals.proposals.vote_button.vote_delegated"), class: "button #{vote_button_classes(from_proposals_list)} disabled", disabled: true %>
+      <%= content_tag :button, t("decidim.proposals.proposals.vote_button.vote_delegated"), class: "button #{vote_button_classes(from_proposals_list)} disabled", id: "vote_button-#{proposal.id}", disabled: true %>
     <% else %>
       <% if @lv_state.user_has_voted %>
         <%= action_authorized_button_to(
