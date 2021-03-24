@@ -13,8 +13,6 @@ describe "Supporting and Delegating a Proposal", type: :system do
   end
 
   let!(:proposal) { create :proposal, component: component }
-  let!(:user) { create(:user, :confirmed, organization: organization) }
-  let!(:delegate) { create(:user, :confirmed, organization: organization) }
 
   def visit_proposal
     visit resource_locator(proposal).path
@@ -36,6 +34,9 @@ describe "Supporting and Delegating a Proposal", type: :system do
   end
 
   context "when the user is logged in" do
+    let!(:user) { create(:user, :confirmed, organization: organization) }
+    let!(:delegate) { create(:user, :confirmed, organization: organization) }
+
     before do
       login_as user, scope: :user
     end
@@ -56,10 +57,10 @@ describe "Supporting and Delegating a Proposal", type: :system do
         expect(page).to have_button("Delegate Support", disabled: false)
       end
 
-      context "and the user delegates"
+      context "and the user then delegates"
     end
 
-    context "when the proposal has been supported" do
+    context "and the proposal has been supported" do
       before do
         visit_proposal
         click_button("Support", id: "vote_button-#{proposal.id}")
@@ -75,7 +76,7 @@ describe "Supporting and Delegating a Proposal", type: :system do
       end
     end
 
-    context "when the proposal has been delegated" do
+    context "and the proposal has been delegated" do
       before do
         visit_proposal
         select delegate.name, from: "delegate_email"
