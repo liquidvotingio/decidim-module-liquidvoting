@@ -68,6 +68,7 @@ describe "Supporting and Delegating a Proposal", type: :system do
       end
 
       it "shows a delegation UI" do
+        expect(page).to have_text(:visible, /Or delegate your support:/)
         expect(page).to have_select("delegate_email")
         expect(page).to have_button("Delegate Support", disabled: false)
       end
@@ -103,8 +104,8 @@ describe "Supporting and Delegating a Proposal", type: :system do
       end
 
       it "shows a delegated UI" do
+        expect(page).to have_text(:visible, /You delegated to: #{delegate.name}/, normalize_ws: true)
         expect(page).to_not have_select("delegate_email")
-        # have text for delegated to delegate.name
         expect(page).to have_button("Withdraw Delegation")
       end
     end
