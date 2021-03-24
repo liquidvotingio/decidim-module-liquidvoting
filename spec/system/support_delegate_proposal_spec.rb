@@ -32,6 +32,19 @@ describe "Supporting and Delegating a Proposal", type: :system do
     expect(page).to have_button("Delegate Support")
   end
 
+  def expect_ui_user_supported
+    expect(page).to have_button("Already supported", id: "vote_button-#{proposal.id}")
+    expect(page).not_to have_select("delegate_email")
+    expect(page).to have_button("Delegate Support", disabled: true)
+  end
+
+  def expect_ui_user_delegated
+    expect(page).to have_button("Support", id: "vote_button-#{proposal.id}", disabled: true)
+    expect(page).to have_text(:visible, /You delegated to: #{delegate.name}/, normalize_ws: true)
+    expect(page).not_to have_select("delegate_email")
+    expect(page).to have_button("Withdraw Delegation")
+  end
+
   context "when the user is not logged in" do
     before do
       visit_proposal
@@ -76,12 +89,6 @@ describe "Supporting and Delegating a Proposal", type: :system do
         end
       end
 
-      it "shows a delegation UI" do
-        expect(page).to have_text(:visible, /Or delegate your support:/)
-        expect(page).to have_select("delegate_email")
-        expect(page).to have_button("Delegate Support")
-      end
-
       context "and then the user delegates"
     end
 
@@ -91,13 +98,8 @@ describe "Supporting and Delegating a Proposal", type: :system do
         click_button("Support", id: "vote_button-#{proposal.id}")
       end
 
-      it "shows an unsupport button" do
-        expect(page).to have_button("Already supported", id: "vote_button-#{proposal.id}")
-      end
-
-      it "shows a disabled delegation UI" do
-        expect(page).not_to have_select("delegate_email")
-        expect(page).to have_button("Delegate Support", disabled: true)
+      it "shows a user supported UI" do
+        expect_ui_user_supported
       end
     end
 
@@ -108,14 +110,8 @@ describe "Supporting and Delegating a Proposal", type: :system do
         click_button "Delegate Support"
       end
 
-      it "shows a disabled support button" do
-        expect(page).to have_button("Support", id: "vote_button-#{proposal.id}", disabled: true)
-      end
-
-      it "shows a delegated UI" do
-        expect(page).to have_text(:visible, /You delegated to: #{delegate.name}/, normalize_ws: true)
-        expect(page).not_to have_select("delegate_email")
-        expect(page).to have_button("Withdraw Delegation")
+      it "shows a user delegated UI" do
+        expect_ui_user_delegated
       end
     end
   end
