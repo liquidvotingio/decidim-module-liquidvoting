@@ -21,9 +21,6 @@ describe "Unsupporting a Proposal", type: :system do
   before do
     login_as user, scope: :user
     visit_proposal
-
-    # TODO: Create 'has voted' state without clicking button, but how?
-    # maybe by using @lv_state struct?
     click_button("Support", id: "vote_button-#{proposal.id}")
   end
 
