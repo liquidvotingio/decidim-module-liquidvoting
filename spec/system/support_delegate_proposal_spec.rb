@@ -18,18 +18,27 @@ describe "Supporting and Delegating a Proposal", type: :system do
     visit resource_locator(proposal).path
   end
 
+  def expect_the_ready_to_vote_UI
+    expect(page).to have_button("Support", id: "vote_button-#{proposal.id}")
+    expect(page).to have_text(:visible, /Or delegate your support:/)
+    expect(page).to have_select("delegate_email")
+    expect(page).to have_button("Delegate Support")
+  end
+
+  def expect_the_ready_to_vote_UI_without_delegation
+    expect(page).to have_button("Support", id: "vote_button-#{proposal.id}")
+    expect(page).to_not have_text(:visible, /Or delegate your support:/)
+    expect(page).to_not have_select("delegate_email")
+    expect(page).to_not have_button("Delegate Support")
+  end
+
   context "when the user is not logged in" do
     before do
       visit_proposal
     end
 
-    it "shows a support button" do
-      expect(page).to have_button("Support")
-    end
-
-    it "does not show a delegation UI" do
-      expect(page).to_not have_select("delegate_email")
-      expect(page).to_not have_button("Delegate Support")
+    it "shows the ready to vote UI without delegation" do
+      expect_the_ready_to_vote_UI_without_delegation
     end
   end
 
@@ -46,8 +55,8 @@ describe "Supporting and Delegating a Proposal", type: :system do
         visit_proposal
       end
 
-      it "shows a support button" do
-        expect(page).to have_button("Support", id: "vote_button-#{proposal.id}", disabled: false)
+      it "shows the ready to vote UI" do
+        expect_the_ready_to_vote_UI
       end
 
       context "and the user then supports" do
@@ -70,7 +79,7 @@ describe "Supporting and Delegating a Proposal", type: :system do
       it "shows a delegation UI" do
         expect(page).to have_text(:visible, /Or delegate your support:/)
         expect(page).to have_select("delegate_email")
-        expect(page).to have_button("Delegate Support", disabled: false)
+        expect(page).to have_button("Delegate Support")
       end
 
       context "and the user then delegates"
@@ -83,7 +92,7 @@ describe "Supporting and Delegating a Proposal", type: :system do
       end
 
       it "shows an unsupport button" do
-        expect(page).to have_button("Already supported", id: "vote_button-#{proposal.id}", disabled: false)
+        expect(page).to have_button("Already supported", id: "vote_button-#{proposal.id}")
       end
 
       it "shows a disabled delegation UI" do
