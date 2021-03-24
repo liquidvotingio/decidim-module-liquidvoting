@@ -50,7 +50,22 @@ describe "Supporting and Delegating a Proposal", type: :system do
         expect(page).to have_button("Support", id: "vote_button-#{proposal.id}", disabled: false)
       end
 
-      context "and the user supports"
+      context "and the user then supports" do
+        let(:proposal_url) { Decidim::ResourceLocatorPresenter.new(proposal).url }
+        let(:voting_result) { double }
+
+        it "calls LV api create_vote" do
+          expect(Decidim::Liquidvoting::Client).to receive(:create_vote).
+          with(
+            proposal_url: proposal_url,
+            participant_email: user.email,
+            yes: true
+          ).
+          and_return(voting_result)
+
+          click_button("Support", id: "vote_button-#{proposal.id}")
+        end
+      end
 
       it "shows a delegation UI" do
         expect(page).to have_select("delegate_email")
