@@ -18,6 +18,13 @@ describe "Supporting and Delegating a Proposal", type: :system do
     visit resource_locator(proposal).path
   end
 
+  def expect_anonymous_the_ready_to_vote_UI
+    expect(page).to have_button("Support", id: "vote_button-#{proposal.id}")
+    expect(page).to_not have_text(:visible, /Or delegate your support:/)
+    expect(page).to_not have_select("delegate_email")
+    expect(page).to_not have_button("Delegate Support")
+  end
+
   def expect_the_ready_to_vote_UI
     expect(page).to have_button("Support", id: "vote_button-#{proposal.id}")
     expect(page).to have_text(:visible, /Or delegate your support:/)
@@ -25,20 +32,13 @@ describe "Supporting and Delegating a Proposal", type: :system do
     expect(page).to have_button("Delegate Support")
   end
 
-  def expect_the_ready_to_vote_UI_without_delegation
-    expect(page).to have_button("Support", id: "vote_button-#{proposal.id}")
-    expect(page).to_not have_text(:visible, /Or delegate your support:/)
-    expect(page).to_not have_select("delegate_email")
-    expect(page).to_not have_button("Delegate Support")
-  end
-
   context "when the user is not logged in" do
     before do
       visit_proposal
     end
 
-    it "shows the ready to vote UI without delegation" do
-      expect_the_ready_to_vote_UI_without_delegation
+    it "shows the anonymous ready to vote UI" do
+      expect_anonymous_the_ready_to_vote_UI
     end
   end
 
@@ -59,7 +59,7 @@ describe "Supporting and Delegating a Proposal", type: :system do
         expect_the_ready_to_vote_UI
       end
 
-      context "and the user then supports" do
+      context "and then the user supports" do
         let(:proposal_url) { Decidim::ResourceLocatorPresenter.new(proposal).url }
         let(:voting_result) { double }
 
@@ -82,7 +82,7 @@ describe "Supporting and Delegating a Proposal", type: :system do
         expect(page).to have_button("Delegate Support")
       end
 
-      context "and the user then delegates"
+      context "and then the user delegates"
     end
 
     context "and the proposal has been supported" do
