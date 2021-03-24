@@ -18,14 +18,14 @@ describe "Supporting and Delegating a Proposal", type: :system do
     visit resource_locator(proposal).path
   end
 
-  def expect_anonymous_the_ready_to_vote_UI
+  def expect_ui_anonymous_ready_to_vote
     expect(page).to have_button("Support", id: "vote_button-#{proposal.id}")
-    expect(page).to_not have_text(:visible, /Or delegate your support:/)
-    expect(page).to_not have_select("delegate_email")
-    expect(page).to_not have_button("Delegate Support")
+    expect(page).not_to have_text(:visible, /Or delegate your support:/)
+    expect(page).not_to have_select("delegate_email")
+    expect(page).not_to have_button("Delegate Support")
   end
 
-  def expect_the_ready_to_vote_UI
+  def expect_ui_ready_to_vote
     expect(page).to have_button("Support", id: "vote_button-#{proposal.id}")
     expect(page).to have_text(:visible, /Or delegate your support:/)
     expect(page).to have_select("delegate_email")
@@ -38,7 +38,7 @@ describe "Supporting and Delegating a Proposal", type: :system do
     end
 
     it "shows the anonymous ready to vote UI" do
-      expect_anonymous_the_ready_to_vote_UI
+      expect_ui_anonymous_ready_to_vote
     end
   end
 
@@ -56,7 +56,7 @@ describe "Supporting and Delegating a Proposal", type: :system do
       end
 
       it "shows the ready to vote UI" do
-        expect_the_ready_to_vote_UI
+        expect_ui_ready_to_vote
       end
 
       context "and then the user supports" do
@@ -64,13 +64,13 @@ describe "Supporting and Delegating a Proposal", type: :system do
         let(:voting_result) { double }
 
         it "calls LV api create_vote" do
-          expect(Decidim::Liquidvoting::Client).to receive(:create_vote).
-          with(
-            proposal_url: proposal_url,
-            participant_email: user.email,
-            yes: true
-          ).
-          and_return(voting_result)
+          expect(Decidim::Liquidvoting::Client).to receive(:create_vote)
+            .with(
+              proposal_url: proposal_url,
+              participant_email: user.email,
+              yes: true
+            )
+            .and_return(voting_result)
 
           click_button("Support", id: "vote_button-#{proposal.id}")
         end
@@ -96,7 +96,7 @@ describe "Supporting and Delegating a Proposal", type: :system do
       end
 
       it "shows a disabled delegation UI" do
-        expect(page).to_not have_select("delegate_email")
+        expect(page).not_to have_select("delegate_email")
         expect(page).to have_button("Delegate Support", disabled: true)
       end
     end
@@ -114,7 +114,7 @@ describe "Supporting and Delegating a Proposal", type: :system do
 
       it "shows a delegated UI" do
         expect(page).to have_text(:visible, /You delegated to: #{delegate.name}/, normalize_ws: true)
-        expect(page).to_not have_select("delegate_email")
+        expect(page).not_to have_select("delegate_email")
         expect(page).to have_button("Withdraw Delegation")
       end
     end
