@@ -3,14 +3,6 @@
 require "spec_helper"
 
 describe "Supporting and Delegating a Proposal", type: :system do
-  before(:all) do
-    system ( "bin/teardown_api_data.sh #{Decidim::Liquidvoting::Client::ORG_ID}" )
-  end
-
-  after(:all) do
-    system ( "bin/teardown_api_data.sh #{Decidim::Liquidvoting::Client::ORG_ID}" )
-  end
-
   include_context "with a component"
   let!(:component) do
     create(
