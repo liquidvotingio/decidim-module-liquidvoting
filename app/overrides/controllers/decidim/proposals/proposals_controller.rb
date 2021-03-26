@@ -50,6 +50,7 @@ module Decidim
 
         @lv_state = Decidim::Liquidvoting::Client.current_proposal_state(current_user&.email, proposal_url)
         @report_form = form(Decidim::ReportForm).from_params(reason: "spam")
+        @delegation_mode = "endorsements"
       end
 
       def new

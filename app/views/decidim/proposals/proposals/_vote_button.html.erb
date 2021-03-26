@@ -5,6 +5,7 @@
     <%= render partial: "decidim/proposals/proposals/participatory_texts/proposal_vote_button", locals: { proposal: proposal, from_proposals_list: true } %>
   <% else %>
     <div id="proposal-<%= proposal.id %>-vote-button" class="button--vote-button">
+    <p>Delegation mode: <%= @delegation_mode %></p> <!-- check we can read the value -->
     <% if !current_user %>
       <% if current_settings.votes_blocked? %>
         <%= action_authorized_button_to :vote, t("decidim.proposals.proposals.vote_button.votes_blocked"), proposal_proposal_vote_path(proposal_id: proposal, from_proposals_list: from_proposals_list), resource: proposal, class: "button #{vote_button_classes(from_proposals_list)} disabled", disabled: true %>
