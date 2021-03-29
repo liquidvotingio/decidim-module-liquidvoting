@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-describe "Supporting a Proposal", type: :system do
+describe "Delegating support for a Proposal", type: :system do
   include_context "with a component"
   let!(:component) do
     create(
@@ -13,6 +13,7 @@ describe "Supporting a Proposal", type: :system do
   end
   let!(:proposal) { create :proposal, component: component }
   let!(:user) { create(:user, :confirmed, organization: organization) }
+  let!(:delegate) { create(:user, :confirmed, organization: organization) }
 
   def visit_proposal
     visit resource_locator(proposal).path
@@ -24,9 +25,11 @@ describe "Supporting a Proposal", type: :system do
   end
 
   it "works" do
-    click_button("Support", id: "vote_button-#{proposal.id}")
-    expect(page).to have_button("Already supported")
+    select delegate.name, from: "delegate_email"
+    click_button "Delegate Support"
+    expect(page).to have_button("Withdraw Delegation")
     expect(page).not_to have_select("delegate_email")
-    expect(page).to have_button("Delegate Support", disabled: true)
+    expect(page).to have_text(:visible, /You delegated to: #{delegate.name}/, normalize_ws: true)
+    expect(page).to have_button("Support", id: "vote_button-#{proposal.id}", disabled: true)
   end
 end
