@@ -12,8 +12,9 @@ module Decidim
     # rubocop:disable Rails/SkipsModelValidations
     def self.update_votes_count(proposal, new_count)
       proposal.update_columns(proposal_votes_count: new_count)
-      # msg = "TRACE: Liquidvoting.update_votes_count set #{new_count.inspect} for proposal id=#{proposal.id}"
-      # Decidim::Liquidvoting::Logger.info msg
+
+      msg = "TRACE: Liquidvoting.update_votes_count set #{new_count.inspect} for proposal id=#{proposal.id}"
+      Decidim::Liquidvoting::Logger.info msg
     end
     # rubocop:enable Rails/SkipsModelValidations
   end
