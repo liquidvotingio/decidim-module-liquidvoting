@@ -10,7 +10,7 @@ module Decidim
       def create
         enforce_permission_to :vote, :proposal, proposal: proposal
 
-        Decidim::Liquidvoting::Client.create_delegation(
+        Decidim::Liquidvoting::ApiClient.create_delegation(
           proposal_url: proposal_locator.url,
           delegator_email: delegator_email,
           delegate_email: params[:delegate_email]
@@ -19,7 +19,7 @@ module Decidim
         @from_proposals_list = params[:from_proposals_list] == "true"
         @proposals = [] + [proposal]
 
-        @lv_state = Decidim::Liquidvoting::Client.current_proposal_state(delegator_email, proposal_locator.url)
+        @lv_state = Decidim::Liquidvoting::ApiClient.current_proposal_state(delegator_email, proposal_locator.url)
         render "decidim/proposals/proposal_votes/update_buttons_and_counters"
       end
 
@@ -32,7 +32,7 @@ module Decidim
       def destroy
         enforce_permission_to :unvote, :proposal, proposal: proposal
 
-        Decidim::Liquidvoting::Client.delete_delegation(
+        Decidim::Liquidvoting::ApiClient.delete_delegation(
           proposal_url: proposal_locator.url,
           delegator_email: delegator_email,
           delegate_email: params[:delegate_email]
@@ -41,7 +41,7 @@ module Decidim
         @from_proposals_list = params[:from_proposals_list] == "true"
         @proposals = [] + [proposal]
 
-        @lv_state = Decidim::Liquidvoting::Client.current_proposal_state(delegator_email, proposal_locator.url)
+        @lv_state = Decidim::Liquidvoting::ApiClient.current_proposal_state(delegator_email, proposal_locator.url)
         render "decidim/proposals/proposal_votes/update_buttons_and_counters"
       end
 

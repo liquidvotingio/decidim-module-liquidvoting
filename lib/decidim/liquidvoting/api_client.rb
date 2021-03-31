@@ -13,7 +13,7 @@ module Decidim
 
     # This client integrates with the liquidvoting.io api, allowing for delegative voting
     # in a participatory space proposal.
-    module Client
+    module ApiClient
       URL = ENV.fetch("LIQUID_VOTING_API_URL", "http://localhost:4000")
       # URL = ENV.fetch('LIQUID_VOTING_API_URL', 'https://api.liquidvoting.io')
       AUTH_KEY = ENV.fetch("LIQUID_VOTING_API_AUTH_KEY", "62309201-d2f0-407f-875b-9f836f94f2ca")

@@ -21,7 +21,7 @@ module Decidim
       #
       # Returns nothing.
       def call
-        response = Decidim::Liquidvoting::Client.delete_vote(
+        response = Decidim::Liquidvoting::ApiClient.delete_vote(
           proposal_url: ResourceLocatorPresenter.new(@proposal).url,
           participant_email: current_user.email
         )

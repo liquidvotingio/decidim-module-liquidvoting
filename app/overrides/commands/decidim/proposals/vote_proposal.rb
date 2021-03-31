@@ -28,7 +28,7 @@ module Decidim
         build_proposal_vote
         return broadcast(:invalid) unless vote.valid?
 
-        response = Decidim::Liquidvoting::Client.create_vote(
+        response = Decidim::Liquidvoting::ApiClient.create_vote(
           proposal_url: ResourceLocatorPresenter.new(@proposal).url,
           participant_email: current_user.email,
           yes: true
