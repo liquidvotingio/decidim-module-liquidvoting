@@ -16,4 +16,8 @@ describe Decidim::Liquidvoting do
       subject.update_votes_count(proposal, new_vote_count)
     end
   end
+
+  describe "#user_proposal_state" do
+    xit "next up ...."
+  end
 end
