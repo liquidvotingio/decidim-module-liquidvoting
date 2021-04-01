@@ -124,38 +124,30 @@ module Decidim
         CLIENT.query(query, variables: variables)
       end
 
-      private_class_method def self.votes
-        response = send_query(VotesQuery)
-
-        raise response.data.errors.messages["votes"].join(", ") if response.data.errors.any?
-
-        response.data.votes
-      end
-
+      # This method is a hack until we can properly query a subset of votes;
+      # it currently retrieves ALL votes in LV and then filters!
       private_class_method def self.user_voted?(participant_email, proposal_url)
         return false unless participant_email.present? && proposal_url.present?
 
-        # this is a hack until we can properly query a subset of delegations
-        vote = votes.find do |v|
+        api_response = send_query(VotesQuery)
+        raise api_response.data.errors.messages["votes"].join(", ") if api_response.data.errors.any?
+
+        vote = api_response.data.votes.find do |v|
           v.participant.email == participant_email && v.proposal_url == proposal_url
         end
 
         !!vote
       end
 
-      private_class_method def self.delegations
-        response = send_query(DelegationsQuery)
-
-        raise response.data.errors.messages["delegations"].join(", ") if response.data.errors.any?
-
-        response.data.delegations
-      end
-
+      # This method is a hack until we can properly query a subset of delegations;
+      # it currently retrieves ALL delegations in LV and then filters!
       private_class_method def self.delegate_email_for(delegator_email, proposal_url)
         return unless delegator_email.present? && proposal_url.present?
 
-        # this is a hack until we can properly query a subset of delegations
-        delegation = delegations.find do |d|
+        api_response = send_query(DelegationsQuery)
+        raise api_response.data.errors.messages["delegations"].join(", ") if api_response.data.errors.any?
+
+        delegation = api_response.data.delegations.find do |d|
           d.delegator.email == delegator_email && d.proposal_url == proposal_url
         end
 
