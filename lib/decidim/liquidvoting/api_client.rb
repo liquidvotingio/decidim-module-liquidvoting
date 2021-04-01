@@ -5,8 +5,6 @@ require "graphql/client/http"
 
 module Decidim
   module Liquidvoting
-    ProposalState = Struct.new(:user_has_voted, :delegate_email)
-
     # Copied over from https://github.com/liquidvotingio/ruby-client/blob/master/liquid_voting_api.rb.
     # Changes here will be applied there as well. Doing this for development speed, until
     # basics are ironed out and we can we publish the client as a gem.
@@ -30,21 +28,6 @@ module Decidim
 
       SCHEMA = ::GraphQL::Client.load_schema(HTTP)
       CLIENT = ::GraphQL::Client.new(schema: SCHEMA, execute: HTTP)
-
-      ## Return a snapshot of current Liquidvoting state for the given user and proposal.
-      ##
-      ## The intent is to encapsulate all of the LV state relevant to a user and a specific proposal
-      ## in a single LV state object, to give controllers a simple way to acquire that object, and
-      ## to make that state available throughout the duration of the web request.
-      ##
-      ## As a ruby Struct, the object is immutable; the best way to refresh the state is to
-      ## reacquire this state object.
-      def self.current_proposal_state(participant_email, proposal_url)
-        user_has_voted = user_voted?(participant_email, proposal_url)
-        delegate_email = delegate_email_for(participant_email, proposal_url)
-
-        ProposalState.new(user_has_voted, delegate_email)
-      end
 
       def self.fetch_user_supported?(user_email, proposal_url)
         user_voted?(user_email, proposal_url)

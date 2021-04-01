@@ -19,7 +19,6 @@ module Decidim
         @from_proposals_list = params[:from_proposals_list] == "true"
         @proposals = [] + [proposal]
 
-        # @lv_state = Decidim::Liquidvoting::ApiClient.current_proposal_state(delegator_email, proposal_locator.url)
         @lv_state = Liquidvoting.user_proposal_state(delegator_email, proposal_locator.url)
         render "decidim/proposals/proposal_votes/update_buttons_and_counters"
       end
@@ -42,7 +41,6 @@ module Decidim
         @from_proposals_list = params[:from_proposals_list] == "true"
         @proposals = [] + [proposal]
 
-        # @lv_state = Decidim::Liquidvoting::ApiClient.current_proposal_state(delegator_email, proposal_locator.url)
         @lv_state = Liquidvoting.user_proposal_state(delegator_email, proposal_locator.url)
         render "decidim/proposals/proposal_votes/update_buttons_and_counters"
       end

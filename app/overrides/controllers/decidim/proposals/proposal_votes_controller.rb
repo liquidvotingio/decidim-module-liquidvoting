@@ -62,11 +62,6 @@ module Decidim
       end
 
       def lv_state
-        # don't memoize, always get a fresh one
-        # @lv_state = Decidim::Liquidvoting::ApiClient.current_proposal_state(
-        #   current_user&.email,
-        #   ResourceLocatorPresenter.new(proposal).url
-        # )
         @lv_state = Liquidvoting.user_proposal_state(
           current_user&.email,
           ResourceLocatorPresenter.new(proposal).url
