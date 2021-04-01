@@ -22,8 +22,9 @@ module Decidim
 
     def self.user_proposal_state(user_email, proposal_url)
       user_has_supported = Decidim::Liquidvoting::ApiClient.fetch_user_supported(user_email, proposal_url)
+      delegate_email = Decidim::Liquidvoting::ApiClient.fetch_delegate_email(user_email, proposal_url)
 
-      UserProposalState.new(user_has_supported, nil)
+      UserProposalState.new(user_has_supported, delegate_email)
     end
   end
 end
