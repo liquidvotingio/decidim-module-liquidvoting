@@ -18,6 +18,14 @@ describe Decidim::Liquidvoting do
   end
 
   describe "#user_proposal_state" do
-    xit "next up ...."
+    let(:user) { create(:user, :confirmed) }
+
+    it "includes :user_has_supported" do
+      allow(Decidim::Liquidvoting::ApiClient).to receive(:fetch_user_supported).and_return(true)
+
+      lv_state = Decidim::Liquidvoting.user_proposal_state(user.email, "https://url_1")
+
+      expect(lv_state.user_has_supported).to be(true)
+    end
   end
 end

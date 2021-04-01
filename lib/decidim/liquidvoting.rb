@@ -17,6 +17,14 @@ module Decidim
       Decidim::Liquidvoting::Logger.info msg
     end
     # rubocop:enable Rails/SkipsModelValidations
+
+    UserProposalState = Struct.new(:user_has_supported, :delegate_email)
+
+    def self.user_proposal_state(user_email, proposal_url)
+      user_has_supported = Decidim::Liquidvoting::ApiClient.fetch_user_supported(user_email, proposal_url)
+
+      UserProposalState.new(user_has_supported, nil)
+    end
   end
 end
 
