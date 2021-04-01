@@ -46,6 +46,14 @@ module Decidim
         ProposalState.new(user_has_voted, delegate_email)
       end
 
+      def self.fetch_user_supported?(user_email, proposal_url)
+        user_voted?(user_email, proposal_url)
+      end
+
+      def self.fetch_delegate_email(user_email, proposal_url)
+        delegate_email_for(user_email, proposal_url)
+      end
+
       ## Example:
       ##
       ## create_vote(
