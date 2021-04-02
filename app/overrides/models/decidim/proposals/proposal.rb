@@ -4,7 +4,7 @@
 # the current vote count from the Liquidvoting external service, and not a cached
 # count from the Proposal#votes association.
 
-# Because we are abandoning the Proposal#votes association and ProposalVote model, we don't
+# Because we are bypassing the Proposal#votes association and ProposalVote model, we don't
 # really expect this :update_votes_count method to be called. However, it can happen, as in
 # the rake db:seeds. So we've overridden the method to log the occurrence.
 #
