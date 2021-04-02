@@ -1,26 +1,22 @@
 # frozen_string_literal: true
 
-# Liquidvoting repurposes the :proposal_votes_count attribute to carry the current vote
-# count from the Liquidvoting external service.
+# Liquidvoting repurposes the :proposal_votes_count attribute in this model to carry instead
+# the current vote count from the Liquidvoting external service, and not a cached
+# count from the Proposal#votes association.
+
+# Because we are bypassing the Proposal#votes association and ProposalVote model, we don't
+# really expect this :update_votes_count method to be called. However, it can happen, as in
+# the rake db:seeds. So we've overridden the method to log the occurrence.
 #
-# To repurpose, we override the existing :update_votes_count method to no longer refresh the count
-# from the :votes association, and to log the (unexpected) event. This can happen when other Decidim
-# code, for example seeding the database, calls the method. The :votes association and ProposalVote
-# model are considered abandoned.
-#
-# We also add an explicit :update_with_lv_vote_count method that will set the attribute with the current
-# Liquidvoting count, and also log the event. This is the expected way to manage the attribute.
+# See the Decidim::Liquidvoting.update_votes_count for the canonical way to update vote counts.
 #
 Decidim::Proposals::Proposal.class_eval do
-  def update_votes_count
-    msg = "TRACE: Surprise :update_votes_count call; Liquidvoting uses :update_with_lv_vote_count"
-    Decidim::Liquidvoting::Logger.info msg
-  end
-
   # rubocop:disable Rails/SkipsModelValidations
-  def update_with_lv_vote_count(lv_count)
-    update_columns(proposal_votes_count: lv_count)
-    Decidim::Liquidvoting::Logger.info "TRACE: Liquidvoting set the proposal_votes_count to #{lv_count.inspect}"
+  def update_votes_count
+    msg = "TRACE: Surprise :update_votes_count call; see Decidim::Liquidvoting.update_votes_count"
+    Decidim::Liquidvoting::Logger.info msg
+
+    update_columns(proposal_votes_count: votes.count) # IDK why `super` doesn't work here
   end
   # rubocop:enable Rails/SkipsModelValidations
 end

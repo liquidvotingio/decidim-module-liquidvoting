@@ -28,14 +28,14 @@ module Decidim
         build_proposal_vote
         return broadcast(:invalid) unless vote.valid?
 
-        response = Decidim::Liquidvoting::Client.create_vote(
+        response = Decidim::Liquidvoting::ApiClient.create_vote(
           proposal_url: ResourceLocatorPresenter.new(@proposal).url,
           participant_email: current_user.email,
           yes: true
         )
 
         new_vote_count = response.voting_result&.in_favor
-        @proposal.update_with_lv_vote_count(new_vote_count)
+        Liquidvoting.update_votes_count(@proposal, new_vote_count)
 
         broadcast(:ok, vote)
       end

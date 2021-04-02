@@ -5,15 +5,13 @@ require "graphql/client/http"
 
 module Decidim
   module Liquidvoting
-    ProposalState = Struct.new(:user_has_voted, :delegate_email)
-
     # Copied over from https://github.com/liquidvotingio/ruby-client/blob/master/liquid_voting_api.rb.
     # Changes here will be applied there as well. Doing this for development speed, until
     # basics are ironed out and we can we publish the client as a gem.
 
     # This client integrates with the liquidvoting.io api, allowing for delegative voting
     # in a participatory space proposal.
-    module Client
+    module ApiClient
       URL = ENV.fetch("LIQUID_VOTING_API_URL", "http://localhost:4000")
       # URL = ENV.fetch('LIQUID_VOTING_API_URL', 'https://api.liquidvoting.io')
       AUTH_KEY = ENV.fetch("LIQUID_VOTING_API_AUTH_KEY", "62309201-d2f0-407f-875b-9f836f94f2ca")
@@ -31,19 +29,12 @@ module Decidim
       SCHEMA = ::GraphQL::Client.load_schema(HTTP)
       CLIENT = ::GraphQL::Client.new(schema: SCHEMA, execute: HTTP)
 
-      ## Return a snapshot of current Liquidvoting state for the given user and proposal.
-      ##
-      ## The intent is to encapsulate all of the LV state relevant to a user and a specific proposal
-      ## in a single LV state object, to give controllers a simple way to acquire that object, and
-      ## to make that state available throughout the duration of the web request.
-      ##
-      ## As a ruby Struct, the object is immutable; the best way to refresh the state is to
-      ## reacquire this state object.
-      def self.current_proposal_state(participant_email, proposal_url)
-        user_has_voted = user_voted?(participant_email, proposal_url)
-        delegate_email = delegate_email_for(participant_email, proposal_url)
+      def self.fetch_user_supported?(user_email, proposal_url)
+        user_voted?(user_email, proposal_url)
+      end
 
-        ProposalState.new(user_has_voted, delegate_email)
+      def self.fetch_delegate_email(user_email, proposal_url)
+        delegate_email_for(user_email, proposal_url)
       end
 
       ## Example:
@@ -133,38 +124,30 @@ module Decidim
         CLIENT.query(query, variables: variables)
       end
 
-      private_class_method def self.votes
-        response = send_query(VotesQuery)
-
-        raise response.data.errors.messages["votes"].join(", ") if response.data.errors.any?
-
-        response.data.votes
-      end
-
+      # This method is a hack until we can properly query a subset of votes;
+      # it currently retrieves ALL votes in LV and then filters!
       private_class_method def self.user_voted?(participant_email, proposal_url)
         return false unless participant_email.present? && proposal_url.present?
 
-        # this is a hack until we can properly query a subset of delegations
-        vote = votes.find do |v|
+        api_response = send_query(VotesQuery)
+        raise api_response.data.errors.messages["votes"].join(", ") if api_response.data.errors.any?
+
+        vote = api_response.data.votes.find do |v|
           v.participant.email == participant_email && v.proposal_url == proposal_url
         end
 
         !!vote
       end
 
-      private_class_method def self.delegations
-        response = send_query(DelegationsQuery)
-
-        raise response.data.errors.messages["delegations"].join(", ") if response.data.errors.any?
-
-        response.data.delegations
-      end
-
+      # This method is a hack until we can properly query a subset of delegations;
+      # it currently retrieves ALL delegations in LV and then filters!
       private_class_method def self.delegate_email_for(delegator_email, proposal_url)
         return unless delegator_email.present? && proposal_url.present?
 
-        # this is a hack until we can properly query a subset of delegations
-        delegation = delegations.find do |d|
+        api_response = send_query(DelegationsQuery)
+        raise api_response.data.errors.messages["delegations"].join(", ") if api_response.data.errors.any?
+
+        delegation = api_response.data.delegations.find do |d|
           d.delegator.email == delegator_email && d.proposal_url == proposal_url
         end
 
