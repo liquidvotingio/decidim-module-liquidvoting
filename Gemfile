@@ -11,8 +11,8 @@ base_path = "../" if File.basename(__dir__) == "development_app"
 require_relative "#{base_path}lib/decidim/liquidvoting/version"
 
 gem "decidim", Decidim::Liquidvoting::DECIDIM_VERSION
-gem "decidim-liquidvoting", path: "."
 gem "decidim-proposals", Decidim::Liquidvoting::DECIDIM_VERSION
+gem "decidim-liquidvoting", path: "."
 
 gem "bootsnap", "~> 1.4"
 gem "puma", ">= 5.0"
