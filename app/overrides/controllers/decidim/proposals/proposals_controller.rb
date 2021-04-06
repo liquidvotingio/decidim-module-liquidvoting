@@ -36,9 +36,9 @@ module Decidim
           render "decidim/proposals/proposals/participatory_texts/participatory_text"
         else
           @base_query = search
-                       .results
-                       .published
-                       .not_hidden
+                        .results
+                        .published
+                        .not_hidden
 
           @proposals = @base_query.includes(:component, :coauthorships)
           @all_geocoded_proposals = @base_query.geocoded
