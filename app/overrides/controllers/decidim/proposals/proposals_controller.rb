@@ -51,7 +51,7 @@ module Decidim
       def show
         raise ActionController::RoutingError, "Not Found" if @proposal.blank? || !can_show_proposal?
 
-        @lv_state = Decidim::Liquidvoting::Client.current_proposal_state(current_user&.email, proposal_url)
+        @lv_state = Liquidvoting.user_proposal_state(current_user&.email, proposal_url)
       end
 
       def new

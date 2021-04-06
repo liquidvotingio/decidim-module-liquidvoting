@@ -21,13 +21,13 @@ module Decidim
       #
       # Returns nothing.
       def call
-        response = Decidim::Liquidvoting::Client.delete_vote(
+        response = Decidim::Liquidvoting::ApiClient.delete_vote(
           proposal_url: ResourceLocatorPresenter.new(@proposal).url,
           participant_email: current_user.email
         )
 
         new_vote_count = response.voting_result&.in_favor
-        @proposal.update_with_lv_vote_count(new_vote_count)
+        Liquidvoting.update_votes_count(@proposal, new_vote_count)
 
         broadcast(:ok, @proposal)
       end
