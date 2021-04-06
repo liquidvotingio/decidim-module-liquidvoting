@@ -8,6 +8,8 @@ module Decidim
       helper ProposalWizardHelper
       helper ParticipatoryTextsHelper
       include Decidim::ApplicationHelper
+      include Flaggable
+      include Withdrawable
       include FormFactory
       include FilterResource
       include Decidim::Proposals::Orderable
@@ -16,8 +18,7 @@ module Decidim
       helper_method :proposal_presenter, :form_presenter
 
       before_action :authenticate_user!, only: [:new, :create, :complete]
-      before_action :ensure_is_draft, only: [:compare, :complete, :preview, :publish,
-                                             :edit_draft, :update_draft, :destroy_draft]
+      before_action :ensure_is_draft, only: [:compare, :complete, :preview, :publish, :edit_draft, :update_draft, :destroy_draft]
       before_action :set_proposal, only: [:show, :edit, :update, :withdraw]
       before_action :edit_form, only: [:edit_draft, :edit]
 
@@ -34,11 +35,13 @@ module Decidim
                        .order(position: :asc)
           render "decidim/proposals/proposals/participatory_texts/participatory_text"
         else
-          @proposals = search
-                       .results
-                       .published
-                       .not_hidden
-                       .includes(:amendable, :category, :component, :resource_permission, :scope)
+          @base_query = search
+                        .results
+                        .published
+                        .not_hidden
+
+          @proposals = @base_query.includes(:component, :coauthorships)
+          @all_geocoded_proposals = @base_query.geocoded
 
           @proposals = paginate(@proposals)
           @proposals = reorder(@proposals)
@@ -49,7 +52,6 @@ module Decidim
         raise ActionController::RoutingError, "Not Found" if @proposal.blank? || !can_show_proposal?
 
         @lv_state = Liquidvoting.user_proposal_state(current_user&.email, proposal_url)
-        @report_form = form(Decidim::ReportForm).from_params(reason: "spam")
       end
 
       def new
