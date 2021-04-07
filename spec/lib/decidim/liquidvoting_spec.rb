@@ -23,7 +23,7 @@ describe Decidim::Liquidvoting do
 
     before do
       # stub API
-      allow(Decidim::Liquidvoting::ApiClient).to receive(:fetch_user_supported?).and_return(true)
+      allow(Decidim::Liquidvoting::ApiClient).to receive(:fetch_user_voted?).and_return(true)
       allow(Decidim::Liquidvoting::ApiClient).to receive(:fetch_delegate_email).and_return(delegate.email)
     end
 
