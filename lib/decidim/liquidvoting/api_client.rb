@@ -29,7 +29,7 @@ module Decidim
       SCHEMA = ::GraphQL::Client.load_schema(HTTP)
       CLIENT = ::GraphQL::Client.new(schema: SCHEMA, execute: HTTP)
 
-      def self.fetch_user_supported?(user_email, proposal_url)
+      def self.fetch_user_voted?(user_email, proposal_url)
         user_voted?(user_email, proposal_url)
       end
 
