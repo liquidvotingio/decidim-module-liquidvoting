@@ -5,6 +5,28 @@ require "spec_helper"
 describe Decidim::Liquidvoting do
   subject { Decidim::Liquidvoting }
 
+  describe "#create_vote" do
+    # response = Decidim::Liquidvoting::ApiClient.create_vote(
+    #   proposal_url: ResourceLocatorPresenter.new(@proposal).url,
+    #   participant_email: current_user.email,
+    #   yes: true
+    # )
+    # before do
+    #   # stub API
+    #   allow(Decidim::Liquidvoting::ApiClient).to receive(:create_vote).and_return(true)
+    #   allow(Decidim::Liquidvoting::ApiClient).to receive(:fetch_delegate_email).and_return(delegate.email)
+    # end
+    let(:user) { create(:user) }
+    let(:proposal) { create(:proposal) }
+
+    it "forwards call to the api" do
+      expect(Decidim::Liquidvoting::ApiClient).to receive(:create_vote)
+
+      subject.create_vote(user.email, proposal)
+    end
+
+  end
+
   describe "#update_votes_count" do
     let(:proposal) { create(:proposal) }
     let(:new_vote_count) { 35 }

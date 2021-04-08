@@ -9,6 +9,14 @@ require "decidim/liquidvoting/logger"
 module Decidim
   # This namespace holds the logic of the `Liquidvoting` module
   module Liquidvoting
+    def self.create_vote(voter_email, proposal)
+      Decidim::Liquidvoting::ApiClient.create_vote(
+        proposal_url: ResourceLocatorPresenter.new(proposal).url,
+        participant_email: voter_email,
+        yes: true
+      )
+    end
+
     # rubocop:disable Rails/SkipsModelValidations
     def self.update_votes_count(proposal, new_count)
       proposal.update_columns(proposal_votes_count: new_count)
