@@ -59,9 +59,11 @@ describe Decidim::Liquidvoting do
       subject.create_delegation(delegator.email, delegate.email, proposal)
     end
 
-    xit "updates the proposal count" do
-      # blocked on liquidvotingio/api#189
-      expect(proposal).to receive(:update_columns).with(proposal_votes_count: 45)
+    it "updates the proposal count" do
+      subject.create_vote(delegate.email, proposal)
+
+      expected_count = 2 # the delegate, who has voted, and the delegator, who is delegating to them
+      expect(proposal).to receive(:update_columns).with(proposal_votes_count: expected_count)
 
       subject.create_delegation(delegator.email, delegate.email, proposal)
     end
