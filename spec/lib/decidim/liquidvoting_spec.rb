@@ -20,11 +20,12 @@ describe Decidim::Liquidvoting do
     let(:proposal) { create(:proposal) }
 
     it "forwards call to the api" do
-      expect(Decidim::Liquidvoting::ApiClient).to receive(:create_vote)
+      expect(Decidim::Liquidvoting::ApiClient).to receive(:create_vote).with(
+        proposal_url: Decidim::ResourceLocatorPresenter.new(proposal).url, participant_email: user.email, yes: true
+      )
 
       subject.create_vote(user.email, proposal)
     end
-
   end
 
   describe "#update_votes_count" do
