@@ -6,16 +6,6 @@ describe Decidim::Liquidvoting do
   subject { Decidim::Liquidvoting }
 
   describe "#create_vote" do
-    # response = Decidim::Liquidvoting::ApiClient.create_vote(
-    #   proposal_url: ResourceLocatorPresenter.new(@proposal).url,
-    #   participant_email: current_user.email,
-    #   yes: true
-    # )
-    # before do
-    #   # stub API
-    #   allow(Decidim::Liquidvoting::ApiClient).to receive(:create_vote).and_return(true)
-    #   allow(Decidim::Liquidvoting::ApiClient).to receive(:fetch_delegate_email).and_return(delegate.email)
-    # end
     let(:user) { create(:user) }
     let(:proposal) { create(:proposal) }
 
@@ -23,6 +13,12 @@ describe Decidim::Liquidvoting do
       expect(Decidim::Liquidvoting::ApiClient).to receive(:create_vote).with(
         proposal_url: Decidim::ResourceLocatorPresenter.new(proposal).url, participant_email: user.email, yes: true
       )
+
+      subject.create_vote(user.email, proposal)
+    end
+
+    it "updates the proposal count" do
+      expect(proposal).to receive(:update_columns).with(proposal_votes_count: 1)
 
       subject.create_vote(user.email, proposal)
     end

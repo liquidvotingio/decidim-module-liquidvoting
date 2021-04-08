@@ -10,11 +10,14 @@ module Decidim
   # This namespace holds the logic of the `Liquidvoting` module
   module Liquidvoting
     def self.create_vote(voter_email, proposal)
-      Decidim::Liquidvoting::ApiClient.create_vote(
+      response = Decidim::Liquidvoting::ApiClient.create_vote(
         proposal_url: ResourceLocatorPresenter.new(proposal).url,
         participant_email: voter_email,
         yes: true
       )
+      new_count = response.voting_result&.in_favor
+
+      update_votes_count(proposal, new_count)
     end
 
     # rubocop:disable Rails/SkipsModelValidations
