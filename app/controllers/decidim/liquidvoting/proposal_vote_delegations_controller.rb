@@ -28,11 +28,7 @@ module Decidim
       def destroy
         enforce_permission_to :unvote, :proposal, proposal: proposal
 
-        Decidim::Liquidvoting::ApiClient.delete_delegation(
-          proposal_url: proposal_locator.url,
-          delegator_email: delegator_email,
-          delegate_email: params[:delegate_email]
-        )
+        Liquidvoting.delete_delegation(delegator_email, params[:delegate_email], proposal)
 
         @from_proposals_list = params[:from_proposals_list] == "true"
         @proposals = [] + [proposal]
