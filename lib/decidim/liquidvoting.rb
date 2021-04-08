@@ -20,6 +20,16 @@ module Decidim
       update_votes_count(proposal, new_count) if new_count
     end
 
+    def self.delete_vote(voter_email, proposal)
+      response = Decidim::Liquidvoting::ApiClient.delete_vote(
+        proposal_url: ResourceLocatorPresenter.new(proposal).url,
+        participant_email: voter_email
+      )
+      new_count = response&.voting_result&.in_favor
+
+      update_votes_count(proposal, new_count) if new_count
+    end
+
     # rubocop:disable Rails/SkipsModelValidations
     def self.update_votes_count(proposal, new_count)
       proposal.update_columns(proposal_votes_count: new_count)

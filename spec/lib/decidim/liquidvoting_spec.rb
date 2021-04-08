@@ -24,6 +24,28 @@ describe Decidim::Liquidvoting do
     end
   end
 
+  describe "#delete_vote" do
+    let(:user) { create(:user) }
+    let(:proposal) { create(:proposal) }
+
+    it "forwards call to the api" do
+      expect(Decidim::Liquidvoting::ApiClient).to receive(:delete_vote).with(
+        proposal_url: Decidim::ResourceLocatorPresenter.new(proposal).url, participant_email: user.email
+      )
+
+      subject.delete_vote(user.email, proposal)
+    end
+
+    it "updates the proposal count" do
+      subject.create_vote(user.email, proposal)
+      expect(proposal.proposal_votes_count).to eq(1)
+
+      expect(proposal).to receive(:update_columns).with(proposal_votes_count: 0)
+
+      subject.delete_vote(user.email, proposal)
+    end
+  end
+
   describe "#update_votes_count" do
     let(:proposal) { create(:proposal) }
     let(:new_vote_count) { 35 }
