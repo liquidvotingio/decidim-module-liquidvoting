@@ -15,9 +15,9 @@ module Decidim
         participant_email: voter_email,
         yes: true
       )
-      new_count = response.voting_result&.in_favor
+      new_count = response&.voting_result&.in_favor
 
-      update_votes_count(proposal, new_count)
+      update_votes_count(proposal, new_count) if new_count
     end
 
     # rubocop:disable Rails/SkipsModelValidations
