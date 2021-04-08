@@ -16,7 +16,7 @@ module Decidim
 
       # Executes the command. Broadcasts these events:
       #
-      # - :ok when everything is valid, together with the proposal vote.
+      # - :ok when everything is valid
       # - :invalid if the form wasn't valid and we couldn't proceed.
       #
       # Returns nothing.
@@ -28,16 +28,9 @@ module Decidim
         build_proposal_vote
         return broadcast(:invalid) unless vote.valid?
 
-        response = Decidim::Liquidvoting::ApiClient.create_vote(
-          proposal_url: ResourceLocatorPresenter.new(@proposal).url,
-          participant_email: current_user.email,
-          yes: true
-        )
+        Liquidvoting.create_vote(current_user.email, @proposal)
 
-        new_vote_count = response.voting_result&.in_favor
-        Liquidvoting.update_votes_count(@proposal, new_vote_count)
-
-        broadcast(:ok, vote)
+        broadcast(:ok)
       end
 
       attr_reader :vote
