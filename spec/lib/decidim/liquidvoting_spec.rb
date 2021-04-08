@@ -69,6 +69,31 @@ describe Decidim::Liquidvoting do
     end
   end
 
+  describe "#delete_delegation" do
+    let(:delegator) { create(:user) }
+    let(:delegate) { create(:user) }
+    let(:proposal) { create(:proposal) }
+
+    it "forwards call to the api" do
+      expect(Decidim::Liquidvoting::ApiClient).to receive(:delete_delegation).with(
+        proposal_url: Decidim::ResourceLocatorPresenter.new(proposal).url, delegator_email: delegator.email, delegate_email: delegate.email
+      )
+
+      subject.delete_delegation(delegator.email, delegate.email, proposal)
+    end
+
+    it "updates the proposal count" do
+      subject.create_delegation(delegator.email, delegate.email, proposal)
+      subject.create_vote(delegate.email, proposal)
+      expect(proposal.proposal_votes_count).to eq(2)
+
+      expected_count = 1 # only the delegate, who has voted; the delegation should be gone
+      expect(proposal).to receive(:update_columns).with(proposal_votes_count: expected_count)
+
+      subject.delete_delegation(delegator.email, delegate.email, proposal)
+    end
+  end
+
   describe "#update_votes_count" do
     let(:proposal) { create(:proposal) }
     let(:new_vote_count) { 35 }
