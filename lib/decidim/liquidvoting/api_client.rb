@@ -88,7 +88,7 @@ module Decidim
 
         raise response.errors.messages["data"].join(", ") if response.errors.any?
 
-        true
+        response.data.create_delegation
       end
 
       ## Example:
@@ -189,7 +189,10 @@ module Decidim
       CreateDelegationMutation = CLIENT.parse <<-GRAPHQL
         mutation($proposal_url: String!, $delegator_email: String!, $delegate_email: String!) {
           createDelegation(proposalUrl: $proposal_url, delegatorEmail: $delegator_email, delegateEmail: $delegate_email) {
-            id
+            votingResult {
+              inFavor
+              against
+            }
           }
         }
 
