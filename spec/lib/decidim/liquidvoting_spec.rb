@@ -46,6 +46,27 @@ describe Decidim::Liquidvoting do
     end
   end
 
+  describe "#create_delegation" do
+    let(:delegator) { create(:user) }
+    let(:delegate) { create(:user) }
+    let(:proposal) { create(:proposal) }
+
+    it "forwards call to the api" do
+      expect(Decidim::Liquidvoting::ApiClient).to receive(:create_delegation).with(
+        proposal_url: Decidim::ResourceLocatorPresenter.new(proposal).url, delegator_email: delegator.email, delegate_email: delegate.email
+      )
+
+      subject.create_delegation(delegator.email, delegate.email, proposal)
+    end
+
+    xit "updates the proposal count" do
+      # blocked on liquidvotingio/api#189
+      expect(proposal).to receive(:update_columns).with(proposal_votes_count: 45)
+
+      subject.create_delegation(delegator.email, delegate.email, proposal)
+    end
+  end
+
   describe "#update_votes_count" do
     let(:proposal) { create(:proposal) }
     let(:new_vote_count) { 35 }

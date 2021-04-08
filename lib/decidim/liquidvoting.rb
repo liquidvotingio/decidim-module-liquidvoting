@@ -30,6 +30,17 @@ module Decidim
       update_votes_count(proposal, new_count) if new_count
     end
 
+    def self.create_delegation(delegator_email, delegate_email, proposal)
+      response = Decidim::Liquidvoting::ApiClient.create_delegation(
+        proposal_url: ResourceLocatorPresenter.new(proposal).url,
+        delegator_email: delegator_email,
+        delegate_email: delegate_email
+      )
+      new_count = response&.voting_result&.in_favor
+
+      update_votes_count(proposal, new_count) if new_count
+    end
+
     # rubocop:disable Rails/SkipsModelValidations
     def self.update_votes_count(proposal, new_count)
       proposal.update_columns(proposal_votes_count: new_count)
