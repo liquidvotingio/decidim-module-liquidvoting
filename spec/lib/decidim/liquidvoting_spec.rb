@@ -94,18 +94,6 @@ describe Decidim::Liquidvoting do
     end
   end
 
-  describe "#update_votes_count" do
-    let(:proposal) { create(:proposal) }
-    let(:new_vote_count) { 35 }
-    let(:expected_msg) { "TRACE: Liquidvoting.update_votes_count set #{new_vote_count} for proposal id=#{proposal.id}" }
-
-    it "logs the unexpected call" do
-      expect(Decidim::Liquidvoting::Logger).to receive(:info).with(expected_msg)
-
-      subject.update_votes_count(proposal, new_vote_count)
-    end
-  end
-
   describe "#user_proposal_state" do
     let(:user) { create(:user) }
     let(:delegate) { create(:user) }
@@ -126,6 +114,18 @@ describe Decidim::Liquidvoting do
       lv_state = Decidim::Liquidvoting.user_proposal_state(user.email, "https://url_1")
 
       expect(lv_state.delegate_email).to eq(delegate.email)
+    end
+  end
+
+  describe "Logging" do
+    let(:user) { create(:user) }
+    let(:proposal) { create(:proposal) }
+    let(:expected_msg) { /TRACE: Liquidvoting.update_votes_count set [0-9]+ for proposal id=#{proposal.id}/ }
+
+    it "logs updates to the vote count" do
+      expect(Decidim::Liquidvoting::Logger).to receive(:info).with(expected_msg)
+
+      subject.create_vote(user.email, proposal)
     end
   end
 end

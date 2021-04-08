@@ -52,15 +52,6 @@ module Decidim
       update_votes_count(proposal, new_count) if new_count
     end
 
-    # rubocop:disable Rails/SkipsModelValidations
-    def self.update_votes_count(proposal, new_count)
-      proposal.update_columns(proposal_votes_count: new_count)
-
-      msg = "TRACE: Liquidvoting.update_votes_count set #{new_count.inspect} for proposal id=#{proposal.id}"
-      Decidim::Liquidvoting::Logger.info msg
-    end
-    # rubocop:enable Rails/SkipsModelValidations
-
     UserProposalState = Struct.new(:user_has_supported, :delegate_email)
 
     def self.user_proposal_state(user_email, proposal_url)
@@ -69,6 +60,15 @@ module Decidim
 
       UserProposalState.new(user_has_supported, delegate_email)
     end
+
+    # rubocop:disable Rails/SkipsModelValidations
+    private_class_method def self.update_votes_count(proposal, new_count)
+      proposal.update_columns(proposal_votes_count: new_count)
+
+      msg = "TRACE: Liquidvoting.update_votes_count set #{new_count.inspect} for proposal id=#{proposal.id}"
+      Decidim::Liquidvoting::Logger.info msg
+    end
+    # rubocop:enable Rails/SkipsModelValidations
   end
 end
 
