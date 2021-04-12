@@ -4,7 +4,7 @@
 
 Integrates decidim with liquidvoting.io.
 
-** EARLY WIP - not ready for production **
+** WIP - not ready for production **
 
 ## Usage
 
