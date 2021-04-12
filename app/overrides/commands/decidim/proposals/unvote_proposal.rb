@@ -16,20 +16,13 @@ module Decidim
 
       # Executes the command. Broadcasts these events:
       #
-      # - :ok when everything is valid, together with the proposal.
-      # - :invalid if the form wasn't valid and we couldn't proceed.
+      # - :ok when everything is valid
       #
       # Returns nothing.
       def call
-        response = Decidim::Liquidvoting::ApiClient.delete_vote(
-          proposal_url: ResourceLocatorPresenter.new(@proposal).url,
-          participant_email: current_user.email
-        )
+        Liquidvoting.delete_vote(current_user.email, @proposal)
 
-        new_vote_count = response.voting_result&.in_favor
-        Liquidvoting.update_votes_count(@proposal, new_vote_count)
-
-        broadcast(:ok, @proposal)
+        broadcast(:ok)
       end
 
       private
