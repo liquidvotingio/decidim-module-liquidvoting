@@ -7,7 +7,7 @@ module Decidim
       include ProposalVotesHelper
       include Rectify::ControllerHelpers
 
-      helper_method :proposal
+      helper_method :proposal, :api_state
 
       before_action :authenticate_user!
 
@@ -24,7 +24,8 @@ module Decidim
               proposal: Proposal.where(component: current_component)
             ).map(&:proposal)
 
-            expose(proposals: proposals + [proposal], lv_state: lv_state)
+            refresh_from_api
+            expose(proposals: proposals + [proposal], api_state: api_state)
             render :update_buttons_and_counters
           end
 
@@ -49,7 +50,8 @@ module Decidim
               proposal: Proposal.where(component: current_component)
             ).map(&:proposal)
 
-            expose(proposals: proposals + [proposal], lv_state: lv_state)
+            refresh_from_api
+            expose(proposals: proposals + [proposal], api_state: api_state)
             render :update_buttons_and_counters
           end
         end
@@ -61,11 +63,13 @@ module Decidim
         @proposal ||= Proposal.where(component: current_component).find(params[:proposal_id])
       end
 
-      def lv_state
-        @lv_state = Liquidvoting.user_proposal_state(
-          current_user&.email,
-          ResourceLocatorPresenter.new(proposal).url
-        )
+      attr_reader :api_state
+
+      # Retrieve the current liquidvoting state. The state is exposed as a helper method :api_state.
+      # Since timing with regard to votes and delegations is important, make this a deliberate act,
+      # rather than a lazy memoized attribute.
+      def refresh_from_api
+        @api_state = Liquidvoting.user_proposal_state(current_user&.email, ResourceLocatorPresenter.new(proposal).url)
       end
     end
   end

@@ -14,10 +14,10 @@
           <span class="show-for-sr"><%= decidim_html_escape(present(proposal).title) %></span>
         <% end %>
       <% end %>
-    <% elsif @lv_state.delegate_email %>
+    <% elsif api_state.delegate_email %>
       <%= content_tag :button, t("decidim.proposals.proposals.vote_button.vote_delegated"), class: "button #{vote_button_classes(from_proposals_list)} disabled", id: "vote_button-#{proposal.id}", disabled: true %>
     <% else %>
-      <% if @lv_state.user_has_supported %>
+      <% if api_state.user_has_supported %>
         <%= action_authorized_button_to(
           :vote,
           proposal_proposal_vote_path(proposal_id: proposal, from_proposals_list: from_proposals_list),
