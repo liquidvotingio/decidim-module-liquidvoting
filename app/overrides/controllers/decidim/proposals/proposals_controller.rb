@@ -15,7 +15,7 @@ module Decidim
       include Decidim::Proposals::Orderable
       include Paginable
 
-      helper_method :proposal_presenter, :form_presenter
+      helper_method :proposal_presenter, :form_presenter, :api_state
 
       before_action :authenticate_user!, only: [:new, :create, :complete]
       before_action :ensure_is_draft, only: [:compare, :complete, :preview, :publish, :edit_draft, :update_draft, :destroy_draft]
@@ -51,7 +51,7 @@ module Decidim
       def show
         raise ActionController::RoutingError, "Not Found" if @proposal.blank? || !can_show_proposal?
 
-        @lv_state = Liquidvoting.user_proposal_state(current_user&.email, proposal_url)
+        refresh_from_api
       end
 
       def new
@@ -204,6 +204,15 @@ module Decidim
       end
 
       private
+
+      attr_reader :api_state
+
+      # Retrieve the current liquidvoting state. The state is exposed as a helper method :api_state.
+      # Since timing with regard to votes and delegations is important, make this a deliberate act,
+      # rather than a lazy memoized attribute.
+      def refresh_from_api
+        @api_state = Liquidvoting.user_proposal_state(current_user&.email, proposal_url)
+      end
 
       def search_klass
         ProposalSearch

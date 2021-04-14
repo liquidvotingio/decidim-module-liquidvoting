@@ -1,10 +1,10 @@
 <div id="proposal-<%= proposal.id %>-delegate-ui" class="button--vote-button">
 <% if current_user %>
-  <% if @lv_state.user_has_supported    # VOTED so disable delegation UI %>
+  <% if api_state.user_has_supported    # VOTED so disable delegation UI %>
     <%= content_tag :button, t("decidim.proposals.proposals.delegate_button.delegate"), class: "button #{vote_button_classes(from_proposals_list)} disabled", disabled: true %>
-  <% elsif @lv_state.delegate_email     # NOT VOTED BUT DELEGATED so present undelegation UI -%>
+  <% elsif api_state.delegate_email     # NOT VOTED BUT DELEGATED so present undelegation UI -%>
     <%= t("decidim.proposals.proposals.delegation_ui.to") %>: <br>
-    <strong><%= Decidim::User.find_by(email: @lv_state.delegate_email).name %></strong>.
+    <strong><%= Decidim::User.find_by(email: api_state.delegate_email).name %></strong>.
     <%= action_authorized_button_to(
       :undelegate,
       "#{proposal_path(proposal)}/delegations",
@@ -12,7 +12,7 @@
       method: :delete,
       remote: true,
       params: {
-        delegate_email: @lv_state.delegate_email,
+        delegate_email: api_state.delegate_email,
         proposal_id: proposal.id,
       },
       data: {
