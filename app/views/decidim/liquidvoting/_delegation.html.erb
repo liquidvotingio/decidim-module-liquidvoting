@@ -27,9 +27,9 @@
   <% else                               # NOT VOTED NOT DELEGATED so present delegation UI %>
     <%= t("decidim.proposals.proposals.delegation_ui.intro") %>: <br>
     <form action=<%= "#{proposal_path(proposal)}/delegations" %> method="POST" data-remote="true">
-      <select name="delegate_email">
-      <% (Decidim::User.where(admin: false).order(:name).pluck(:email, :name).unshift(["", "(choose delegate)"])).each do |email, name| %>
-        <option value="<%= email %>"><%= name -%></option>
+      <select name="delegate_id">
+      <% (Decidim::User.where(admin: false).order(:name).pluck(:id, :name).unshift(["", "(choose delegate)"])).each do |id, name| %>
+        <option value="<%= id %>"><%= name -%></option>
       <% end %>
       </select>
       <%= action_authorized_button_to(

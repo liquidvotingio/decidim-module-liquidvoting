@@ -22,7 +22,7 @@ describe "Undelegating support for a Proposal", type: :system do
   before do
     login_as user, scope: :user
     visit_proposal
-    select delegate.name, from: "delegate_email"
+    select delegate.name, from: "delegate_id"
     click_button "Delegate Support"
   end
 
@@ -30,7 +30,7 @@ describe "Undelegating support for a Proposal", type: :system do
     click_button "Withdraw Delegation"
     expect(page).to have_button("Support", id: "vote_button-#{proposal.id}")
     expect(page).to have_button("Delegate Support")
-    expect(page).to have_select("delegate_email")
+    expect(page).to have_select("delegate_id")
     expect(page).to have_text(:visible, /Or delegate your support:/)
   end
 end
