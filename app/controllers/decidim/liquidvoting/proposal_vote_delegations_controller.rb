@@ -10,7 +10,7 @@ module Decidim
       def create
         enforce_permission_to :vote, :proposal, proposal: proposal
 
-        Liquidvoting.create_delegation(delegator_email, params[:delegate_email], proposal)
+        Liquidvoting.create_delegation(delegator_email, delegate_email, proposal)
         refresh_from_api
 
         @from_proposals_list = params[:from_proposals_list] == "true"
@@ -28,7 +28,7 @@ module Decidim
       def destroy
         enforce_permission_to :unvote, :proposal, proposal: proposal
 
-        Liquidvoting.delete_delegation(delegator_email, params[:delegate_email], proposal)
+        Liquidvoting.delete_delegation(delegator_email, delegate_email, proposal)
         refresh_from_api
 
         @from_proposals_list = params[:from_proposals_list] == "true"
@@ -45,6 +45,10 @@ module Decidim
 
       def delegator_email
         current_user&.email
+      end
+
+      def delegate_email
+        User.find(params[:delegate_id])&.email
       end
 
       # Helpers for cross-engine routing

@@ -1,10 +1,10 @@
 <div id="proposal-<%= proposal.id %>-delegate-ui" class="button--vote-button">
 <% if current_user %>
   <% if api_state.user_has_supported    # VOTED so disable delegation UI %>
-    <%= content_tag :button, t("decidim.proposals.proposals.delegate_button.delegate"), class: "button #{vote_button_classes(from_proposals_list)} disabled", disabled: true %>
-  <% elsif api_state.delegate_email     # NOT VOTED BUT DELEGATED so present undelegation UI -%>
-    <%= t("decidim.proposals.proposals.delegation_ui.to") %>: <br>
-    <strong><%= Decidim::User.find_by(email: api_state.delegate_email).name %></strong>.
+    <%= content_tag :button, t("decidim.liquidvoting.delegation.delegate"), class: "button #{vote_button_classes(from_proposals_list)} disabled", disabled: true %>
+  <% elsif api_state.delegate_id     # NOT VOTED BUT DELEGATED so present undelegation UI -%>
+    <%= t("decidim.liquidvoting.delegation.to") %>: <br>
+    <strong><%= Decidim::User.find(api_state.delegate_id).name %></strong>.
     <%= action_authorized_button_to(
       :undelegate,
       "#{proposal_path(proposal)}/delegations",
@@ -12,7 +12,7 @@
       method: :delete,
       remote: true,
       params: {
-        delegate_email: api_state.delegate_email,
+        delegate_id: api_state.delegate_id,
         proposal_id: proposal.id,
       },
       data: {
@@ -21,15 +21,19 @@
       },
       class: "button #{vote_button_classes(from_proposals_list)}",
     ) do %>
-      <%= t("decidim.proposals.proposals.delegate_button.withdraw") %>
+      <%= t("decidim.liquidvoting.delegation.withdraw") %>
       <span class="show-for-sr"><%= decidim_html_escape(present(proposal).title) %></span>
     <% end %>
   <% else                               # NOT VOTED NOT DELEGATED so present delegation UI %>
-    <%= t("decidim.proposals.proposals.delegation_ui.intro") %>: <br>
+    <%= t("decidim.liquidvoting.delegation.intro") %>: <br>
     <form action=<%= "#{proposal_path(proposal)}/delegations" %> method="POST" data-remote="true">
-      <select name="delegate_email">
-      <% (Decidim::User.where(admin: false).order(:name).pluck(:email, :name).unshift(["", "(choose delegate)"])).each do |email, name| %>
-        <option value="<%= email %>"><%= name -%></option>
+      <select name="delegate_id">
+      <%
+        potential_delegates = Decidim::User.where(admin: false)
+        default_select = t("decidim.liquidvoting.delegation.default_select")
+        (potential_delegates.order(:name).pluck(:id, :name).unshift(["", "#{default_select}"])).each do |id, name|
+      %>
+        <option value="<%= id %>"><%= name -%></option>
       <% end %>
       </select>
       <%= action_authorized_button_to(
@@ -46,7 +50,7 @@
         },
         class: "button #{vote_button_classes(from_proposals_list)}",
       ) do %>
-        <%= t("decidim.proposals.proposals.delegate_button.delegate") %>
+        <%= t("decidim.liquidvoting.delegation.delegate") %>
         <span class="show-for-sr"><%= decidim_html_escape(present(proposal).title) %></span>
       <% end %>
     </form>

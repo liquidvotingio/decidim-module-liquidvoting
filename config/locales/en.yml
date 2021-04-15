@@ -1,14 +1,15 @@
 ---
 en:
   decidim:
+    liquidvoting:
+      delegation:
+        default_select: "(choose delegate)"
+        delegate: Delegate Support
+        intro: Or delegate your support
+        to: You delegated to
+        withdraw: Withdraw Delegation
     proposals:
       proposals:
-        delegation_ui:
-          intro: Or delegate your support
-          to: You delegated to
-        delegate_button:
-          delegate: Delegate Support
-          withdraw: Withdraw Delegation
         vote_button:
           already_voted: Already supported
           already_voted_hover: Withdraw support

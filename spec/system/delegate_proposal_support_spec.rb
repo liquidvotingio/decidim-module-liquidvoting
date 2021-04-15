@@ -25,10 +25,10 @@ describe "Delegating support for a Proposal", type: :system do
   end
 
   it "works" do
-    select delegate.name, from: "delegate_email"
+    select delegate.name, from: "delegate_id"
     click_button "Delegate Support"
     expect(page).to have_button("Withdraw Delegation")
-    expect(page).not_to have_select("delegate_email")
+    expect(page).not_to have_select("delegate_id")
     expect(page).to have_text(:visible, /You delegated to: #{delegate.name}/, normalize_ws: true)
     expect(page).to have_button("Support", id: "vote_button-#{proposal.id}", disabled: true)
   end
