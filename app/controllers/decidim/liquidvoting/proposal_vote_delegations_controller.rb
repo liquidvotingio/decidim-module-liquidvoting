@@ -48,11 +48,7 @@ module Decidim
       end
 
       def delegate_email
-        if params[:delegate_id].present?
-          User.find(params[:delegate_id])&.email
-        elsif params[:delegate_email].present?
-          params[:delegate_email]
-        end
+        User.find(params[:delegate_id])&.email
       end
 
       # Helpers for cross-engine routing

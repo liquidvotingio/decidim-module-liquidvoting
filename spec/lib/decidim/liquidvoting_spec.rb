@@ -110,10 +110,10 @@ describe Decidim::Liquidvoting do
       expect(api_state.user_has_supported).to be(true)
     end
 
-    it "includes :delegate_email" do
+    it "includes :delegate_id" do
       api_state = Decidim::Liquidvoting.user_proposal_state(user.email, "https://url_1")
 
-      expect(api_state.delegate_email).to eq(delegate.email)
+      expect(api_state.delegate_id).to eq(delegate.id)
     end
   end
 
