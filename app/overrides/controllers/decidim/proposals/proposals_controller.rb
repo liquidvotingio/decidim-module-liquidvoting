@@ -25,6 +25,8 @@ module Decidim
       before_action :set_participatory_text
 
       def index
+        refresh_from_api
+
         if component_settings.participatory_texts_enabled?
           @proposals = Decidim::Proposals::Proposal
                        .where(component: current_component)
