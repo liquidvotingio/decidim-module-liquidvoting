@@ -213,11 +213,12 @@ module Decidim
       # Since timing with regard to votes and delegations is important, make this a deliberate act,
       # rather than a lazy memoized attribute.
       def refresh_from_api(skip_the_proposal_url: false)
-        if skip_the_proposal_url
-          @api_state = Liquidvoting.user_proposal_state(current_user&.email)
-        else
-          @api_state = Liquidvoting.user_proposal_state(current_user&.email, proposal_url)
-        end
+        @api_state =
+          if skip_the_proposal_url
+            Liquidvoting.user_proposal_state(current_user&.email)
+          else
+            Liquidvoting.user_proposal_state(current_user&.email, proposal_url)
+          end
       end
 
       def search_klass
