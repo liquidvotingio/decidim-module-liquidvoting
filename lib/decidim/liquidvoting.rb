@@ -54,7 +54,14 @@ module Decidim
 
     UserProposalState = Struct.new(:user_has_supported, :delegate_id)
 
-    def self.user_proposal_state(user_email, proposal_url)
+    # Gather all relevant LV api state, based on the current user's email and the url of a proposal.
+    #
+    # There are some contexts like Proposal#index which haven't identified a specific proposal;
+    # for this case, proposal_url is optional, and an empty UserProposalState is returned so views
+    # can query the api_state object.
+    def self.user_proposal_state(user_email, proposal_url = nil)
+      return UserProposalState.new unless proposal_url
+
       user_has_supported = Decidim::Liquidvoting::ApiClient.fetch_user_voted?(user_email, proposal_url)
       delegate_email = Decidim::Liquidvoting::ApiClient.fetch_delegate_email(user_email, proposal_url)
 

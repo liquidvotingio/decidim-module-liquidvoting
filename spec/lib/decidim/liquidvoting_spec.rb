@@ -115,6 +115,13 @@ describe Decidim::Liquidvoting do
 
       expect(api_state.delegate_id).to eq(delegate.id)
     end
+
+    it "supports a non-proposal-specific request, as in Proposals#index" do
+      api_state = Decidim::Liquidvoting.user_proposal_state(user.email)
+
+      expect(api_state.delegate_id).to be(nil)
+      expect(api_state.user_has_supported).to be(nil)
+    end
   end
 
   describe "Logging" do
