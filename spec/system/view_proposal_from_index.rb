@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-# Test to confirm that override presenting the Support button on a proposal card in the proposals
+# Test to confirm that we override presenting the Support button on a proposal card in the proposals
 # index view, because we don't yet have a good liquidvoting UI for doing that from the Proposals
 # list page. Instead, we want to replace the voting related elements with a View Proposal button.
 describe "Viewing the Proposals list", type: :system do
