@@ -22,7 +22,6 @@ module Decidim
 
       initializer "decidim_liquidvoting.add_cells_view_paths" do
         Cell::ViewModel.view_paths.unshift File.expand_path("#{Decidim::Liquidvoting::Engine.root}/app/cells")
-        Cell::ViewModel.view_paths.unshift File.expand_path("#{Decidim::Liquidvoting::Engine.root}/app/views") # for partials
       end
 
       # Initializer must go here otherwise every engine triggers config/initializers/ files
