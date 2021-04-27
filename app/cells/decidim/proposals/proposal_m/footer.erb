@@ -1,0 +1,17 @@
+<%
+  proposal_url = Decidim::ResourceLocatorPresenter.new(model).url
+  api_state = Decidim::Liquidvoting.user_proposal_state(current_user&.email, proposal_url)
+%>
+<% if has_link_to_resource? %>
+  <div class="card__footer">
+    <div class="card__support">
+      <% if has_footer? %>
+        <div class="card__support__data"></div>
+        <%= link_to resource_path, class: "card__button button--sc light button small" do %>
+          <%= t("decidim.proposals.proposals.proposal.view_proposal") %>
+          <span class="show-for-sr"><%= title %></span>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

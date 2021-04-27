@@ -19,6 +19,10 @@ module Decidim
         end
       end
 
+      initializer "decidim_liquidvoting.add_cells_view_paths" do
+        Cell::ViewModel.view_paths.unshift File.expand_path("#{Decidim::Liquidvoting::Engine.root}/app/cells")
+      end
+
       # Initializer must go here otherwise every engine triggers config/initializers/ files
       initializer "decidim_liquidvoting.overrides" do |_app|
         Rails.application.config.to_prepare do
