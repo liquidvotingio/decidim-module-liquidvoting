@@ -2,7 +2,6 @@
 
 require "rails"
 require "decidim/core"
-# require "decidim/consultations"
 
 module Decidim
   module Liquidvoting
