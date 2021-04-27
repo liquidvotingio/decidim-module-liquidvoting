@@ -56,9 +56,12 @@ module Decidim
 
     # Gather all relevant LV api state, based on the current user's email and the url of a proposal.
     #
-    # There are some contexts like Proposal#index which haven't identified a specific proposal;
-    # for this case, proposal_url is optional, and an empty UserProposalState is returned so views
-    # can query the api_state object.
+    # There are some contexts like ProposalsController#index which are not specific to a specific proposal.
+    # For these cases, proposal_url is optional, and an empty UserProposalState is returned so
+    # views can query the api_state object.
+    #
+    # Proposals in this case are expected to be unvoted and undelegated: views like ProposalsController#index
+    # should not expose vote/delegate status unless it's unvoted/undelegated.
     def self.user_proposal_state(user_email, proposal_url = nil)
       return UserProposalState.new unless proposal_url
 

@@ -25,7 +25,7 @@ module Decidim
       before_action :set_participatory_text
 
       def index
-        refresh_from_api(skip_the_proposal_url: true) # because index is not proposal-specific
+        refresh_from_api(specific_to_a_proposal: false)
 
         if component_settings.participatory_texts_enabled?
           @proposals = Decidim::Proposals::Proposal
@@ -212,12 +212,14 @@ module Decidim
       # Retrieve the current liquidvoting state. The state is exposed as a helper method :api_state.
       # Since timing with regard to votes and delegations is important, make this a deliberate act,
       # rather than a lazy memoized attribute.
-      def refresh_from_api(skip_the_proposal_url: false)
+      # This refresh is generally specific to a proposal, but that can be defeated by passing the
+      # argument with 'false'.
+      def refresh_from_api(specific_to_a_proposal: true)
         @api_state =
-          if skip_the_proposal_url
-            Liquidvoting.user_proposal_state(current_user&.email)
-          else
+          if specific_to_a_proposal
             Liquidvoting.user_proposal_state(current_user&.email, proposal_url)
+          else
+            Liquidvoting.user_proposal_state(current_user&.email)
           end
       end
 
