@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "decidim/liquidvoting/admin"
-require "decidim/liquidvoting/admin_engine"
 require "decidim/liquidvoting/engine"
 require "decidim/liquidvoting/api_client"
 require "decidim/liquidvoting/logger"
