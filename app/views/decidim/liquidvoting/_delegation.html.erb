@@ -26,8 +26,8 @@
     <% end %>
   <% else                               # NOT VOTED NOT DELEGATED so present delegation UI %>
     <%= t("decidim.liquidvoting.delegation.intro") %>: <br>
-    <form action=<%= "#{proposal_path(proposal)}/delegations" %> method="POST" data-remote="true">
-      <select name="delegate_id">
+    <form action=<%= "#{proposal_path(proposal)}/delegations" %> method="POST" data-remote="true" id="delegation-form">
+      <select name="delegate_id" id="select-delegate">
       <%
         potential_delegates = Decidim::User.where(admin: false)
         default_select = t("decidim.liquidvoting.delegation.default_select")
@@ -57,3 +57,5 @@
   <% end -%>
 <% end -%>
 </div>
+
+<%= javascript_include_tag "decidim/liquidvoting/delegation" %>
