@@ -1,6 +1,8 @@
-$(() => {
+$(function() {
   $('#delegation-form').submit(function()
     {
+      console.log($( "#select-delegate option:selected" ).text());
+
       if ($( "#select-delegate option:selected" ).text() == "(choose delegate)") {
         // 'event' in command below is, apparently, deprecated, but this does not work in Chromium
         // without it. Needs more investigation.
