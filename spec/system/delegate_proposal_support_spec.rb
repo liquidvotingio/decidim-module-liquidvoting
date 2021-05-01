@@ -38,6 +38,6 @@ describe "Delegating support for a Proposal", type: :system do
 
     msg = accept_alert { click_button "Delegate Support" }
 
-    expect(msg).to match(/select a delegate/)
+    expect(msg).to match(/choose a delegate/)
   end
 end
