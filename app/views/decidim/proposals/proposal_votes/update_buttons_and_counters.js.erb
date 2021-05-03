@@ -17,15 +17,6 @@
     if($proposalVoteButton[0]) {
       morphdom($proposalVoteButton[0], '<%= j(render partial: "decidim/proposals/proposals/vote_button", locals: { proposal: proposal, from_proposals_list: @from_proposals_list }).strip.html_safe %>');
     }
-
-    $('#delegation-form').submit(function() {
-      var submit = $('#delegation-submit');
-
-      if ($( "#select-delegate option:selected" ).text() == submit.data('default-select')) {
-        alert(submit.data('select-alert'));
-        return false; // prevent the form submit
-      }
-    });
   })();
 <% end %>
 
@@ -55,3 +46,12 @@
     morphdom($votingRules[0], '<%= j(render partial: "decidim/proposals/proposals/voting_rules").strip.html_safe %>');
   }());
 <% end %>
+
+$('#delegation-form').submit(function() {
+  var submit = $('#delegation-submit');
+
+  if ($( "#select-delegate option:selected" ).text() == submit.data('default-select')) {
+    alert(submit.data('select-alert'));
+    return false; // prevent the form submit
+  }
+});
