@@ -18,7 +18,12 @@
       morphdom($proposalVoteButton[0], '<%= j(render partial: "decidim/proposals/proposals/vote_button", locals: { proposal: proposal, from_proposals_list: @from_proposals_list }).strip.html_safe %>');
     }
 
-    $('#delegation-form').append("<%= j(render partial: "decidim/liquidvoting/delegation_modal").strip.html_safe %>");
+    $('#delegation-form').submit(function() {
+      if ($( "#select-delegate option:selected" ).text() == "(choose delegate)") {
+        alert("Please first choose your delegate");
+        return false; // prevent the form submit
+      }
+    });
   })();
 <% end %>
 
