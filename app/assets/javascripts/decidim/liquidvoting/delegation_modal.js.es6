@@ -1,7 +1,7 @@
 $(() => {
   $('#delegation-form').submit(function() {
-    if ($( "#select-delegate option:selected" ).text() == "(choose delegate)") {
-      alert("Please first choose your delegate");
+    if ($( "#select-delegate option:selected" ).text() == $('#delegation-submit').data('default-select')) {
+      alert($('#delegation-submit').data('select-alert'));
       return false; // prevent the form submit
     }
   });
