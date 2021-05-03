@@ -47,11 +47,4 @@
   }());
 <% end %>
 
-$('#delegation-form').submit(function() {
-  var submit = $('#delegation-submit');
-
-  if ($( "#select-delegate option:selected" ).text() == submit.data('default-select')) {
-    alert(submit.data('select-alert'));
-    return false; // prevent the form submit
-  }
-});
+$('body').append('<%= javascript_include_tag 'decidim/liquidvoting/delegation_modal' %>');
