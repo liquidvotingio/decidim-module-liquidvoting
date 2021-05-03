@@ -32,4 +32,12 @@ describe "Delegating support for a Proposal", type: :system do
     expect(page).to have_text(:visible, /You delegated to: #{delegate.name}/, normalize_ws: true)
     expect(page).to have_button("Support", id: "vote_button-#{proposal.id}", disabled: true)
   end
+
+  it "alerts and does not send request when no delegate selected" do
+    expect(Decidim::Liquidvoting).not_to receive(:create_delegation)
+
+    msg = accept_alert { click_button "Delegate Support" }
+
+    expect(msg).to match(/Please first choose your delegate/)
+  end
 end

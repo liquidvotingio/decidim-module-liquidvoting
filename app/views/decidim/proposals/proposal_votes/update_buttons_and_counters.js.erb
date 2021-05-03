@@ -46,3 +46,7 @@
     morphdom($votingRules[0], '<%= j(render partial: "decidim/proposals/proposals/voting_rules").strip.html_safe %>');
   }());
 <% end %>
+
+<%# Reloads the delegation modal script, which otherwise would not be reloaded
+when an Ajax refresh of the _delegation.html.erb partial occurs. %>
+$('body').append('<%= javascript_include_tag 'decidim/liquidvoting/delegation_modal' %>');

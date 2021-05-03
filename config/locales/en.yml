@@ -4,6 +4,7 @@ en:
     liquidvoting:
       delegation:
         default_select: "(choose delegate)"
+        select_alert: Please first choose your delegate
         delegate: Delegate Support
         intro: Or delegate your support
         to: You delegated to

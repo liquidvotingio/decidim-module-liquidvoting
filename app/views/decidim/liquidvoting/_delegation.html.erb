@@ -26,11 +26,14 @@
     <% end %>
   <% else                               # NOT VOTED NOT DELEGATED so present delegation UI %>
     <%= t("decidim.liquidvoting.delegation.intro") %>: <br>
-    <form action=<%= "#{proposal_path(proposal)}/delegations" %> method="POST" data-remote="true">
-      <select name="delegate_id">
+    <form action=<%= "#{proposal_path(proposal)}/delegations" %> method="POST" data-remote="true" id="delegation-form">
+      <%
+        default_select = t("decidim.liquidvoting.delegation.default_select")
+        select_alert = t("decidim.liquidvoting.delegation.select_alert")
+      %>
+      <select name="delegate_id" id="select-delegate">
       <%
         potential_delegates = Decidim::User.where(admin: false)
-        default_select = t("decidim.liquidvoting.delegation.default_select")
         (potential_delegates.order(:name).pluck(:id, :name).unshift(["", "#{default_select}"])).each do |id, name|
       %>
         <option value="<%= id %>"><%= name -%></option>
@@ -46,9 +49,12 @@
         },
         data: {
           disable: true,
-          "redirect-url": proposal_path(proposal)
+          "redirect-url": proposal_path(proposal),
+          "default-select": default_select,
+          "select-alert": select_alert
         },
         class: "button #{vote_button_classes(from_proposals_list)}",
+        id: "delegation-submit",
       ) do %>
         <%= t("decidim.liquidvoting.delegation.delegate") %>
         <span class="show-for-sr"><%= decidim_html_escape(present(proposal).title) %></span>
@@ -57,3 +63,5 @@
   <% end -%>
 <% end -%>
 </div>
+
+<%= javascript_include_tag "decidim/liquidvoting/delegation_modal" %>
