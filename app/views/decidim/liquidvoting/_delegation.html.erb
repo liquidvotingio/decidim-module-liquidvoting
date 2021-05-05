@@ -33,7 +33,7 @@
       %>
       <select name="delegate_id" id="select-delegate">
       <%
-        potential_delegates = Decidim::User.where(admin: false)
+        potential_delegates = Decidim::User.where(admin: false).where.not(name: current_user.name)
         (potential_delegates.order(:name).pluck(:id, :name).unshift(["", "#{default_select}"])).each do |id, name|
       %>
         <option value="<%= id %>"><%= name -%></option>
