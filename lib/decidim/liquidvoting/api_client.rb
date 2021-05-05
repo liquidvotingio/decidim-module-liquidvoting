@@ -5,17 +5,29 @@ require "graphql/client/http"
 
 module Decidim
   module Liquidvoting
-    # Copied over from https://github.com/liquidvotingio/ruby-client/blob/master/liquid_voting_api.rb.
-    # Changes here will be applied there as well. Doing this for development speed, until
+    # Copied over from https://github.com/liquidvotingio/api-client/blob/master/liquid_voting_api.rb.
+    # Changes here will be applied there as well. Doing this for now for development speed, until
     # basics are ironed out and we can we publish the client as a gem.
 
     # This client integrates with the liquidvoting.io api, allowing for delegative voting
     # in a participatory space proposal.
     module ApiClient
-      URL = ENV.fetch("LIQUID_VOTING_API_URL", "http://localhost:4000")
-      # URL = ENV.fetch('LIQUID_VOTING_API_URL', 'https://api.liquidvoting.io')
+      # Default ENV vars configuring use of the live API with an AUTH_KEY for a demo organization.
+      #
+      # This default config works: the demo organization exists on the live API so one can easily test drive it.
+      #
+      # Deploying the liquidvoting API locally or within a private network works differently. Requests won't
+      # go through the live auth service, which would have exchanged the AUTH_KEY for an ORG_ID, so
+      # an AUTH_KEY isn't needed and an ORG_ID can be sent directly.
+      #
+      # Example:
+      #
+      # LIQUID_VOTING_API_URL = "http://localhost:4000"
+      # LIQUID_VOTING_API_ORG_ID = "24e173f5-d99a-4470-b1cc-142b392df10a"
+      #
+      URL = ENV.fetch("LIQUID_VOTING_API_URL", "https://api.liquidvoting.io")
       AUTH_KEY = ENV.fetch("LIQUID_VOTING_API_AUTH_KEY", "62309201-d2f0-407f-875b-9f836f94f2ca")
-      ORG_ID = ENV.fetch("LIQUID_VOTING_API_ORG_ID", "62309201-d2f0-407f-875b-9f836f94f2ca")
+      ORG_ID = ENV.fetch("LIQUID_VOTING_API_ORG_ID", "")
 
       HTTP = ::GraphQL::Client::HTTP.new(URL) do
         def headers(_context)
