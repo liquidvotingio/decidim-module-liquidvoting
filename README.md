@@ -25,6 +25,22 @@ And then execute:
 bundle
 ```
 
+## Running locally, with local API instance
+
+For development, when running a Decidim instance locally with this module bundled, if you want to also run an API instance locally, you'll need to export the following env vars before starting Decidim:
+
+```bash
+export LIQUID_VOTING_API_URL="http://localhost:4000"
+export LIQUID_VOTING_API_ORG_ID="24e173f5-d99a-4470-b1cc-142b392df10a"
+sudo -E bin/rails s --port=80
+```
+
+Notes:
+
+We use `sudo` so we can override port 80 - The API doesn't accept proposal urls with ports. The `-E` option so it'll remember the environment variables exported.
+
+For instructions on how to setup the API locally, [see the API repo's README](https://github.com/liquidvotingio/api#local-setup)
+
 ## License
 
 This engine is distributed under the GNU AFFERO GENERAL PUBLIC LICENSE.

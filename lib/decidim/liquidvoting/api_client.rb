@@ -12,18 +12,21 @@ module Decidim
     # This client integrates with the liquidvoting.io api, allowing for delegative voting
     # in a participatory space proposal.
     module ApiClient
-      # Default ENV vars configuring use of the live API with an AUTH_KEY for a demo organization.
-      #
-      # This default config works: the demo organization exists on the live API so one can easily test drive it.
+      # Default configuration using the live API with an AUTH_KEY for a demo organization.
       #
       # Deploying the liquidvoting API locally or within a private network works differently. Requests won't
       # go through the live auth service, which would have exchanged the AUTH_KEY for an ORG_ID, so
       # an AUTH_KEY isn't needed and an ORG_ID can be sent directly.
       #
-      # Example:
+      # An example local config would be:
       #
-      # LIQUID_VOTING_API_URL = "http://localhost:4000"
-      # LIQUID_VOTING_API_ORG_ID = "24e173f5-d99a-4470-b1cc-142b392df10a"
+      # URL = "http://localhost:4000"
+      # ORG_ID = "24e173f5-d99a-4470-b1cc-142b392df10a"
+      #
+      # Which can be set externally through ENV vars:
+      #
+      # export LIQUID_VOTING_API_URL="http://localhost:4000"
+      # export LIQUID_VOTING_API_ORG_ID="24e173f5-d99a-4470-b1cc-142b392df10a"
       #
       URL = ENV.fetch("LIQUID_VOTING_API_URL", "https://api.liquidvoting.io")
       AUTH_KEY = ENV.fetch("LIQUID_VOTING_API_AUTH_KEY", "62309201-d2f0-407f-875b-9f836f94f2ca")
