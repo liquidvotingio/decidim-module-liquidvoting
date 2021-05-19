@@ -837,6 +837,7 @@ DEPENDENCIES
   byebug (~> 11.0)
   codecov
   decidim (= 0.24.0)
+  decidim-assemblies (= 0.24.0)
   decidim-dev (= 0.24.0)
   decidim-liquidvoting!
   decidim-proposals (= 0.24.0)
