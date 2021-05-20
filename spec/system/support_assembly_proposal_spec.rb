@@ -13,19 +13,7 @@ describe "Supporting an Assembly Proposal", type: :system do
   end
 
   let!(:user) { create(:user, :confirmed, organization: organization) }
-
-  let!(:assembly) do
-    create(
-      :assembly,
-      :with_type,
-      organization: organization,
-      description: { en: "Description", ca: "Descripció", es: "Descripción" },
-      short_description: { en: "Short description", ca: "Descripció curta", es: "Descripción corta" },
-      show_statistics: true
-    )
-  end
   let(:manifest_name) { :assemblies }
-  let!(:proposals_component) { create(:component, :published, participatory_space: assembly, manifest_name: :proposals) }
   let!(:assembly_proposal) { create :proposal, component: component }
 
   def visit_assembly_proposal
