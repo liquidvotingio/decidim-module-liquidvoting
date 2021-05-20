@@ -11,7 +11,6 @@ describe "Supporting an Assembly Proposal", type: :system do
       participatory_space: participatory_space
     )
   end
-  let!(:proposal) { create :proposal, component: component }
 
   let!(:user) { create(:user, :confirmed, organization: organization) }
 
