@@ -25,6 +25,7 @@ describe "Supporting a Proposal", type: :system do
 
   it "works" do
     click_button("Support", id: "vote_button-#{proposal.id}")
+
     expect(page).to have_button("Already supported")
     expect(page).not_to have_select("delegate_id")
     expect(page).to have_button("Delegate Support", disabled: true)

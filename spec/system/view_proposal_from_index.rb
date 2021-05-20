@@ -31,6 +31,7 @@ describe "Viewing the Proposals list", type: :system do
 
   it "goes to the Proposal page when clicking View Proposal button" do
     click_link("View proposal")
+
     expect(page).to have_button("Support", id: "vote_button-#{proposal.id}")
     expect(page).to have_button("Delegate Support")
   end

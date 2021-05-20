@@ -28,6 +28,7 @@ describe "Undelegating support for a Proposal", type: :system do
 
   it "works" do
     click_button "Withdraw Delegation"
+
     expect(page).to have_button("Support", id: "vote_button-#{proposal.id}")
     expect(page).to have_button("Delegate Support")
     expect(page).to have_select("delegate_id")
