@@ -44,4 +44,3 @@ describe "Delegating support for a Proposal", type: :system do
     expect(msg).to match(/Please first choose your delegate/)
   end
 end
-
