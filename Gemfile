@@ -12,7 +12,6 @@ require_relative "#{base_path}lib/decidim/liquidvoting/version"
 
 gem "decidim", Decidim::Liquidvoting::DECIDIM_VERSION
 gem "decidim-liquidvoting", path: "."
-gem "decidim-proposals", Decidim::Liquidvoting::DECIDIM_VERSION
 
 gem "bootsnap", "~> 1.4"
 gem "puma", ">= 5.0"

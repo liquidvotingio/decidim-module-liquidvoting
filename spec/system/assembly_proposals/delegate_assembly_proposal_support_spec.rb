@@ -11,12 +11,14 @@ describe "Delegating support for a Proposal", type: :system do
       participatory_space: participatory_space
     )
   end
-  let!(:proposal) { create :proposal, component: component }
+
   let!(:user) { create(:user, :confirmed, organization: organization) }
+  let(:manifest_name) { :assemblies }
+  let!(:assembly_proposal) { create :proposal, component: component }
   let!(:delegate) { create(:user, :confirmed, organization: organization) }
 
   def visit_proposal
-    visit resource_locator(proposal).path
+    visit resource_locator(assembly_proposal).path
   end
 
   before do
@@ -27,10 +29,11 @@ describe "Delegating support for a Proposal", type: :system do
   it "works" do
     select delegate.name, from: "delegate_id"
     click_button "Delegate Support"
+
     expect(page).to have_button("Withdraw Delegation")
     expect(page).not_to have_select("delegate_id")
     expect(page).to have_text(:visible, /You delegated to: #{delegate.name}/, normalize_ws: true)
-    expect(page).to have_button("Support", id: "vote_button-#{proposal.id}", disabled: true)
+    expect(page).to have_button("Support", id: "vote_button-#{assembly_proposal.id}", disabled: true)
   end
 
   it "alerts and does not send request when no delegate selected" do

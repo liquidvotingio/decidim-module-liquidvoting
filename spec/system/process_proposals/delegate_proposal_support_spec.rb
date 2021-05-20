@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-describe "Undelegating support for a Proposal", type: :system do
+describe "Delegating support for a Proposal", type: :system do
   include_context "with a component"
   let!(:component) do
     create(
@@ -22,15 +22,23 @@ describe "Undelegating support for a Proposal", type: :system do
   before do
     login_as user, scope: :user
     visit_proposal
-    select delegate.name, from: "delegate_id"
-    click_button "Delegate Support"
   end
 
   it "works" do
-    click_button "Withdraw Delegation"
-    expect(page).to have_button("Support", id: "vote_button-#{proposal.id}")
-    expect(page).to have_button("Delegate Support")
-    expect(page).to have_select("delegate_id")
-    expect(page).to have_text(:visible, /Or delegate your support:/)
+    select delegate.name, from: "delegate_id"
+    click_button "Delegate Support"
+
+    expect(page).to have_button("Withdraw Delegation")
+    expect(page).not_to have_select("delegate_id")
+    expect(page).to have_text(:visible, /You delegated to: #{delegate.name}/, normalize_ws: true)
+    expect(page).to have_button("Support", id: "vote_button-#{proposal.id}", disabled: true)
+  end
+
+  it "alerts and does not send request when no delegate selected" do
+    expect(Decidim::Liquidvoting).not_to receive(:create_delegation)
+
+    msg = accept_alert { click_button "Delegate Support" }
+
+    expect(msg).to match(/Please first choose your delegate/)
   end
 end
