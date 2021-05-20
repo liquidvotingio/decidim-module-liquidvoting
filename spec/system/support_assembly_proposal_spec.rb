@@ -39,7 +39,7 @@ describe "Supporting an Assembly Proposal", type: :system do
   end
 
   it "works" do
-    click_button("Support", id: "vote_button-#{proposal.id}")
+    click_button("Support", id: "vote_button-#{assembly_proposal.id}")
 
     expect(page).to have_button("Already supported")
     expect(page).not_to have_select("delegate_id")
