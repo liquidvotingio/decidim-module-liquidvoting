@@ -21,6 +21,8 @@ describe "Supporting an Assembly Proposal", type: :system do
   end
 
   before do
+    expect(component.participatory_space_type).to eq("Decidim::Assembly")
+
     login_as user, scope: :user
     visit_assembly_proposal
   end
