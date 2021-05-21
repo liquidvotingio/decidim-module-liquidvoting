@@ -5,7 +5,13 @@ require "spec_helper"
 describe "Supporting an Assembly Proposal", type: :system do
   let(:organization) { create(:organization) }
   let(:assembly) { create(:assembly, organization: organization) }
-  let(:assembly_proposals_component) { create(:component, participatory_space: assembly, manifest_name: :proposals) }
+  let(:assembly_proposals_component) do
+    create(:component,
+      # :with_votes_enabled,
+      participatory_space: assembly,
+      manifest_name: :proposals
+    )
+  end
   let(:assembly_proposal) { create :proposal, component: assembly_proposals_component }
 
   let(:user) { create(:user, :confirmed, organization: organization) }
@@ -16,6 +22,7 @@ describe "Supporting an Assembly Proposal", type: :system do
 
   before do
     expect(assembly_proposal.component.participatory_space_type).to eq("Decidim::Assembly")
+    expect(assembly_proposal.component.current_settings.votes_enabled).to be(true)
 
     login_as user, scope: :user
     visit_assembly_proposal
