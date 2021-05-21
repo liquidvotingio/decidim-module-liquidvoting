@@ -12,7 +12,7 @@ describe "Delegating support for a Proposal", type: :system do
   let(:delegate) { create(:user, :confirmed, organization: organization) }
 
   def visit_proposal
-    visit resource_locator(assembly_proposal).path
+    visit resource_locator(assembly_proposal).url # path gives a RoutingError
   end
 
   before do
