@@ -3,24 +3,26 @@
 require "spec_helper"
 
 describe "Supporting an Assembly Proposal", type: :system do
-  include_context "with a component"
-  let!(:component) do
-    create(
-      :proposal_component,
-      :with_votes_enabled,
-      participatory_space: participatory_space
-    )
+  let(:organization) { create(:organization) }
+  let(:assembly) { create(:assembly, organization: organization) }
+  let(:assembly_proposals_component) do
+    create(:component,
+           default_step_settings: { votes_enabled: true },
+           participatory_space: assembly,
+           manifest_name: :proposals)
   end
+  let(:assembly_proposal) { create :proposal, component: assembly_proposals_component }
 
-  let!(:user) { create(:user, :confirmed, organization: organization) }
-  let(:manifest_name) { :assemblies }
-  let!(:assembly_proposal) { create :proposal, component: component }
+  let(:user) { create(:user, :confirmed, organization: organization) }
 
   def visit_assembly_proposal
-    visit resource_locator(assembly_proposal).path
+    visit resource_locator(assembly_proposal).url # path gives a RoutingError
   end
 
   before do
+    expect(assembly_proposal.component.participatory_space_type).to eq("Decidim::Assembly")
+    expect(assembly_proposal.component.current_settings.votes_enabled).to be(true)
+
     login_as user, scope: :user
     visit_assembly_proposal
   end
