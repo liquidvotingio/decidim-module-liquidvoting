@@ -13,8 +13,8 @@ describe "Undelegating support for a Proposal", type: :system do
   end
   let(:assembly_proposal) { create :proposal, component: assembly_proposals_component }
 
-  let(:user) { create(:user, :confirmed, organization: organization) }
-  let(:delegate) { create(:user, :confirmed, organization: organization) }
+  let!(:user) { create(:user, :confirmed, organization: organization) }
+  let!(:delegate) { create(:user, :confirmed, organization: organization) }
 
   def visit_proposal
     visit resource_locator(assembly_proposal).url # path gives a RoutingError
