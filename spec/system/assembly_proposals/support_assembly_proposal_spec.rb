@@ -11,7 +11,7 @@ describe "Supporting an Assembly Proposal", type: :system do
   let(:user) { create(:user, :confirmed, organization: organization) }
 
   def visit_assembly_proposal
-    visit resource_locator(assembly_proposal).path
+    visit resource_locator(assembly_proposal).url # path gives a RoutingError
   end
 
   before do
