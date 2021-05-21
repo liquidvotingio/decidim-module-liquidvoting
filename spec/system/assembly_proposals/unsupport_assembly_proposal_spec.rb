@@ -5,7 +5,12 @@ require "spec_helper"
 describe "Unsupporting a Proposal", type: :system do
   let(:organization) { create(:organization) }
   let(:assembly) { create(:assembly, organization: organization) }
-  let(:assembly_proposals_component) { create(:component, participatory_space: assembly, manifest_name: :proposals) }
+  let(:assembly_proposals_component) do
+    create(:component,
+      default_step_settings: { votes_enabled: true },
+      participatory_space: assembly,
+      manifest_name: :proposals)
+  end
   let(:assembly_proposal) { create :proposal, component: assembly_proposals_component }
 
   let(:user) { create(:user, :confirmed, organization: organization) }

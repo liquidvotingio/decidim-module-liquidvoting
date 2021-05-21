@@ -7,10 +7,9 @@ describe "Supporting an Assembly Proposal", type: :system do
   let(:assembly) { create(:assembly, organization: organization) }
   let(:assembly_proposals_component) do
     create(:component,
-      # :with_votes_enabled,
-      participatory_space: assembly,
-      manifest_name: :proposals
-    )
+           default_step_settings: { votes_enabled: true },
+           participatory_space: assembly,
+           manifest_name: :proposals)
   end
   let(:assembly_proposal) { create :proposal, component: assembly_proposals_component }
 
