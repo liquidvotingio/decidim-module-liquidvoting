@@ -17,9 +17,9 @@ module Decidim
           post proposal_delegation_path => "proposal_vote_delegations#create", as: :delegations
           delete proposal_delegation_path => "proposal_vote_delegations#destroy"
 
-          # assembly_proposal_delegation_path = "/assemblies/:assembly_slug/f/:component_id/proposals/:id/delegations"
-          # post assembly_proposal_delegation_path => "proposal_vote_delegations#create", as: :assembly_delegations
-          # delete assembly_proposal_delegation_path => "proposal_vote_delegations#destroy"
+          assembly_proposal_delegation_path = "/assemblies/:assembly_slug/f/:component_id/proposals/:id/delegations"
+          post assembly_proposal_delegation_path => "proposal_vote_delegations#create", as: :assembly_delegations
+          delete assembly_proposal_delegation_path => "proposal_vote_delegations#destroy"
         end
       end
 
