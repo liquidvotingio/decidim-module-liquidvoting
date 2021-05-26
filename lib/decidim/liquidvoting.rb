@@ -9,7 +9,7 @@ module Decidim
   module Liquidvoting
     def self.create_vote(voter_email, proposal)
       response = Decidim::Liquidvoting::ApiClient.create_vote(
-        proposal_url: ResourceLocatorPresenter.new(proposal).url,
+        proposal_url: Decidim::ResourceLocatorPresenter.new(proposal).url,
         participant_email: voter_email,
         yes: true
       )
@@ -20,7 +20,7 @@ module Decidim
 
     def self.delete_vote(voter_email, proposal)
       response = Decidim::Liquidvoting::ApiClient.delete_vote(
-        proposal_url: ResourceLocatorPresenter.new(proposal).url,
+        proposal_url: Decidim::ResourceLocatorPresenter.new(proposal).url,
         participant_email: voter_email
       )
       new_count = response&.voting_result&.in_favor
@@ -30,7 +30,7 @@ module Decidim
 
     def self.create_delegation(delegator_email, delegate_email, proposal)
       response = Decidim::Liquidvoting::ApiClient.create_delegation(
-        proposal_url: ResourceLocatorPresenter.new(proposal).url,
+        proposal_url: Decidim::ResourceLocatorPresenter.new(proposal).url,
         delegator_email: delegator_email,
         delegate_email: delegate_email
       )
@@ -41,7 +41,7 @@ module Decidim
 
     def self.delete_delegation(delegator_email, delegate_email, proposal)
       response = Decidim::Liquidvoting::ApiClient.delete_delegation(
-        proposal_url: ResourceLocatorPresenter.new(proposal).url,
+        proposal_url: Decidim::ResourceLocatorPresenter.new(proposal).url,
         delegator_email: delegator_email,
         delegate_email: delegate_email
       )

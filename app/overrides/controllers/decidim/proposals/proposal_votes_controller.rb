@@ -57,6 +57,9 @@ Decidim::Proposals::ProposalVotesController.class_eval do
   # Since timing with regard to votes and delegations is important, make this a deliberate act,
   # rather than a lazy memoized attribute.
   def refresh_from_api
-    @api_state = Decidim::Liquidvoting.user_proposal_state(current_user&.email, ResourceLocatorPresenter.new(proposal).url)
+    @api_state = Decidim::Liquidvoting.user_proposal_state(
+      current_user&.email,
+      Decidim::ResourceLocatorPresenter.new(proposal).url
+    )
   end
 end

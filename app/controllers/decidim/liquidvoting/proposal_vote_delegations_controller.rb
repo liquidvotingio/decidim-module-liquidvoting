@@ -54,7 +54,7 @@ module Decidim
       # Helpers for cross-engine routing
 
       def proposal_locator
-        @proposal_locator ||= ResourceLocatorPresenter.new(@proposal)
+        @proposal_locator ||= Decidim::ResourceLocatorPresenter.new(@proposal)
       end
 
       def proposal_path(_ignore)
