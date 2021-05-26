@@ -52,6 +52,7 @@ module Decidim
 
       def show
         raise ActionController::RoutingError, "Not Found" if @proposal.blank? || !can_show_proposal?
+
         Rails.logger.info "######################"
         Rails.logger.info ""
         Rails.logger.info ""
