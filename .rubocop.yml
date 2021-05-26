@@ -1083,6 +1083,7 @@ Metrics/BlockLength:
   Exclude:
     - config/**/*
     - spec/**/*
+    - app/overrides/**/*
 
 Metrics/BlockNesting:
   Max: 3
