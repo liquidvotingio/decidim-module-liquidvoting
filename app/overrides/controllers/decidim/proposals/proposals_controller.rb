@@ -52,7 +52,13 @@ module Decidim
 
       def show
         raise ActionController::RoutingError, "Not Found" if @proposal.blank? || !can_show_proposal?
-
+        Rails.logger.info "######################"
+        Rails.logger.info ""
+        Rails.logger.info ""
+        Rails.logger.info "Liquidvoting: Inside ProposalsController#show"
+        Rails.logger.info ""
+        Rails.logger.info ""
+        Rails.logger.info "######################"
         refresh_from_api
       end
 
@@ -217,13 +223,37 @@ module Decidim
       # This refresh is generally specific to a proposal, but if a proposal is not available, we request
       # api_state that is not proposal-specific
       def refresh_from_api
+        Rails.logger.info "######################"
+        Rails.logger.info ""
+        Rails.logger.info ""
+        Rails.logger.info "Liquidvoting: refresh_from_api called from ProposalsController"
+        Rails.logger.info ""
+        Rails.logger.info ""
+        Rails.logger.info "######################"
         @api_state =
           if @proposal
             proposal_url = Decidim::ResourceLocatorPresenter.new(@proposal).url
+            Rails.logger.info "######################"
+            Rails.logger.info ""
+            Rails.logger.info ""
+            Rails.logger.info "Liquidvoting: "
+            Rails.logger.info "  proposal_url: #{proposal_url}"
+            Rails.logger.info "  current_user.email: #{current_user&.email}"
+            Rails.logger.info ""
+            Rails.logger.info ""
+            Rails.logger.info "######################"
             Liquidvoting.user_proposal_state(current_user&.email, proposal_url)
           else
             Liquidvoting.user_proposal_state(current_user&.email)
           end
+        Rails.logger.info "######################"
+        Rails.logger.info ""
+        Rails.logger.info ""
+        Rails.logger.info "Liquidvoting: @api_state: #{@api_state}"
+        Rails.logger.info ""
+        Rails.logger.info "  refresh_from_api finished"
+        Rails.logger.info ""
+        Rails.logger.info "######################"
       end
 
       def search_klass

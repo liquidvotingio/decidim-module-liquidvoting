@@ -61,13 +61,30 @@ module Decidim
     # Proposals in this case are expected to be unvoted and undelegated: views like ProposalsController#index
     # should not expose vote/delegate status unless it's unvoted/undelegated.
     def self.user_proposal_state(user_email, proposal_url = nil)
+      Rails.logger.info "######################"
+      Rails.logger.info ""
+      Rails.logger.info ""
+      Rails.logger.info "Liquidvoting.user_proposal_state called"
+      Rails.logger.info ""
+      Rails.logger.info "  proposal_url: #{proposal_url}"
+      Rails.logger.info ""
+      Rails.logger.info "######################"
       return UserProposalState.new unless proposal_url
 
       user_has_supported = Decidim::Liquidvoting::ApiClient.fetch_user_voted?(user_email, proposal_url)
       delegate_email = Decidim::Liquidvoting::ApiClient.fetch_delegate_email(user_email, proposal_url)
 
       delegate_id = Decidim::User.find_by(email: delegate_email)&.id if delegate_email.present?
-
+      Rails.logger.info "######################"
+      Rails.logger.info ""
+      Rails.logger.info ""
+      Rails.logger.info "Liquidvoting.user_proposal_state:"
+      Rails.logger.info ""
+      Rails.logger.info "  user_has_supported: #{user_has_supported}"
+      Rails.logger.info "  delegate_email: #{delegate_email}"
+      Rails.logger.info "  delegate_id: #{delegate_id}"
+      Rails.logger.info ""
+      Rails.logger.info "######################"
       UserProposalState.new(user_has_supported, delegate_id)
     end
 
