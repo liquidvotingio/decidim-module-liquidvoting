@@ -29,11 +29,21 @@ module Decidim
 
       # Initializer must go here otherwise every engine triggers config/initializers/ files
       initializer "decidim_liquidvoting.overrides" do |_app|
+        Rails.logger.info "######################"
+        Rails.logger.info ""
+        Rails.logger.info ""
+        Rails.logger.info "Liquidvoting: initializer 'decidim_liquidvoting.overrides', glob is \"#{Decidim::Liquidvoting::Engine.root}/app/overrides/**/*.rb\""
+        Rails.logger.info ""
+        Rails.logger.info ""
+        Rails.logger.info "######################"
         Rails.application.config.to_prepare do
           Dir.glob("#{Decidim::Liquidvoting::Engine.root}/app/overrides/**/*.rb").each do |c|
+            Rails.logger.info "  Liquidvoting about to require_dependency: #{c}"
             require_dependency(c)
           end
         end
+        Rails.logger.info ""
+        Rails.logger.info "######################"
       end
 
       initializer "decidim_liquidvoting.assets" do |app|
