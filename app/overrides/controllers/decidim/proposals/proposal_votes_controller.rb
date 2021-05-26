@@ -60,4 +60,3 @@ Decidim::Proposals::ProposalVotesController.class_eval do
     @api_state = Decidim::Liquidvoting.user_proposal_state(current_user&.email, ResourceLocatorPresenter.new(proposal).url)
   end
 end
-end
