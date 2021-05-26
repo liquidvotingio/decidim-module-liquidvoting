@@ -87,9 +87,9 @@ Decidim::Proposals::ProposalsController.class_eval do
         Rails.logger.info ""
         Rails.logger.info ""
         Rails.logger.info "######################"
-        Liquidvoting.user_proposal_state(current_user&.email, proposal_url)
+        Decidim::Liquidvoting.user_proposal_state(current_user&.email, proposal_url)
       else
-        Liquidvoting.user_proposal_state(current_user&.email)
+        Decidim::Liquidvoting.user_proposal_state(current_user&.email)
       end
     Rails.logger.info "######################"
     Rails.logger.info ""
