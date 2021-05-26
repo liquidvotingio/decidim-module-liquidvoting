@@ -7,13 +7,13 @@ Decidim::Proposals::ProposalVotesController.class_eval do
     enforce_permission_to :vote, :proposal, proposal: proposal
     @from_proposals_list = params[:from_proposals_list] == "true"
 
-    VoteProposal.call(proposal, current_user) do
+    Decidim::Proposals::VoteProposal.call(proposal, current_user) do
       on(:ok) do
         proposal.reload
 
-        proposals = ProposalVote.where(
+        proposals = Decidim::Proposals::ProposalVote.where(
           author: current_user,
-          proposal: Proposal.where(component: current_component)
+          proposal: Decidim::Proposals::Proposal.where(component: current_component)
         ).map(&:proposal)
 
         refresh_from_api
@@ -33,13 +33,13 @@ Decidim::Proposals::ProposalVotesController.class_eval do
     enforce_permission_to :unvote, :proposal, proposal: proposal
     @from_proposals_list = params[:from_proposals_list] == "true"
 
-    UnvoteProposal.call(proposal, current_user) do
+    Decidim::Proposals::UnvoteProposal.call(proposal, current_user) do
       on(:ok) do
         proposal.reload
 
-        proposals = ProposalVote.where(
+        proposals = Decidim::Proposals::ProposalVote.where(
           author: current_user,
-          proposal: Proposal.where(component: current_component)
+          proposal: Decidim::Proposals::Proposal.where(component: current_component)
         ).map(&:proposal)
 
         refresh_from_api

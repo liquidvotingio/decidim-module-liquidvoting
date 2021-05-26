@@ -26,9 +26,9 @@ Decidim::Proposals::UnvoteProposal.class_eval do
 
   def user_votes
     Rails.logger.info "TRACE: UnvoteProposal#user_votes, who called this, Liquidvoting is managing user votes!"
-    @user_votes ||= ProposalVote.where(
+    @user_votes ||= Decidim::Proposals::ProposalVote.where(
       author: @current_user,
-      proposal: Proposal.where(component: component)
+      proposal: Decidim::Proposals::Proposal.where(component: component)
     )
   end
 end
