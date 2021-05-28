@@ -2,23 +2,14 @@
 [![Ruby Style Guide](https://img.shields.io/badge/code_style-rubocop-brightgreen.svg)](https://github.com/rubocop-hq/rubocop)
 [![YourActionName Actions Status](https://github.com/liquidvotingio/decidim-module-liquidvoting/workflows/CI/badge.svg)](https://github.com/liquidvotingio/decidim-module-liquidvoting/actions)
 
-**In alpha**
-
-Hasn't been used in production yet. But it's ready for a pilot!
-
-## What
-
 Integrates Decidim with the [liquidvoting.io API](https://www.liquidvoting.io/api).
 
-Enables delegations of supports for proposals in participatory processes and assemblies.
+**Note: In alpha**. Not yet used in production. But it's ready for a pilot!
 
-Redirects supports so they go through the API, in order to calculate results based on different voting weights of delegates.
+https://user-images.githubusercontent.com/21290/120000386-a952b180-bfca-11eb-9e94-82b875048b6b.mp4
 
-By default this will connect the instance with the live api hosted on https://api.liquidvoting.io/, and use a demo organization there.
+The integration enables delegations of supports for proposals in participatory processes and assemblies, and redirects supports so they go through the API, in order to calculate results based on different voting weights of delegates.
 
-For use with your own organization [please contact us](mailto:info@liquidvoting.io) to request an authentication key.
-
-If a private on-prem instance of the API is preferred, [see the instructions on the API repo](https://github.com/liquidvotingio/api) on how to use the docker image.
 
 ## Installation
 
@@ -33,6 +24,12 @@ And then execute:
 ```bash
 bundle
 ```
+
+By default the instance will connect with the live api hosted on https://api.liquidvoting.io/, and use a demo organization there.
+
+For use with your own organization [please contact us](mailto:info@liquidvoting.io) to request an authentication key.
+
+If a private on-prem instance of the API is preferred, [see the instructions on the API repo](https://github.com/liquidvotingio/api) on how to use the docker image.
 
 ## Running locally, with a local API instance
 
