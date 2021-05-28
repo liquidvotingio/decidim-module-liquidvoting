@@ -2,7 +2,7 @@
 [![Ruby Style Guide](https://img.shields.io/badge/code_style-rubocop-brightgreen.svg)](https://github.com/rubocop-hq/rubocop)
 [![YourActionName Actions Status](https://github.com/liquidvotingio/decidim-module-liquidvoting/workflows/CI/badge.svg)](https://github.com/liquidvotingio/decidim-module-liquidvoting/actions)
 
-Integrates decidim with liquidvoting.io.
+Integrates Decidim with the [liquidvoting.io API](https://www.liquidvoting.io/).
 
 **WIP - not ready for production**
 
